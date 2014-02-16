@@ -1,6 +1,7 @@
 package game.main.gamelogic;
 
 import game.main.gamelogic.meta.LandType;
+import game.main.gamelogic.meta.SeqOfCells;
 import game.main.gamelogic.meta.Settlement;
 
 import java.util.Random;
@@ -42,6 +43,13 @@ public class Map {
             return table[y][x];
         }
         return null;
+    }
+
+
+    public SeqOfCells shortPath(int xBegin, int yBegin, int xEnd, int yEnd){
+        SeqOfCells sc=new SeqOfCells();
+
+        return sc;
     }
 
     void fillRandom(LandType[] types){

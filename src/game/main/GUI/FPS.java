@@ -9,6 +9,8 @@ public class FPS {
     private int fps = 0;
     private long time;
     int count = 0;
+//изменение
+    count=0;
 
     public FPS() {
         time = System.currentTimeMillis();

@@ -11,7 +11,6 @@ public class FPS {
     int count = 0;
 //изменение
     count=0;
-
     public FPS() {
         time = System.currentTimeMillis();
     }

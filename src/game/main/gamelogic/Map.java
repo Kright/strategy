@@ -38,7 +38,10 @@ public class Map {
      * @return
      */
     public Cell getCell(int x, int y, int playerId){
-        return table[y][x];
+        if (x>=0 && y>=0 && x<width && y<height){
+            return table[y][x];
+        }
+        return null;
     }
 
     void fillRandom(LandType[] types){

@@ -15,19 +15,17 @@ import java.util.Random;
 
 /**
  * Created by lgor on 16.01.14.
+ * Такой большой Singleton. Имеет статическую ссылку на себя, чтобы при сворачивании приложения ничего не пропадало
+ *
+ * Cостояние игры:
+ * 1. Игровой мир
+ * 2. Всё, что связано с GUI (картинки, положение экрана, последнее активное нажатие и т.п.)
+ * 3. настройки
+ * методы, связанные с загрузкой и сохранением этого всего
  */
 public class GameSession {
 
-    //статическая ссылка на себя, чтобы при сворачивании приложения ничего не пропадало
     public static GameSession now;
-
-    /**
-     * Cостояние игры:
-     * 1. Игровой мир
-     * 2. Всё, что связано с GUI (картинки, положение экрана, последнее активное нажатие и т.п.)
-     * 3. настройки
-     * методы, связанные с загрузкой и сохранением этого всего
-     */
 
     public boolean notFinished = true;
     public Random rnd = new Random(); //потом тут будет свой генератор случайных чисел, с возможностью "откатиться"
@@ -53,10 +51,9 @@ public class GameSession {
         UnitType crusader=new UnitType(2, 2, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
 
         world = new World(landscape);
-        world.map.table[1][1].unit=new Unit(crusader);
         world.addPlayer(new Gamer(world, 1));
-
         currentPlayer = world.getNextPlayer();
+        world.map.getCell(2, 2).setUnit(new Unit(crusader, currentPlayer));
         properties = new GameProperties();
     }
 

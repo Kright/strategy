@@ -15,8 +15,8 @@ import game.main.gamelogic.meta.Settlement;
  */
 public class Cell implements iRender {
     /*
-клетка карты, содержит всякую информацию - тип ландшафта, юнита, если он есть, улучшения и т.п.
-*/
+    клетка карты, содержит всякую информацию - тип ландшафта, юнита, если он есть, улучшения и т.п.
+    */
     public final int x, y;
     public LandType land;
     Settlement settlement = null;

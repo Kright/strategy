@@ -10,6 +10,8 @@ import game.main.gamelogic.World;
 
 /**
  * Created by lgor on 17.01.14.
+ * Камера, которая показывает карту.
+ * В будущем она должна показывать карту не всю, а так, как её видит игрок.
  */
 public class MapCamera {
 
@@ -91,14 +93,15 @@ public class MapCamera {
             int minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
             int maxX = Math.min(world.map.width, (int) XonMap(screenW, y * dy - position.y + 1) + 1);
             Rect r = new Rect();
-            Cell[] line = world.map.table[y];
+            //Cell[] line = world.map.table[y];
             int yy = (int) (y * dy - position.y);
             for (int x = minX; x < maxX; x++) {
-                if (line[x] == null)
+                Cell c = world.map.getCell(x, y);
+                if (c == null)
                     continue;
                 int xx = (int) (x * w - y * w * 0.5f - position.x);
                 r.set(xx - 1, yy - 1, xx + (int) (w + 1), yy + (int) (h + 1));  //рисуем немного внахлёст
-                line[x].render(canv, r);
+                c.render(canv, r);
             }
         }
     }

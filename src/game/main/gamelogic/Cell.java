@@ -42,7 +42,7 @@ public class Cell implements iRender {
      */
     public int getMovindCost(){
         //TODO
-        return land.TransportParam;
+        return 1;
     }
 
     /**

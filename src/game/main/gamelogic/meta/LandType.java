@@ -13,8 +13,6 @@ public class LandType {
 
     public final Sprite sprite;
 
-    public int TransportParam;
-
     public LandType(Sprite sprite){
         this.sprite=sprite;
     }

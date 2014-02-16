@@ -39,6 +39,8 @@ public class Map {
      */
     public void listsUnitsSettlements(Player player, List<Unit> units, List<Settlement> settlements) {
         int id = player.id;
+        units.clear();
+        settlements.clear();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 Cell c = table[j][i];

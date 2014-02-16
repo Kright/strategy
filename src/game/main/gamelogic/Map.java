@@ -83,4 +83,25 @@ public class Map {
             }
         }
     }
+
+    /*
+    когда-нибудь многие методы Map станут приватными, а каждому игроку дадут по объекту PlayerMap, который
+    будет учитывать туман войны для игрока
+
+    public PlayerMap getMap4Player(Player player){
+        return new PlayerMap(player);
+    }
+
+    public class PlayerMap{
+        private final int id;
+
+        private PlayerMap(Player player){
+            id= player.id;
+        }
+
+        public Cell getCell(int x,int y){
+            return Map.this.getCell(x, y, id);
+        }
+    }
+    */
 }

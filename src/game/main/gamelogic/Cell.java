@@ -8,7 +8,7 @@ import game.main.GUI.iRender;
 import game.main.gamelogic.meta.LandType;
 import game.main.gamelogic.meta.Settlement;
 
-/**
+/*
  * Created by lgor on 31.12.13.
  * Клетка карты.
  * Находящиеся на ней юнит и поселение должны иметь ссылку на неё - потому что только клетка знает свои координаты.
@@ -70,7 +70,7 @@ public class Cell implements iRender {
     }
 
     /**
-     * можно ди переместиться на эту клетку прямо сейчас (На ней нет юнитов и по ней можно ходить)
+     * можно ли переместиться на эту клетку прямо сейчас (На ней нет юнитов и по ней можно ходить)
      */
     public boolean canMove() {
         //TODO

@@ -1,8 +1,12 @@
 package game.main.gamelogic;
 
 import game.main.GUI.MapCamera;
+import game.main.GUI.UnitSelection;
+import game.main.GUI.iRenderFeature;
 import game.main.gamelogic.meta.Player;
 import game.main.input.Touch;
+
+import java.util.List;
 
 /**
  * Created by lgor on 09.02.14.
@@ -15,18 +19,25 @@ public class Gamer extends Player {
     }
 
     @Override
-    public boolean update(MapCamera camera, Touch[] touches) {
+    public boolean update(MapCamera camera, Touch[] touches, List<iRenderFeature> features) {
         if (touches != null) {
             for (Touch t : touches) {
-                update(camera, t);
+                update(camera, t, features);
             }
         }
         return true;
     }
 
-    private void update(MapCamera camera, Touch touch) {
+    private void update(MapCamera camera, Touch touch, List<iRenderFeature> features) {
         if (touch.count() == 1) {
             camera.move(-touch.dx(), -touch.dy());
+            if (touch.firstTouch()) {
+                Cell c = camera.getCell(world.map, touch.x, touch.y);
+                features.clear();
+                if (c.hasUnit()) {
+                    features.add(new UnitSelection(c.getUnit()));
+                }
+            }
         } else {
             camera.move(-(touch.dx() + touch.next.dx()) / 2, -(touch.dy() + touch.next.dy()) / 2);
             Touch t2 = touch.next;
@@ -37,7 +48,12 @@ public class Gamer extends Player {
 
     @Override
     public void nextStep() {
-        super.nextStep();   //обязательно вызывать, там обновляются списки юнитов
+        super.nextStep();   //обязательно вызывать, там обновляются города
+    }
+
+    @Override
+    public void theEnd() {
+        super.theEnd();     //обязательно вызывать, обновляются очки движения юнитов
     }
 
     private float len2(float x, float y) {

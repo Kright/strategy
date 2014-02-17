@@ -29,22 +29,25 @@ public class Unit implements iRender {
     }
 
     /**
-     * вызывать вначале каждого хода
+     * Вызывается в конце каждого хода
      */
-    public void nextTurn() {
+    public void endTurn() {
         if (hitPoints < getMaxHitPoints() && movementPoints == type.movementPoints && cell.getPlayerID() == playerID) {
             hitPoints++;
         }
         movementPoints = type.movementPoints;
         /*
         восполнение запасов хп, если на союзной территории и ничего не сделал за прошлый ход.
-        перемещение если есть задание на несколько ходов вперёд
         строительство улучшений, если занят постройкой (рабочий например)
          */
     }
 
-    void setCell(Cell cell) {
+    public void setCell(Cell cell) {
         this.cell = cell;
+    }
+
+    public Cell getCell() {
+        return cell;
     }
 
     /**
@@ -54,6 +57,9 @@ public class Unit implements iRender {
         return type.hitPoints;
     }
 
+    /**
+     * количество здоровья
+     */
     public int getHitPoints() {
         return hitPoints;
     }

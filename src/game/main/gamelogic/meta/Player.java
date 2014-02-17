@@ -1,6 +1,7 @@
 package game.main.gamelogic.meta;
 
 import game.main.GUI.MapCamera;
+import game.main.GUI.iRenderFeature;
 import game.main.gamelogic.Unit;
 import game.main.gamelogic.World;
 import game.main.input.Touch;
@@ -20,8 +21,8 @@ public abstract class Player {
      */
     public final int id;
 
-    protected List<Unit> units = new ArrayList<Unit>();
-    protected List<Settlement> settlements = new ArrayList<Settlement>();
+    protected final List<Unit> units = new ArrayList<Unit>();
+    protected final List<Settlement> settlements = new ArrayList<Settlement>();
 
     public Player(World world, int id){
         this.world=world;
@@ -34,9 +35,6 @@ public abstract class Player {
      */
     public void nextStep(){
         world.map.listsUnitsSettlements(this, units, settlements);
-        for (Unit unit : units) {
-            unit.nextTurn();
-        }
         for (Settlement settlement : settlements) {
             settlement.nextTurn();
         }
@@ -49,12 +47,14 @@ public abstract class Player {
     подлечить юнитов, восполнить очки ходов и т.п.
      */
     public void theEnd(){
-        //TODO
+        for (Unit unit : units) {
+            unit.endTurn();
+        }
     }
 
     /*
     вызывается до тех пор, пока не вернёт fasle.
     между вызовами мир рисуется на экран
      */
-    public abstract boolean update(MapCamera camera, Touch[] touches);
+    public abstract boolean update(MapCamera camera, Touch[] touches, List<iRenderFeature> features);
 }

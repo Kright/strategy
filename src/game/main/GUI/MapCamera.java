@@ -1,7 +1,10 @@
 package game.main.GUI;
 
 import android.graphics.*;
-import game.main.gamelogic.*;
+import game.main.gamelogic.Cell;
+import game.main.gamelogic.GameProperties;
+import game.main.gamelogic.Map;
+import game.main.gamelogic.World;
 
 import java.util.List;
 
@@ -141,18 +144,15 @@ public class MapCamera {
     private void drawLandscape(World world, Canvas canv) {
         int minY = Math.max(0, (int) YonMap(0) - 1);
         int maxY = Math.min(world.map.height, (int) YonMap(screenH) + 1);
+        Rect r = new Rect();
         for (int y = minY; y < maxY; y++) {
             int minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
             int maxX = Math.min(world.map.width, (int) XonMap(screenW, y * dy - position.y + 1) + 1);
-            Rect r = new Rect();
             int yy = MapToY(y);
             for (int x = minX; x < maxX; x++) {
-                Cell c = world.map.getCell(x, y);
-                if (c == null)
-                    continue;
                 int xx = MapToX(x, y);
                 r.set(xx - 1, yy - 1, xx + (int) (w + 1), yy + (int) (h + 1));  //рисуем немного внахлёст
-                c.render(canv, r);
+                world.map.getCell(x, y).render(canv, r);
             }
         }
     }
@@ -160,22 +160,19 @@ public class MapCamera {
     private void drawUnits(World world, Canvas canvas) {
         int minY = Math.max(0, (int) YonMap(0) - 1);
         int maxY = Math.min(world.map.height, (int) YonMap(screenH) + 1);
+        Rect r = new Rect();
         for (int y = minY; y < maxY; y++) {
             int minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
             int maxX = Math.min(world.map.width, (int) XonMap(screenW, y * dy - position.y + 1) + 1);
-            Rect r = new Rect();
             int yy = MapToY(y);
             for (int x = minX; x < maxX; x++) {
                 Cell c = world.map.getCell(x, y);
-                if (c == null)
-                    continue;
-                Unit unit = c.getUnit();
-                if (unit == null) {
+                if (!c.hasUnit()) {
                     continue;
                 }
                 int xx = MapToX(x, y);
                 r.set(xx - 1, yy - 1, xx + (int) (w + 1), yy + (int) (h + 1));  //рисуем немного внахлёст
-                unit.render(canvas, r);
+                c.getUnit().render(canvas, r);
             }
         }
     }

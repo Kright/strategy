@@ -4,6 +4,8 @@ import android.view.MotionEvent;
 
 /**
  * Created by lgor on 09.02.14.
+ * нажатие.
+ * Если в конкретный момент нажатий несколько, первое касание хранится в ссылке next второго касания и т.д
  */
 public class Touch {
 
@@ -11,20 +13,60 @@ public class Touch {
             PRESSED = 1,
             DRAGGED = 2,
             RELEASED = 3;
-
     private static String[] typeString = {"error", "pressed", "dragged", "released"};
-
     //поля public, но они final и с ними ничего страшного не случится
     public final float x, y;
     public final int type;
     public final Touch next;      //next!=null если в данный момент есть ещё одно нажатие
-
     private final int id;
     private final Touch old;
 
+    private Touch(float x, float y, int type, int id, Touch next, Touch old) {
+        this.x = x;
+        this.y = y;
+        this.type = type;
+        this.id = id;
+        this.next = next;
+        this.old = old;
+    }
+
+    public static Touch find(int id, Touch prev) {
+        while (prev != null) {
+            if (prev.id == id) {
+                return prev;
+            }
+            prev = prev.next;
+        }
+        return null;
+    }
+
+    public static Touch getTouches(MotionEvent event, Touch prev) {
+        Touch t = null;
+        int mask = event.getActionMasked();
+        int pointerWillUp = -1;
+        if (mask == MotionEvent.ACTION_POINTER_UP || mask == MotionEvent.ACTION_UP || mask == MotionEvent.ACTION_CANCEL) {
+            pointerWillUp = event.getActionIndex();
+        }
+        boolean newPointer = (mask == MotionEvent.ACTION_DOWN);
+        for (int i = 0; i < event.getPointerCount(); i++) {
+            float x, y;
+            int id;
+            x = event.getX(i);
+            y = event.getY(i);
+            id = event.getPointerId(i);
+            Touch sample = find(id, prev);
+
+            if (!newPointer) {                           //продолжение или конец нажатия
+                t = new Touch(x, y, pointerWillUp == id ? RELEASED : DRAGGED, id, t, sample);
+            } else {
+                t = new Touch(x, y, PRESSED, id, t, null);
+            }
+        }
+        return t;
+    }
+
     /**
      * самое начало нажатия
-     *
      */
     public boolean firstTouch() {
         return (next == null) && (type == PRESSED);
@@ -66,59 +108,9 @@ public class Touch {
         return old != null ? y - old.y : 0;
     }
 
-    private Touch(float x, float y, int type, int id, Touch next, Touch old) {
-        this.x = x;
-        this.y = y;
-        this.type = type;
-        this.id = id;
-        this.next = next;
-        this.old = old;
-    }
-
     @Override
     public String toString() {
         return (int) x + "," + (int) y + "," + id + "," + typeString[type] + "; " +
                 (next != null ? next.toString() : "");
-    }
-
-    public static Touch find(int id, Touch prev) {
-        while (prev != null) {
-            if (prev.id == id) {
-                return prev;
-            }
-            prev = prev.next;
-        }
-        return null;
-    }
-
-    public static Touch getTouches(MotionEvent event, Touch prev) {
-        Touch t = null;
-        int mask = event.getActionMasked();
-        int pointerWillUp = -1;
-        if (mask == MotionEvent.ACTION_POINTER_UP || mask == MotionEvent.ACTION_UP || mask == MotionEvent.ACTION_CANCEL) {
-            pointerWillUp = event.getActionIndex();
-        }
-        boolean newPointer = mask == MotionEvent.ACTION_DOWN;
-        for (int i = 0; i < event.getPointerCount(); i++) {
-            float x, y;
-            int type, id;
-            Touch old;
-            x = event.getX(i);
-            y = event.getY(i);
-            id = event.getPointerId(i);
-            Touch sample = find(id, prev);
-            if (sample != null && !newPointer) {
-                old = sample;
-                if (i == pointerWillUp)
-                    type = RELEASED;
-                else
-                    type = DRAGGED;
-            } else {                   //новое нажатие
-                old = null;
-                type = PRESSED;
-            }
-            t = new Touch(x, y, type, id, t, old);
-        }
-        return t;
     }
 }

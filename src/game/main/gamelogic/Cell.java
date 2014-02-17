@@ -38,9 +38,6 @@ public class Cell implements iRender {
         canv.drawBitmap(land.sprite.bmp, land.sprite.rect, cell, paint);
         if (settlement != null)
             settlement.render(canv, cell);
-        if (unit != null) {
-            unit.render(canv, cell);
-        }
     }
 
     protected int getPlayerID() {
@@ -49,6 +46,10 @@ public class Cell implements iRender {
 
     public Unit getUnit() {
         return unit;
+    }
+
+    public boolean hasUnit() {
+        return unit != null;
     }
 
     /**
@@ -84,4 +85,59 @@ public class Cell implements iRender {
         //TODO
         return true;
     }
+
+    /**
+     * принадлежит ли эта клетка карте
+     */
+    public boolean isNull() {
+        return false;
+    }
+
+    public static Cell getEmpty() {
+        return empty;
+    }
+
+    static private Cell empty = new Cell(-1, -1) {
+        @Override
+        public void render(Canvas canv, Rect cell) {
+            /*
+            ничего. Это же пустая клетка.
+            Хотя, возможно, лучше рисовать что-нибудь чёрное
+             */
+        }
+
+        @Override
+        public void render(Canvas canv, Rect cell, Paint paint) {
+        }
+
+        @Override
+        protected int getPlayerID() {
+            return 0;
+        }
+
+        @Override
+        public boolean accessible() {
+            return false;
+        }
+
+        @Override
+        public boolean isNull() {
+            return true;
+        }
+
+        @Override
+        public int getMovindCost() {
+            return 0;
+        }
+
+        @Override
+        public boolean hasUnit() {
+            return false;
+        }
+
+        @Override
+        public void setUnit(Unit unit) {
+            //ничего. Нефиг сюда ходить
+        }
+    };
 }

@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import game.main.GUI.MapCamera;
 import game.main.GUI.Sprite;
+import game.main.GUI.iRenderFeature;
 import game.main.R;
 import game.main.gamelogic.meta.LandType;
 import game.main.gamelogic.meta.Player;
@@ -11,6 +12,8 @@ import game.main.gamelogic.meta.Settlement;
 import game.main.gamelogic.meta.UnitType;
 import game.main.input.Touch;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -35,6 +38,7 @@ public class GameSession {
     MapCamera camera;
     GameProperties properties;
     Player currentPlayer;
+    List<iRenderFeature> renderFeatures = new ArrayList<iRenderFeature>();
 
     private GameSession() {
     }
@@ -59,15 +63,16 @@ public class GameSession {
 
     public void doLogic(Touch[] touches) {
         newTouches = touches != null;
-        if (!currentPlayer.update(camera, touches)) {
+        if (!currentPlayer.update(camera, touches, renderFeatures)) {
             currentPlayer.theEnd();
             currentPlayer = world.getNextPlayer();
+            renderFeatures.clear();
             currentPlayer.nextStep();
         }
     }
 
     public void render(Canvas canv) {
-        camera.render(world, canv, properties);
+        camera.render(world, canv, properties, renderFeatures);
     }
 
     private boolean newTouches;

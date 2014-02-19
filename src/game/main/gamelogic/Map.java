@@ -89,6 +89,29 @@ public class Map {
         }
     }
 
+    /**
+     * кратчайшее расстояние между двумя клетками
+     */
+    public final int getInterval(Cell c1, Cell c2) {
+        return getInterval(c1.x - c2.x, c1.y - c2.y);
+    }
+
+    /**
+     * расстояние между двумя клетками c разницей в dx, dy по обычным координатам. Метрика хитрая
+     * sign(x)==sign(y) -> max(|x|,|y|)
+     * else             -> |x|+|y|
+     */
+    public final int getInterval(int dx, int dy) {
+        if (dx >= 0) {
+            if (dy >= 0)
+                return dx > dy ? dx : dy;
+            return dx - dy;
+        }
+        if (dy >= 0)
+            return dy - dx;
+        return dx < dy ? -dx : -dy;
+    }
+
     /*
     когда-нибудь многие методы Map станут приватными, а каждому игроку дадут по объекту PlayerMap, который
     будет учитывать туман войны для игрока

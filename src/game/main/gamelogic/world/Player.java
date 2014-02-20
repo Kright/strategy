@@ -1,10 +1,8 @@
-package game.main.gamelogic.meta;
+package game.main.gamelogic.world;
 
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
-import game.main.gamelogic.Unit;
-import game.main.gamelogic.World;
-import game.main.input.Touch;
+import game.main.utils.Touch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +22,16 @@ public abstract class Player {
     protected final List<Unit> units = new ArrayList<Unit>();
     protected final List<Settlement> settlements = new ArrayList<Settlement>();
 
-    public Player(World world, int id){
-        this.world=world;
-        this.id=id;
+    public Player(World world, int id) {
+        this.world = world;
+        this.id = id;
     }
 
     /*
     обновить состояние городов, казны и т.п.
     вызывается до того, как будет вызван update
      */
-    public void nextStep(){
+    public void nextStep() {
         world.map.listsUnitsSettlements(this, units, settlements);
         for (Settlement settlement : settlements) {
             settlement.nextTurn();
@@ -46,7 +44,7 @@ public abstract class Player {
     вызывается после update==false
     подлечить юнитов, восполнить очки ходов и т.п.
      */
-    public void theEnd(){
+    public void theEnd() {
         for (Unit unit : units) {
             unit.endTurn();
         }

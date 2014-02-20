@@ -1,11 +1,10 @@
-package game.main.gamelogic.meta;
+package game.main.gamelogic.world;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import game.main.GUI.Sprite;
 import game.main.GUI.iRender;
-import game.main.gamelogic.Cell;
 import game.main.gamelogic.GameSession;
 
 /**

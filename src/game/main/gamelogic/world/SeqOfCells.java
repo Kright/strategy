@@ -1,6 +1,4 @@
-package game.main.gamelogic.meta;
-
-import game.main.gamelogic.Cell;
+package game.main.gamelogic.world;
 
 import java.util.ArrayList;
 

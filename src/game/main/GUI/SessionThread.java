@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
 import game.main.gamelogic.GameSession;
-import game.main.input.Touch;
+import game.main.utils.Touch;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,6 @@
-package game.main.gamelogic;
+package game.main.gamelogic.world;
 
-import game.main.gamelogic.meta.LandType;
-import game.main.gamelogic.meta.Player;
-import game.main.gamelogic.meta.Settlement;
+import game.main.gamelogic.GameSession;
 
 import java.util.List;
 import java.util.Random;

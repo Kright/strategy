@@ -1,4 +1,4 @@
-package game.main.input;
+package game.main.utils;
 
 import android.view.MotionEvent;
 

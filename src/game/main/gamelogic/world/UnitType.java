@@ -1,4 +1,4 @@
-package game.main.gamelogic.meta;
+package game.main.gamelogic.world;
 
 import game.main.GUI.Sprite;
 

@@ -3,8 +3,8 @@ package game.main.GUI;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import game.main.gamelogic.Cell;
-import game.main.gamelogic.Unit;
+import game.main.gamelogic.world.Cell;
+import game.main.gamelogic.world.Unit;
 
 /**
  * Created by lgor on 17.02.14.

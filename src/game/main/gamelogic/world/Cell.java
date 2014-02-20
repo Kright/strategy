@@ -1,12 +1,10 @@
-package game.main.gamelogic;
+package game.main.gamelogic.world;
 
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import game.main.GUI.iRender;
-import game.main.gamelogic.meta.LandType;
-import game.main.gamelogic.meta.Settlement;
 
 /*
  * Created by lgor on 31.12.13.

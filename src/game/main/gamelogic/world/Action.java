@@ -1,4 +1,4 @@
-package game.main.gamelogic;
+package game.main.gamelogic.world;
 
 /**
  * Created by lgor on 08.01.14.

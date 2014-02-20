@@ -1,4 +1,4 @@
-package game.main.gamelogic.meta;
+package game.main.gamelogic.world;
 
 import game.main.GUI.Sprite;
 
@@ -14,7 +14,7 @@ public class LandType {
     public final int movingCost = 2;  //заглушка
     public final Sprite sprite;
 
-    public LandType(Sprite sprite){
-        this.sprite=sprite;
+    public LandType(Sprite sprite) {
+        this.sprite = sprite;
     }
 }

@@ -1,12 +1,9 @@
-package game.main.gamelogic;
+package game.main.gamelogic.world;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import game.main.GUI.iRender;
-import game.main.gamelogic.meta.Player;
-import game.main.gamelogic.meta.Settlement;
-import game.main.gamelogic.meta.UnitType;
 
 /**
  * Created by lgor on 08.01.14.
@@ -23,7 +20,7 @@ public class Unit implements iRender {
 
     private Cell cell;      //при перемещении надо обновлять
 
-    Unit(UnitType type, Player player) {
+    public Unit(UnitType type, Player player) {
         this.type = type;
         playerID = player.id;
     }

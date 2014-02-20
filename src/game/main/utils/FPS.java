@@ -1,4 +1,4 @@
-package game.main.GUI;
+package game.main.utils;
 
 /**
  * Счётчик кадров в секунду

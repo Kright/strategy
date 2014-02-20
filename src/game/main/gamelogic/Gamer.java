@@ -3,8 +3,10 @@ package game.main.gamelogic;
 import game.main.GUI.MapCamera;
 import game.main.GUI.UnitSelection;
 import game.main.GUI.iRenderFeature;
-import game.main.gamelogic.meta.Player;
-import game.main.input.Touch;
+import game.main.gamelogic.world.Cell;
+import game.main.gamelogic.world.Player;
+import game.main.gamelogic.world.World;
+import game.main.utils.Touch;
 
 import java.util.List;
 

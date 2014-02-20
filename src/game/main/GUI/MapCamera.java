@@ -1,10 +1,11 @@
 package game.main.GUI;
 
 import android.graphics.*;
-import game.main.gamelogic.Cell;
 import game.main.gamelogic.GameProperties;
-import game.main.gamelogic.Map;
-import game.main.gamelogic.World;
+import game.main.gamelogic.world.Cell;
+import game.main.gamelogic.world.Map;
+import game.main.gamelogic.world.World;
+import game.main.utils.FPS;
 
 import java.util.List;
 

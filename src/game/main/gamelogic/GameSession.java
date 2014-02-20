@@ -6,11 +6,8 @@ import game.main.GUI.MapCamera;
 import game.main.GUI.Sprite;
 import game.main.GUI.iRenderFeature;
 import game.main.R;
-import game.main.gamelogic.meta.LandType;
-import game.main.gamelogic.meta.Player;
-import game.main.gamelogic.meta.Settlement;
-import game.main.gamelogic.meta.UnitType;
-import game.main.input.Touch;
+import game.main.gamelogic.world.*;
+import game.main.utils.Touch;
 
 import java.util.ArrayList;
 import java.util.List;

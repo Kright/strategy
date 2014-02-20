@@ -1,5 +1,6 @@
 package game.main.utils;
 
+import android.graphics.Rect;
 import android.view.MotionEvent;
 
 /**
@@ -77,6 +78,13 @@ public class Touch {
      */
     public boolean lastTouch() {
         return (next == null) && (type == RELEASED);
+    }
+
+    /**
+     * принадлежит ли нажатие прямоугольнику
+     */
+    public boolean into(Rect r) {
+        return (x > r.left && x < r.right && y < r.bottom && y > r.top);
     }
 
     /**

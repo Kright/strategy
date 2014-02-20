@@ -54,5 +54,5 @@ public abstract class Player {
     вызывается до тех пор, пока не вернёт fasle.
     между вызовами мир рисуется на экран
      */
-    public abstract boolean update(MapCamera camera, Touch[] touches, List<iRenderFeature> features);
+    public abstract boolean update(MapCamera camera, List<Touch> touches, List<iRenderFeature> features);
 }

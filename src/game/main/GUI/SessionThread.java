@@ -35,8 +35,7 @@ public class SessionThread extends Thread implements View.OnTouchListener {
     public final void run() {
         Canvas canvas;
         while (runFlag && session.notFinished) {
-            Touch[] t = getTouches();
-            session.doLogic(t);
+            session.doLogic(getTouches());
             if (session.maySkipRender() && !first){
                 delay(20);
                 continue;
@@ -70,18 +69,13 @@ public class SessionThread extends Thread implements View.OnTouchListener {
         return true;
     }
 
-    private Touch[] getTouches() {
+    private List<Touch> getTouches() {
+        List<Touch> copy;
         synchronized (touches) {
-            int size = touches.size();
-            if (size == 0)
-                return null;
-            Touch[] result = new Touch[size];
-            for (int i = 0; i < size; i++) {
-                result[i] = touches.get(i);
-            }
+            copy = new ArrayList<Touch>(touches);
             touches.clear();
-            return result;
         }
+        return copy;
     }
 
     protected final void delay(long time) {

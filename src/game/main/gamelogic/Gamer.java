@@ -21,11 +21,9 @@ public class Gamer extends Player {
     }
 
     @Override
-    public boolean update(MapCamera camera, Touch[] touches, List<iRenderFeature> features) {
-        if (touches != null) {
-            for (Touch t : touches) {
-                update(camera, t, features);
-            }
+    public boolean update(MapCamera camera, List<Touch> touches, List<iRenderFeature> features) {
+        for (Touch t : touches) {
+            update(camera, t, features);
         }
         return true;
     }

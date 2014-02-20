@@ -92,6 +92,14 @@ public abstract class MapCamera {
         return h;
     }
 
+    public int getScreenHeight() {
+        return screenH;
+    }
+
+    public int getScreenWidth() {
+        return screenW;
+    }
+
     /**
      * прямоугольник, в который вписана клетка (x,y) карты
      */

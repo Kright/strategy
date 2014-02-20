@@ -1,8 +1,9 @@
-package game.main.GUI;
+package game.main;
 
 import android.content.Context;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import game.main.GUI.SessionThread;
 
 /**
  * Created by lgor on 13.01.14.

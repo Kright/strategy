@@ -3,7 +3,6 @@ package game.main;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import game.main.GUI.MapView;
 
 /**
  * Created by lgor on 13.01.14.

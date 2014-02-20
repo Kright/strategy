@@ -3,9 +3,9 @@ package game.main.gamelogic.world;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import game.main.GUI.Sprite;
 import game.main.GUI.iRender;
 import game.main.gamelogic.GameSession;
+import game.main.utils.Sprite;
 
 /**
  * Created by lgor on 25.01.14.

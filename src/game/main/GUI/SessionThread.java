@@ -17,7 +17,7 @@ import java.util.List;
 public class SessionThread extends Thread implements View.OnTouchListener {
 
     private boolean runFlag = false;
-    private SurfaceHolder surfaceHolder;
+    private final SurfaceHolder surfaceHolder;
     private final GameSession session;
 
     public SessionThread(SurfaceHolder surfaceHolder, Resources resources) {
@@ -56,12 +56,10 @@ public class SessionThread extends Thread implements View.OnTouchListener {
             }
         }
         //session.save();
-        surfaceHolder = null;
     }
 
     private final List<Touch> touches = new ArrayList<Touch>();
-
-    Touch prev;
+    private Touch prev;
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {

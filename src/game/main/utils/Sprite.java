@@ -1,4 +1,4 @@
-package game.main.GUI;
+package game.main.utils;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

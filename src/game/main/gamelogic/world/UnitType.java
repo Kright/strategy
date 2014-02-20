@@ -1,6 +1,6 @@
 package game.main.gamelogic.world;
 
-import game.main.GUI.Sprite;
+import game.main.utils.Sprite;
 
 /**
  * Created by lgor on 08.01.14.

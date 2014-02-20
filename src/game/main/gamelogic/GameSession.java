@@ -3,10 +3,11 @@ package game.main.gamelogic;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import game.main.GUI.MapCamera;
-import game.main.GUI.Sprite;
+import game.main.GUI.MapRender;
 import game.main.GUI.iRenderFeature;
 import game.main.R;
 import game.main.gamelogic.world.*;
+import game.main.utils.Sprite;
 import game.main.utils.Touch;
 
 import java.util.ArrayList;
@@ -41,12 +42,14 @@ public class GameSession {
     }
 
     public void init(Resources resources) {
+        properties = new GameProperties();
+
         Sprite[] sprites = Sprite.loadHorisontalN(resources, R.drawable.land2, 5);
         LandType[] landscape = new LandType[3];
         for (int i = 0; i < 3; i++) {
             landscape[i] = new LandType(sprites[i]);
         }
-        camera = new MapCamera(192, 128);
+        camera = new MapRender(192, 128);
         Settlement.init(new Sprite[]{sprites[3], sprites[4]});
 
         UnitType crusader=new UnitType(2, 2, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
@@ -55,11 +58,12 @@ public class GameSession {
         world.addPlayer(new Gamer(world, 1));
         currentPlayer = world.getNextPlayer();
         world.map.getCell(2, 2).setUnit(new Unit(crusader, currentPlayer));
-        properties = new GameProperties();
     }
 
+    private boolean newTouches = true;
+
     public void doLogic(Touch[] touches) {
-        newTouches = touches != null;
+        newTouches = (touches != null);
         if (!currentPlayer.update(camera, touches, renderFeatures)) {
             currentPlayer.theEnd();
             currentPlayer = world.getNextPlayer();
@@ -71,8 +75,6 @@ public class GameSession {
     public void render(Canvas canv) {
         camera.render(world, canv, properties, renderFeatures);
     }
-
-    private boolean newTouches;
 
     public boolean maySkipRender() {
         return (properties.powerSaving && !newTouches);

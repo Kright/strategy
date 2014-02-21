@@ -27,7 +27,7 @@ public class MapRender extends MapCamera {
     public void render(World world, Canvas canv, GameProperties properties, List<iRenderFeature> features) {
         screenH = canv.getHeight();
         screenW = canv.getWidth();
-        checkPosition(screenW, screenH);
+        checkPosition(screenW, screenH, (int) (world.map.width * w), (int) (world.map.height * dy + h - dy));
 
         canv.drawColor(0xFFFF00FF); //фон
         drawLandscape(world, canv);
@@ -47,8 +47,8 @@ public class MapRender extends MapCamera {
         int maxY = Math.min(world.map.height, (int) YonMap(screenH) + 1);
         Rect r = new Rect();
         for (int y = minY; y < maxY; y++) {
-            int minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
-            int maxX = Math.min(world.map.width, (int) XonMap(screenW, y * dy - position.y + 1) + 1);
+            int minX = (int) XonMap(0, 1 + y * dy - position.y);
+            int maxX = (int) XonMap(screenW, y * dy - position.y + 1) + 1;
             int yy = MapToY(y);
             for (int x = minX; x < maxX; x++) {
                 int xx = MapToX(x, y);
@@ -63,8 +63,8 @@ public class MapRender extends MapCamera {
         int maxY = Math.min(world.map.height, (int) YonMap(screenH) + 1);
         Rect r = new Rect();
         for (int y = minY; y < maxY; y++) {
-            int minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
-            int maxX = Math.min(world.map.width, (int) XonMap(screenW, y * dy - position.y + 1) + 1);
+            int minX = (int) XonMap(0, 1 + y * dy - position.y);
+            int maxX = (int) XonMap(screenW, y * dy - position.y + 1) + 1;
             int yy = MapToY(y);
             for (int x = minX; x < maxX; x++) {
                 Cell c = world.map.getCell(x, y);

@@ -118,11 +118,17 @@ public abstract class MapCamera {
     }
 
     //если камера уползла за край карты, двигаем её обратно
-    protected void checkPosition(int viewWidth, int viewHeight) {
+    protected void checkPosition(int viewWidth, int viewHeight, int maxX, int maxY) {
         if (position.x < 0)
             position.x = 0;
         if (position.y < 0)
             position.y = 0;
-        //TODO проверку на правый и нижний края
+        if (position.x + viewWidth > maxX) {
+            position.x = maxX - viewWidth;
+        }
+        if (position.y + viewHeight > maxY) {
+            position.y = maxY - viewHeight;
+        }
+        //TODO проверку на слишком маленький или большой масштаб
     }
 }

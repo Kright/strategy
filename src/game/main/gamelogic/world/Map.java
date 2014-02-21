@@ -11,13 +11,10 @@ import java.util.Random;
  */
 public class Map {
 
-    /*
-    Класс карты - массив ячеек, операции по нахождению кратчайших путей и прочего
-    клетки массива могут быть null по краям
+    public final int width, height;
+    /**
+     * клетки хранятся хитро, не стоит присваивать значения в table напрямую.
      */
-
-    //сначала у, потом х
-    public final int height, width;
     private final Cell[][] table;
 
     /**
@@ -30,7 +27,7 @@ public class Map {
         table = new Cell[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                table[y][x] = new Cell(x, y);
+                table[y][x] = new Cell(x + y / 2, y);
             }
         }
     }
@@ -62,17 +59,25 @@ public class Map {
      * возвращает нормальную клетку или Cell.getEmpty(). В перспективе будет туман войны
      */
     public Cell getCell(int x, int y, int playerId) {
+        return getCell(x, y);
+    }
+
+    public final Cell getCell(int x, int y) {
+        x -= y / 2;
         if (x >= 0 && y >= 0 && x < width && y < height) {
             return table[y][x];
         }
         return Cell.getEmpty();
     }
 
-    public Cell getCell(int x, int y) {
-        if (x >= 0 && y >= 0 && x < width && y < height) {
-            return table[y][x];
+    /**
+     * устанавливает клетку, использует поля cell.x и cell.y
+     */
+    protected final void setCell(Cell cell) {
+        int x = cell.x - cell.y / 2;
+        if (x >= 0 && cell.y >= 0 && x < width && cell.y < height) {
+            table[cell.y][x] = cell;
         }
-        return Cell.getEmpty();
     }
 
     void fillRandom(LandType[] types) {
@@ -85,6 +90,11 @@ public class Map {
                 }
             }
         }
+    }
+
+    public final boolean isOnMap(int x, int y) {
+        x -= y / 2;
+        return y >= 0 && y < height && x >= 0 && x < width;
     }
 
     /**

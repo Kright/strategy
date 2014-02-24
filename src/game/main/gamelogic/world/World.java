@@ -14,7 +14,7 @@ public class World {
     private int currentPlayer = -1;
 
     public World(LandType[] types) {
-        map = new Map(100, 70);
+        map = new Map(64, 64);
         map.fillRandom(types);
     }
 

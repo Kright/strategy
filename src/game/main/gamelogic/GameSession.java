@@ -65,7 +65,7 @@ public class GameSession {
     private ActiveArea currentActive;
 
     public void doLogic(List<Touch> touches) {
-        newTouches = (touches != null);
+        newTouches = (!touches.isEmpty());
         List<Touch> tt = new ArrayList<Touch>();
         while (!touches.isEmpty()) {
             Touch t = touches.remove(0);

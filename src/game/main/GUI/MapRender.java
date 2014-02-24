@@ -27,7 +27,7 @@ public class MapRender extends MapCamera {
     public void render(World world, Canvas canv, GameProperties properties, List<iRenderFeature> features) {
         screenH = canv.getHeight();
         screenW = canv.getWidth();
-        checkPosition(screenW, screenH, (int) (world.map.width * w), (int) (world.map.height * dy + h - dy));
+        checkPosition(screenW, screenH, world.map.width * w, world.map.height * dy + h - dy);
 
         canv.drawColor(0xFFFF00FF); //фон
         drawLandscape(world, canv);

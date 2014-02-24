@@ -61,6 +61,17 @@ public class Unit implements iRender {
         return hitPoints;
     }
 
+    /**
+     * @return
+     */
+    public int getMovementPoints() {
+        return movementPoints;
+    }
+
+    public int getMaxMovementPoints() {
+        return type.movementPoints;
+    }
+
     @Override
     public void render(Canvas canv, Rect cell) {
         canv.drawBitmap(type.sprite.bmp, type.sprite.rect, cell, null);

@@ -17,7 +17,7 @@ public abstract class Action {
     /**
      *  просто вызвать снаружи эту штуку - мир изменится
      */
-    public void apply(){
+    public final void apply() {
         if (doAction()){
             world.lastAction=this;
         }

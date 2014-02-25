@@ -73,7 +73,7 @@ public class Cell implements iRender {
      */
     public boolean canMove() {
         //TODO
-        return accessible();
+        return accessible() && !hasUnit();
     }
 
     /**

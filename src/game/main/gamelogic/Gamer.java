@@ -7,6 +7,7 @@ import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Player;
 import game.main.gamelogic.world.World;
 import game.main.utils.Touch;
+import game.main.utils.Way;
 
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class Gamer extends Player {
                 features.clear();
                 if (c.hasUnit()) {
                     features.add(new UnitSelection(c.getUnit()));
+                    features.add(new Way(world.map, c.getUnit()));
                 }
             }
         } else {

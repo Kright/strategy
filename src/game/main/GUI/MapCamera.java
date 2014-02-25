@@ -100,13 +100,28 @@ public abstract class MapCamera {
         return screenW;
     }
 
+    private RectF rectangle4return = new RectF();
+
     /**
-     * прямоугольник, в который вписана клетка (x,y) карты
+     * прямоугольник, в который вписана клетка (x,y) карты.
+     * на самом деле возвращается один и тот же прямоугольник, чтобы не мучать сборщик мусора
      */
     final public RectF getRectF(int x, int y) {
         float xLeft = MapToX(x, y);
         float yTop = MapToY(y);
-        return new RectF(xLeft, yTop, xLeft + w, yTop + h);
+        rectangle4return.set(xLeft, yTop, xLeft + w, yTop + h);
+        return rectangle4return;
+    }
+
+    /**
+     * прямоугольник, в который вписана клетка карты.
+     * на самом деле возвращается один и тот же прямоугольник, чтобы не мучать сборщик мусора
+     */
+    final public RectF getRectF(Cell c) {
+        float xLeft = MapToX(c.x, c.y);
+        float yTop = MapToY(c.y);
+        rectangle4return.set(xLeft, yTop, xLeft + w, yTop + h);
+        return rectangle4return;
     }
 
     /**

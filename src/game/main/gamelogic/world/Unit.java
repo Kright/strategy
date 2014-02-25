@@ -44,6 +44,7 @@ public class Unit implements iRender {
     }
 
     public Cell getCell() {
+        assert cell != null;
         return cell;
     }
 

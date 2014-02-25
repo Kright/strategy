@@ -36,7 +36,7 @@ public class SessionThread extends Thread implements View.OnTouchListener {
         Canvas canvas;
         while (runFlag && session.notFinished) {
             session.doLogic(getTouches());
-            if (session.maySkipRender() && !first){
+            if (session.maySkipRender() && !first && prev != null && prev.lastTouch()) {
                 delay(20);
                 continue;
             }

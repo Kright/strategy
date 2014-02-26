@@ -54,10 +54,11 @@ public class GameSession {
         UnitType crusader=new UnitType(2, 2, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
 
         world = new World(landscape);
-        world.addPlayer(new Gamer(world, 1));
+        world.addPlayer(new Gamer(world, 1, renderFeatures));
         currentPlayer = world.getNextPlayer();
         world.map.getCell(2, 2).setUnit(new Unit(crusader, currentPlayer));
 
+        gui.add(new CancelButton(camera, (Gamer) currentPlayer));
         gui.add(new MiniMap(camera));
     }
 
@@ -84,7 +85,7 @@ public class GameSession {
                 tt.add(t);
             }
         }
-        if (!currentPlayer.update(camera, tt, renderFeatures)) {
+        if (!currentPlayer.update(camera, tt)) {
             setNextPlayer();
         }
     }

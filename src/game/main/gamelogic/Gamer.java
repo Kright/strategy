@@ -18,21 +18,24 @@ import java.util.List;
  */
 public class Gamer extends Player {
 
-    public Gamer(World world, int id) {
+    private final List<iRenderFeature> features;
+
+    public Gamer(World world, int id, List<iRenderFeature> features) {
         super(world, id);
+        this.features = features;
     }
 
     @Override
-    public boolean update(MapCamera camera, List<Touch> touches, List<iRenderFeature> features) {
+    public boolean update(MapCamera camera, List<Touch> touches) {
         for (Touch t : touches) {
-            update(camera, t, features);
+            update(camera, t);
         }
         return true;
     }
 
     private Way way = null;
 
-    private void update(MapCamera camera, Touch touch, List<iRenderFeature> features) {
+    private void update(MapCamera camera, Touch touch) {
         if (touch.count() == 1) {
             camera.move(-touch.dx(), -touch.dy());
             if (touch.firstTouch()) {
@@ -54,6 +57,14 @@ public class Gamer extends Player {
             float scale = (float) Math.sqrt(len2(touch.x - t2.x, touch.y - t2.y) / len2(touch.oldX() - t2.oldX(), touch.oldY() - t2.oldY()));
             camera.scale(scale, (touch.x + t2.x) / 2, (touch.y + t2.y) / 2);
         }
+    }
+
+    /**
+     * отменили действие, сбрасываем состояние
+     */
+    public void cancelAction() {
+        way = null;
+        features.clear();
     }
 
     @Override

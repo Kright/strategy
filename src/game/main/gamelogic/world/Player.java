@@ -1,7 +1,6 @@
 package game.main.gamelogic.world;
 
 import game.main.GUI.MapCamera;
-import game.main.GUI.iRenderFeature;
 import game.main.utils.Touch;
 
 import java.util.ArrayList;
@@ -54,5 +53,5 @@ public abstract class Player {
     вызывается до тех пор, пока не вернёт fasle.
     между вызовами мир рисуется на экран
      */
-    public abstract boolean update(MapCamera camera, List<Touch> touches, List<iRenderFeature> features);
+    public abstract boolean update(MapCamera camera, List<Touch> touches);
 }

@@ -33,4 +33,20 @@ public abstract class Action {
     public static void init(World w) {
         world = w;
     }
+
+    public static Action getCancelAction() {
+        return cancel;
+    }
+
+    private static Action cancel = new Action() {
+        @Override
+        protected boolean doAction() {
+            world.cancelPreviousAction();
+            return true;
+        }
+
+        @Override
+        protected void cancel() {
+        }  //нечего отменять отмену предыдущего действия
+    };
 }

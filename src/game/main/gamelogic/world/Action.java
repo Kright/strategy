@@ -34,8 +34,18 @@ public abstract class Action {
         world = w;
     }
 
+    /**
+     * Action отмены предыдущего action, отменить отмену нельзя
+     */
     public static Action getCancelAction() {
         return cancel;
+    }
+
+    /**
+     * Action, метод apply не изменяет вообще ничего, как будто его и не было.
+     */
+    public static Action getNullAction() {
+        return nullAction;
     }
 
     private static Action cancel = new Action() {
@@ -48,5 +58,17 @@ public abstract class Action {
         @Override
         protected void cancel() {
         }  //нечего отменять отмену предыдущего действия
+    };
+
+    private static Action nullAction = new Action() {
+        @Override
+        protected boolean doAction() {
+            // всё время возвращается false, действие не считается применённым и не отмечается как "последнее"
+            return false;
+        }
+
+        @Override
+        protected void cancel() {
+        }
     };
 }

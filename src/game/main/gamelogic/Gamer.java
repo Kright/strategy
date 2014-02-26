@@ -38,11 +38,11 @@ public class Gamer extends Player {
         if (touch.count() == 1) {
             camera.move(-touch.dx(), -touch.dy());
             if (touch.firstTouch()) {
+                Action moveUnit = Action.getNullAction();
                 Cell c = camera.getCell(world.map, touch.x, touch.y);
                 if (way != null) {
                     if (way.isInto(c)) {
-                        Action action = way.getMoveTo(c);
-                        action.apply();
+                        moveUnit = way.getMoveTo(c);
                     }
                     way = null;
                 }
@@ -52,6 +52,7 @@ public class Gamer extends Player {
                     way = new Way(world.map, c.getUnit());
                     features.add(way);
                 }
+                moveUnit.apply();
             }
         } else {
             camera.move(-(touch.dx() + touch.next.dx()) / 2, -(touch.dy() + touch.next.dy()) / 2);

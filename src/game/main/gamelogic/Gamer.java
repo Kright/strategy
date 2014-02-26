@@ -19,6 +19,7 @@ import java.util.List;
 public class Gamer extends Player {
 
     private final List<iRenderFeature> features;
+    private Way way = null;
 
     public Gamer(World world, int id, List<iRenderFeature> features) {
         super(world, id);
@@ -33,16 +34,17 @@ public class Gamer extends Player {
         return true;
     }
 
-    private Way way = null;
-
     private void update(MapCamera camera, Touch touch) {
         if (touch.count() == 1) {
             camera.move(-touch.dx(), -touch.dy());
             if (touch.firstTouch()) {
                 Cell c = camera.getCell(world.map, touch.x, touch.y);
-                if (way != null && way.isInto(c)) {
-                    Action action = way.getMoveTo(c);
-                    action.apply();
+                if (way != null) {
+                    if (way.isInto(c)) {
+                        Action action = way.getMoveTo(c);
+                        action.apply();
+                    }
+                    way = null;
                 }
                 features.clear();
                 if (c.hasUnit()) {

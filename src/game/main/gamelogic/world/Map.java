@@ -80,6 +80,11 @@ public class Map {
         }
     }
 
+    public final void setUnit(Unit unit, Cell cell) {
+        unit.getCell().setUnit(null);       //убираем юнита со старой клетки
+        cell.setUnit(unit);                 //сажаем его на новую
+    }
+
     void fillRandom(LandType[] types) {
         Random rnd = GameSession.now.rnd;
         for (Cell[] cc : table) {

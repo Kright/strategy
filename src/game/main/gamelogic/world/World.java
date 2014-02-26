@@ -16,6 +16,7 @@ public class World {
     public World(LandType[] types) {
         map = new Map(64, 64);
         map.fillRandom(types);
+        Action.init(this);
     }
 
     public Player getNextPlayer() {

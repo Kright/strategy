@@ -13,16 +13,28 @@ public class Unit implements iRender {
 
     public final UnitType type;
     public final int playerID;
-
     private int movementPoints;     //очки перемещения
     private int hitPoints;          //
     private Settlement home;
-
     private Cell cell;      //при перемещении надо обновлять
 
     public Unit(UnitType type, Player player) {
         this.type = type;
         playerID = player.id;
+        this.cell = Cell.getEmpty();
+    }
+
+    private Unit(Unit u) {
+        this.type = u.type;
+        this.playerID = u.playerID;
+        this.movementPoints = u.getMovementPoints();
+        this.hitPoints = u.hitPoints;
+        this.home = u.home;
+        this.cell = u.cell;
+    }
+
+    public Unit getClone() {
+        return new Unit(this);
     }
 
     /**
@@ -39,13 +51,13 @@ public class Unit implements iRender {
          */
     }
 
-    public void setCell(Cell cell) {
-        this.cell = cell;
-    }
-
     public Cell getCell() {
         assert cell != null;
         return cell;
+    }
+
+    public void setCell(Cell cell) {
+        this.cell = cell;
     }
 
     /**
@@ -63,10 +75,31 @@ public class Unit implements iRender {
     }
 
     /**
+     * оставшиеся очки перемещения
+     *
      * @return
      */
     public int getMovementPoints() {
         return movementPoints;
+    }
+
+    /**
+     * @return movementPoints>0
+     */
+    public boolean hasMovementPoints() {
+        return movementPoints > 0;
+    }
+
+    /**
+     * отнимаются очки перемещения, если это возможно
+     *
+     * @param count
+     */
+    public void decreaseMovementPoints(int count) {
+        if (movementPoints > count) {
+            movementPoints -= count;
+        }
+        movementPoints = 0;
     }
 
     public int getMaxMovementPoints() {

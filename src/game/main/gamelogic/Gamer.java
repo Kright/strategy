@@ -3,6 +3,7 @@ package game.main.gamelogic;
 import game.main.GUI.MapCamera;
 import game.main.GUI.UnitSelection;
 import game.main.GUI.iRenderFeature;
+import game.main.gamelogic.world.Action;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Player;
 import game.main.gamelogic.world.World;
@@ -29,15 +30,22 @@ public class Gamer extends Player {
         return true;
     }
 
+    private Way way = null;
+
     private void update(MapCamera camera, Touch touch, List<iRenderFeature> features) {
         if (touch.count() == 1) {
             camera.move(-touch.dx(), -touch.dy());
             if (touch.firstTouch()) {
                 Cell c = camera.getCell(world.map, touch.x, touch.y);
+                if (way != null && way.isInto(c)) {
+                    Action action = way.getMoveTo(c);
+                    action.apply();
+                }
                 features.clear();
                 if (c.hasUnit()) {
                     features.add(new UnitSelection(c.getUnit()));
-                    features.add(new Way(world.map, c.getUnit()));
+                    way = new Way(world.map, c.getUnit());
+                    features.add(way);
                 }
             }
         } else {

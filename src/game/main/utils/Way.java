@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
 import game.main.gamelogic.world.Action;
+import game.main.gamelogic.world.Actions.MoveUnit;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Unit;
@@ -38,7 +39,11 @@ public class Way implements iRenderFeature {
 
     //заглушка
     public Action getMoveTo(Cell c) {
-        return null;
+        assert cells.get(0).hasUnit();
+        List<Cell> path = new ArrayList<Cell>(2);
+        path.add(cells.get(0));
+        path.add(c);
+        return new MoveUnit(cells.get(0).getUnit(), path);
     }
 
     public boolean isInto(Cell c) {

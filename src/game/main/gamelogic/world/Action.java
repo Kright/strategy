@@ -5,21 +5,17 @@ package game.main.gamelogic.world;
  */
 public abstract class Action {
     /**
-    действие игрока над миром - команда юниту, выбор улучшения города, дипломатическое соглашение и т.п.
-    нужен единый интерфейс для возможности отмены действия в случае ошибки пользователя
+     * действие игрока над миром - команда юниту, выбор улучшения города, дипломатическое соглашение и т.п.
+     * нужен единый интерфейс для возможности отмены действия в случае ошибки пользователя
      */
-    private final World world;
-
-    protected Action(World world){
-        this.world=world;
-    }
+    protected static World world;
 
     /**
-     *  просто вызвать снаружи эту штуку - мир изменится
+     * просто вызвать снаружи эту штуку - мир изменится
      */
     public final void apply() {
-        if (doAction()){
-            world.lastAction=this;
+        if (doAction()) {
+            world.lastAction = this;
         }
     }
 
@@ -28,5 +24,13 @@ public abstract class Action {
      */
     protected abstract boolean doAction();
 
+    /**
+     * отменить действие.
+     * Может быть вызвано, только если doAction возвратит true!
+     */
     protected abstract void cancel();
+
+    public static void init(World w) {
+        world = w;
+    }
 }

@@ -27,7 +27,8 @@ public class MoveUnit extends Action {
     @Override
     protected boolean doAction() {
         for (int i = 1; i < way.size(); i++) {
-            assert unit.hasMovementPoints();    //если нет, то это какое-то левое перемещение
+            assert unit.hasMovementPoints();    //если нет, то это какое-то левое перемещение.
+            // Но assert почему-то не работает, и это печально
             unit.decreaseMovementPoints(way.get(i).getMovindCost());
         }
         world.map.setUnit(unit, finish);

@@ -33,7 +33,8 @@ public class Way implements iRenderFeature {
         for(int i=0; i<2*mPoints+1; i++)
             for(int j=0; j<2*mPoints+1; j++)
             {
-                if(!map.getCell(x0-mPoints+j,y0-mPoints+j).canMove()){
+                if(!map.getCell(x0-mPoints+i,y0-mPoints+j).canMove()){
+                    Log.d("log",""+i+""+j);
                     s[i][j][0]=1; // клетку посетил
                     s[i][j][1]=mPoints+1; // путь бусконечный
                     controlSum+=1;
@@ -54,6 +55,7 @@ public class Way implements iRenderFeature {
         for(int count=0; count<6; count++){
                if((x+k[count][0]>=0)&&(x+k[count][0]<=2*mPoints)&&(y+k[count][1]>=0)&&(y+k[count][1]<=2*mPoints)){
                movCost=map.getCell(x0-mPoints+x+k[count][0],y0-mPoints+y+k[count][1]).getMovindCost();
+
                if(mPoints-s[x][y][1]>=movCost){
                  if((s[x+k[count][0]][y+k[count][1]][1]>movCost+s[x][y][1])){
                      s[x+k[count][0]][y+k[count][1]][1]=movCost+s[x][y][1];
@@ -62,11 +64,11 @@ public class Way implements iRenderFeature {
                }
             }
         }
-        Log.d("log",""+x+" "+y+" "+controlSum);
+
         s[x][y][0]=1;
         if(s[x][y][1]<=mPoints){
-            cells.add(map.getCell(x,y));
-
+            cells.add(map.getCell(x0-mPoints+x,y0-mPoints+y));
+            Log.d("log",""+x+""+y);
         }
         controlSum+=1;
             if(controlSum==(2*mPoints+1)*(2*mPoints+1))

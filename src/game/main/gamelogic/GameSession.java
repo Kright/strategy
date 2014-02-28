@@ -51,7 +51,7 @@ public class GameSession {
     public void init(Resources resources) {
         properties = new GameProperties();
 
-        Sprite[] sprites = Sprite.loadHorisontalN(resources, R.drawable.land3, 5);
+        Sprite[] sprites = Sprite.loadHorisontalN(resources, R.drawable.land2, 5);
         LandType[] landscape = new LandType[3];
         for (int i = 0; i < 3; i++) {
             landscape[i] = new LandType(sprites[i], i + 2);

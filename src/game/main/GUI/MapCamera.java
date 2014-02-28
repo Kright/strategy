@@ -2,6 +2,7 @@ package game.main.GUI;
 
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import game.main.gamelogic.GameProperties;
 import game.main.gamelogic.world.Cell;
@@ -9,6 +10,7 @@ import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.World;
 import game.main.utils.FPS;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -92,6 +94,11 @@ public abstract class MapCamera {
         return h;
     }
 
+    public void setScreenSize(int width, int height) {
+        screenW = width;
+        screenH = height;
+    }
+
     public int getScreenHeight() {
         return screenH;
     }
@@ -159,4 +166,68 @@ public abstract class MapCamera {
             position.y = (int) maxY - viewHeight;
         }
     }
+
+    public Iterator<RenderObject> getIterator(Map map) {
+        return new Frame(map);
+    }
+
+    public class RenderObject {
+        public Cell cell;
+        public Rect rect;
+
+        protected RenderObject() {
+            rect = new Rect();
+        }
+    }
+
+    private class Frame implements Iterator<RenderObject> {
+
+        private final RenderObject pair;
+        private final Map map;
+        private int x, y, maxX, maxY, xx, yy;
+        private boolean next = true;
+
+        Frame(Map map) {
+            this.map = map;
+            pair = new RenderObject();
+            y = Math.max(0, (int) YonMap(0) - 1);
+            x = Math.max(0, (int) XonMap(0, 0) - 1);
+            yy = MapToY(y);
+            xx = MapToX(x, y);
+            maxY = Math.min(map.height, (int) YonMap(screenH) + 1);
+            maxX = (int) XonMap(screenW, y * dy - position.y + 1) + 1;
+        }
+
+        private void incXY() {
+            x++;
+            if (x >= maxX) {
+                y++;
+                x = (int) XonMap(0, 1 + y * dy - position.y);
+                maxX = (int) XonMap(screenW, y * dy - position.y + 1) + 1;
+                yy = MapToY(y);
+                if (y >= maxY) {
+                    next = false;
+                }
+            }
+            xx = MapToX(x, y);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return next;
+        }
+
+        @Override
+        public RenderObject next() {
+            pair.cell = map.getCell(x, y);
+            pair.rect.set(xx - 1, yy - 1, xx + (int) (w + 1), yy + (int) (h + 1));
+            incXY();
+            return pair;
+        }
+
+        @Override
+        public void remove() {
+        }
+    }
 }
+

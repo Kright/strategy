@@ -7,6 +7,7 @@ import game.main.gamelogic.GameProperties;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.World;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -25,8 +26,7 @@ public class MapRender extends MapCamera {
     }
 
     public void render(World world, Canvas canv, GameProperties properties, List<iRenderFeature> features) {
-        screenH = canv.getHeight();
-        screenW = canv.getWidth();
+        setScreenSize(canv.getWidth(), canv.getHeight());
         checkPosition(screenW, screenH, world.map.width * w, world.map.height * dy + h - dy);
 
         canv.drawColor(0xFFFF00FF); //фон
@@ -43,37 +43,19 @@ public class MapRender extends MapCamera {
     }
 
     private void drawLandscape(World world, Canvas canv) {
-        int minY = Math.max(0, (int) YonMap(0) - 1);
-        int maxY = Math.min(world.map.height, (int) YonMap(screenH) + 1);
-        Rect r = new Rect();
-        for (int y = minY; y < maxY; y++) {
-            int minX = (int) XonMap(0, 1 + y * dy - position.y);
-            int maxX = (int) XonMap(screenW, y * dy - position.y + 1) + 1;
-            int yy = MapToY(y);
-            for (int x = minX; x < maxX; x++) {
-                int xx = MapToX(x, y);
-                r.set(xx - 1, yy - 1, xx + (int) (w + 1), yy + (int) (h + 1));  //рисуем немного внахлёст
-                world.map.getCell(x, y).render(canv, r);
-            }
+        Iterator<RenderObject> iter = getIterator(world.map);
+        while (iter.hasNext()) {
+            RenderObject ro = iter.next();
+            ro.cell.render(canv, ro.rect);
         }
     }
 
     private void drawUnits(World world, Canvas canvas) {
-        int minY = Math.max(0, (int) YonMap(0) - 1);
-        int maxY = Math.min(world.map.height, (int) YonMap(screenH) + 1);
-        Rect r = new Rect();
-        for (int y = minY; y < maxY; y++) {
-            int minX = (int) XonMap(0, 1 + y * dy - position.y);
-            int maxX = (int) XonMap(screenW, y * dy - position.y + 1) + 1;
-            int yy = MapToY(y);
-            for (int x = minX; x < maxX; x++) {
-                Cell c = world.map.getCell(x, y);
-                if (!c.hasUnit()) {
-                    continue;
-                }
-                int xx = MapToX(x, y);
-                r.set(xx - 1, yy - 1, xx + (int) (w + 1), yy + (int) (h + 1));  //рисуем немного внахлёст
-                c.getUnit().render(canvas, r);
+        Iterator<RenderObject> iter = getIterator(world.map);
+        while (iter.hasNext()) {
+            RenderObject ro = iter.next();
+            if (ro.cell.hasUnit()) {
+                ro.cell.getUnit().render(canvas, ro.rect);
             }
         }
     }

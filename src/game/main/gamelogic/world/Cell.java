@@ -19,7 +19,7 @@ public class Cell implements iRender {
     public LandType land;
     Settlement settlement = null;
     private Unit unit = null;
-    //boolean road = false;
+    private boolean road = false;
 
     public Cell(int x, int y) {
         this.x = x;
@@ -60,11 +60,21 @@ public class Cell implements iRender {
         }
     }
 
+    public boolean hasRoad() {
+        return road;
+    }
+
+    public void setRoad(boolean hasRoad) {
+        road = hasRoad;
+    }
+
     /**
      * отнимаемые очки перемещения
      */
     public int getMovindCost() {
         //TODO движение по дорогам
+        if (road)
+            return 1;
         return land.movingCost;
     }
 

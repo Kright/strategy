@@ -25,67 +25,66 @@ public class Way implements iRenderFeature {
 
     public Way(Map map, Unit unit) {
         Cell cell = unit.getCell();
-        int mPoints=unit.getMovementPoints();
-        int x0=cell.x;
-        int y0=cell.y;
-        int controlSum=0;
-        int[][][] s=new int[2*mPoints+1][2*mPoints+1][2];
-        for(int i=0; i<2*mPoints+1; i++)
-            for(int j=0; j<2*mPoints+1; j++)
-            {
-                if(!map.getCell(x0-mPoints+i,y0-mPoints+j).canMove()){
-                    Log.d("log",""+i+""+j);
-                    s[i][j][0]=1; // клетку посетил
-                    s[i][j][1]=mPoints+1; // путь бусконечный
-                    controlSum+=1;
-                }else{
-                    s[i][j][1]=mPoints+1;
-                    s[i][j][0]=0; // клетку еще не посещал
+        int mPoints = unit.getMovementPoints();
+        int x0 = cell.x;
+        int y0 = cell.y;
+        int controlSum = 0;
+        int[][][] s = new int[2 * mPoints + 1][2 * mPoints + 1][2];
+        for (int i = 0; i < 2 * mPoints + 1; i++)
+            for (int j = 0; j < 2 * mPoints + 1; j++) {
+                if (!map.getCell(x0 - mPoints + i, y0 - mPoints + j).canMove()) {
+                    Log.d("log", "" + i + "" + j);
+                    s[i][j][0] = 1; // клетку посетил
+                    s[i][j][1] = mPoints + 1; // путь бусконечный
+                    controlSum += 1;
+                } else {
+                    s[i][j][1] = mPoints + 1;
+                    s[i][j][0] = 0; // клетку еще не посещал
                 }
             }
-        s[mPoints][mPoints][0]=0;
-        s[mPoints][mPoints][1]=0;
+        s[mPoints][mPoints][0] = 0;
+        s[mPoints][mPoints][1] = 0;
 
 
-        int[][] k={{1,1},{0,1},{-1,0},{-1,-1},{0,-1}, {1,0}};// связь с какими клетками имеется
-        int x=mPoints;
-        int y=mPoints;
+        int[][] k = {{1, 1}, {0, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, 0}};// связь с какими клетками имеется
+        int x = mPoints;
+        int y = mPoints;
         int movCost;
-        while(controlSum!=(2*mPoints+1)*(2*mPoints+1)){
-        for(int count=0; count<6; count++){
-               if((x+k[count][0]>=0)&&(x+k[count][0]<=2*mPoints)&&(y+k[count][1]>=0)&&(y+k[count][1]<=2*mPoints)){
-               movCost=map.getCell(x0-mPoints+x+k[count][0],y0-mPoints+y+k[count][1]).getMovindCost();
+        while (controlSum != (2 * mPoints + 1) * (2 * mPoints + 1)) {
+            for (int count = 0; count < 6; count++) {
+                if ((x + k[count][0] >= 0) && (x + k[count][0] <= 2 * mPoints) && (y + k[count][1] >= 0) && (y + k[count][1] <= 2 * mPoints)) {
+                    movCost = map.getCell(x0 - mPoints + x + k[count][0], y0 - mPoints + y + k[count][1]).getMovindCost();
 
-               if(mPoints-s[x][y][1]>=movCost){
-                 if((s[x+k[count][0]][y+k[count][1]][1]>movCost+s[x][y][1])){
-                     s[x+k[count][0]][y+k[count][1]][1]=movCost+s[x][y][1];
-                   }
+                    if (mPoints - s[x][y][1] >= movCost) {
+                        if ((s[x + k[count][0]][y + k[count][1]][1] > movCost + s[x][y][1])) {
+                            s[x + k[count][0]][y + k[count][1]][1] = movCost + s[x][y][1];
+                        }
 
-               }
+                    }
+                }
             }
-        }
 
-        s[x][y][0]=1;
-        if(s[x][y][1]<=mPoints){
-            cells.add(map.getCell(x0-mPoints+x,y0-mPoints+y));
-            Log.d("log",""+x+""+y);
-        }
-        controlSum+=1;
-            if(controlSum==(2*mPoints+1)*(2*mPoints+1))
+            s[x][y][0] = 1;
+            if (s[x][y][1] <= mPoints) {
+                cells.add(map.getCell(x0 - mPoints + x, y0 - mPoints + y));
+                Log.d("log", "" + x + "" + y);
+            }
+            controlSum += 1;
+            if (controlSum == (2 * mPoints + 1) * (2 * mPoints + 1))
                 break;
-        int min=mPoints+2;
-        for(int i=0; i<2*mPoints+1; i++)
-                for(int j=0; j<2*mPoints+1; j++){
-                    if(s[i][j][0]==0){
-                      if(s[i][j][1]<min){
-                          x=i;
-                          y=j;
-                          min=s[i][j][1];
-                      }
-                      }
+            int min = mPoints + 2;
+            for (int i = 0; i < 2 * mPoints + 1; i++)
+                for (int j = 0; j < 2 * mPoints + 1; j++) {
+                    if (s[i][j][0] == 0) {
+                        if (s[i][j][1] < min) {
+                            x = i;
+                            y = j;
+                            min = s[i][j][1];
+                        }
                     }
                 }
         }
+    }
 
         /*for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -98,9 +97,10 @@ public class Way implements iRenderFeature {
             }
         }*/
 
-
-
-    //заглушка
+    /**
+     * заглушка
+     * в идеале будет формировать последовательность соседних клеток от первой до конечной
+     */
     public Action getMoveTo(Cell c) {
         assert cells.get(0).hasUnit();
         List<Cell> path = new ArrayList<Cell>(2);

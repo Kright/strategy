@@ -11,10 +11,11 @@ public class LandType {
         его параметры, возможные улучшения, возможно картинка, но хочется несколько для разнообразия
     */
 
-    public final int movingCost = 2;  //заглушка
+    public final int movingCost;  //заглушка
     public final Sprite sprite;
 
-    public LandType(Sprite sprite) {
+    public LandType(Sprite sprite, int movingCost) {
         this.sprite = sprite;
+        this.movingCost = movingCost;
     }
 }

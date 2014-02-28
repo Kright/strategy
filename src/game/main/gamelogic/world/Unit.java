@@ -22,6 +22,8 @@ public class Unit implements iRender {
         this.type = type;
         playerID = player.id;
         this.cell = Cell.getEmpty();
+        hitPoints = type.hitPoints;
+        movementPoints = type.movementPoints;
     }
 
     private Unit(Unit u) {

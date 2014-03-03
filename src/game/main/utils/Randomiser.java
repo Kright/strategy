@@ -10,7 +10,7 @@ final public class Randomiser {
     {
         previous = state;
         state = (a*state+b) % m;
-        return state;
+        return state % 32768;
     }
     public void back()
     {
@@ -24,10 +24,11 @@ final public class Randomiser {
         this.b=bb;
         this.m=mm;
     }
-    private int state = (int)SystemClock.elapsedRealtime();
+    private int state = (int)SystemClock.elapsedRealtime() % 100000;
+
     private int previous = state;
-    private int a=17221;
-    private int b=107839;
-    private int m=510300;
+    private int a=4081;
+    private int b=25673;
+    private int m=121500;
 
 }

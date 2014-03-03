@@ -30,7 +30,6 @@ final public class Randomiser {
 
     private void rnd ()
     {
-        previous = seed;
         if (isBack)
         {
             seed = tmpS;
@@ -38,6 +37,8 @@ final public class Randomiser {
         }
         else
             seed = rSeed.nextLong();
+
+        previous = seed;
         rand.setSeed(seed);
     }
     public void back()

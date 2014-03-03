@@ -17,6 +17,7 @@ final public class Randomiser {
         state = previous;
     }
 
+
     public void changeParam(int aa,int bb, int mm)
     {
         this.a=aa;

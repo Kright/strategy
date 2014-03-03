@@ -17,15 +17,21 @@ final public class Randomiser {
     }
     public  float getFloat()
     {
-        return rand.nextFloat();
+        float x = rand.nextFloat();
+        rnd();
+        return x;
     }
     public int getInt(){
 
-        return rand.nextInt();
+        int x = rand.nextInt();
+        rnd();
+        return x;
     }
     public int getInt(int n)
     {
-        return rand.nextInt(n);
+        int x =  rand.nextInt(n);
+        rnd();
+        return x;
     }
 
     private void rnd ()

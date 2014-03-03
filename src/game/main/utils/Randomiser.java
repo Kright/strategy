@@ -8,9 +8,18 @@ import java.util.Random;
  * Created by user on 03.03.14.
  */
 final public class Randomiser {
+
     Random rand = new Random();
     Random rSeed = new Random();
-    Randomiser()
+
+    public Randomiser(long _seed, long _tmpS, long _previous, boolean _isBack )
+    {
+        seed = _seed;
+        tmpS =_tmpS;
+        previous = _previous;
+        isBack = _isBack;
+    }
+    public Randomiser()
     {
         rSeed.setSeed(SystemClock.elapsedRealtime());
         seed = rSeed.nextLong();

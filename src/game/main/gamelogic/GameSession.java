@@ -5,12 +5,12 @@ import android.graphics.Canvas;
 import game.main.GUI.*;
 import game.main.R;
 import game.main.gamelogic.world.*;
+import game.main.utils.CustomRandom;
 import game.main.utils.Sprite;
 import game.main.utils.Touch;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by lgor on 16.01.14.
@@ -26,8 +26,7 @@ public class GameSession {
 
     public static GameSession now;
     public boolean notFinished = true;
-    public Random rnd = new Random(); //потом тут будет свой генератор случайных чисел, с возможностью "откатиться"
-    // назад, чтобы при отмене дейсвия со случайным исходом (боя, например) и повторении его результат был такой же
+    public CustomRandom random;         //потом тут будет свой, особый генератор случайных чисел
     World world;
     MapCamera camera;
     GameProperties properties;

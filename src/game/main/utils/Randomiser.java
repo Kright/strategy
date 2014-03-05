@@ -8,24 +8,40 @@ import java.util.Random;
  * Created by user on 03.03.14.
  */
 final public class Randomiser {
+
     Random rand = new Random();
     Random rSeed = new Random();
-    Randomiser()
+
+    public Randomiser(long _seed, long _tmpS, long _previous, boolean _isBack )
+    {
+        seed = _seed;
+        tmpS =_tmpS;
+        previous = _previous;
+        isBack = _isBack;
+    }
+    public Randomiser()
     {
         rSeed.setSeed(SystemClock.elapsedRealtime());
+        seed = rSeed.nextLong();
         rnd();
     }
     public  float getFloat()
     {
-        return rand.nextFloat();
+        float x = rand.nextFloat();
+        rnd();
+        return x;
     }
     public int getInt(){
 
-        return rand.nextInt();
+        int x = rand.nextInt();
+        rnd();
+        return x;
     }
     public int getInt(int n)
     {
-        return rand.nextInt(n);
+        int x =  rand.nextInt(n);
+        rnd();
+        return x;
     }
 
     private void rnd ()
@@ -38,6 +54,7 @@ final public class Randomiser {
         }
         else
             seed = rSeed.nextLong();
+
         rand.setSeed(seed);
     }
     public void back()

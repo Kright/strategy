@@ -1,9 +1,9 @@
 package game.main.gamelogic.world;
 
 import game.main.gamelogic.GameSession;
+import game.main.utils.CustomRandom;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by lgor on 31.12.13.
@@ -86,11 +86,11 @@ public class Map {
     }
 
     void fillRandom(LandType[] types) {
-        Random rnd = GameSession.now.rnd;
+        CustomRandom rnd = GameSession.now.rnd;
         for (Cell[] cc : table) {
             for (Cell c : cc) {
-                c.land = types[rnd.nextInt(types.length)];
-                if (c.land == types[0] && rnd.nextInt(4) == 0) {
+                c.land = types[rnd.get(types.length)];
+                if (c.land == types[0] && rnd.get(4) == 0) {
                     c.settlement = new Settlement(c, 0);
                 }
             }

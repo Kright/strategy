@@ -25,8 +25,9 @@ import java.util.List;
 public class GameSession {
 
     public static GameSession now;
+
     public boolean notFinished = true;
-    public CustomRandom random;         //потом тут будет свой, особый генератор случайных чисел
+    public CustomRandom rnd;         //потом тут будет свой, особый генератор случайных чисел
     World world;
     MapCamera camera;
     GameProperties properties;

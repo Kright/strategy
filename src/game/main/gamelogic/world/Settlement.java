@@ -21,7 +21,7 @@ public class Settlement implements iRender {
     public Settlement(Cell cell, int playerID) {
         this.playerID = playerID;
         this.cell = cell;
-        sprite = samples[GameSession.now.rnd.nextInt(samples.length)];
+        sprite = samples[GameSession.now.rnd.get(samples.length)];
     }
 
     public static void init(Sprite[] sprites) {

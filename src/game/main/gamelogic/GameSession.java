@@ -51,7 +51,6 @@ public class GameSession {
 
     public void init(Resources resources) {
         properties = new GameProperties();
-
         rnd = new Randomiser();
 
         Sprite[] sprites = Sprite.loadHorisontalN(resources, R.drawable.land2, 5);

@@ -13,12 +13,12 @@ public interface CustomRandom extends Serializable {
     /**
      * @return число, описывающее внутреннее состояние в данный момент
      */
-    public long getSeed();
+    public int getSeed();
 
     /**
      * @param seed - установить внутреннее состояние
      */
-    public void setSeed(long seed);
+    public void setSeed(int seed);
 
     /**
      * @param n

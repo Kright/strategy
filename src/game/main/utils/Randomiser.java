@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * Created by user on 03.03.14.
  */
-final public class Randomiser {
+final public class Randomiser implements CustomRandom {
     public Randomiser()
     {
         seed = (int)SystemClock.elapsedRealtime();
@@ -24,12 +24,12 @@ final public class Randomiser {
         seed = (a*seed+b) % m;
         return (float)seed / (float)m;
     }
-    public int getInt(){
+    public int get(){
         previous = seed;
         seed = (a*seed+b) % m;
         return seed ;
     }
-    public int getInt(int n)
+    public int get(int n)
     {
         previous = seed;
         seed = (a*seed+b) % m;

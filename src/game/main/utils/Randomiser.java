@@ -49,6 +49,7 @@ final public class Randomiser implements CustomRandom {
     private int seed =  1;
     private int previous = seed;
     private int a=3877;
+
     private int b=29573;
     private int m=139968;
 

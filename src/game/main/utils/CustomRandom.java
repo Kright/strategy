@@ -24,5 +24,8 @@ public interface CustomRandom extends Serializable {
      * @param n
      * @return возвращает целое число в диапазоне [0..(n-1)]
      */
+
+    //НО. ГСЧ простенький, поэтому n<= ~ 121000
+    //если задано n больше это не страшно, но метод выдаст число меньшее чем ~121000
     public int get(int n);
 }

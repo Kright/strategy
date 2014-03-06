@@ -10,8 +10,7 @@ import java.util.Random;
 final public class Randomiser implements CustomRandom {
     public Randomiser()
     {
-        seed = (int)SystemClock.elapsedRealtime();
-        seed %= m;
+        seed = (int)(Math.random()* m);
     }
     public Randomiser(int _seed)
     {

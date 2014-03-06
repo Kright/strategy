@@ -52,7 +52,7 @@ public class GameSession {
     public void init(Resources resources) {
         properties = new GameProperties();
 
-        CustomRandom rnd = new Randomiser();
+        rnd = new Randomiser();
 
         Sprite[] sprites = Sprite.loadHorisontalN(resources, R.drawable.land2, 5);
         LandType[] landscape = new LandType[3];
@@ -71,6 +71,7 @@ public class GameSession {
 
         gui.add(new CancelButton(camera, (Gamer) currentPlayer));
         gui.add(new MiniMap(camera));
+
     }
 
     public void doLogic(List<Touch> touches) {

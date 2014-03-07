@@ -6,7 +6,7 @@ import game.main.GUI.*;
 import game.main.R;
 import game.main.gamelogic.world.*;
 import game.main.utils.CustomRandom;
-import game.main.utils.Randomiser;
+import game.main.utils.LinearCongruentialGenerator;
 import game.main.utils.Sprite;
 import game.main.utils.Touch;
 
@@ -52,7 +52,7 @@ public class GameSession {
     public void init(Resources resources) {
         properties = new GameProperties();
 
-        rnd = new Randomiser();
+        rnd = LinearCongruentialGenerator.getLikeNativeRandom();
 
         Sprite[] sprites = Sprite.loadHorisontalN(resources, R.drawable.land2, 5);
         LandType[] landscape = new LandType[3];
@@ -71,7 +71,6 @@ public class GameSession {
 
         gui.add(new CancelButton(camera, (Gamer) currentPlayer));
         gui.add(new MiniMap(camera));
-
     }
 
     public void doLogic(List<Touch> touches) {

@@ -1,9 +1,5 @@
 package game.main.utils;
 
-import android.os.SystemClock;
-
-import java.util.Random;
-
 /**
  * Created by user on 03.03.14.
  */
@@ -17,8 +13,7 @@ final public class Randomiser implements CustomRandom {
         seed = _seed;
     }
 
-    public  float getFloat()
-    {
+    public float getFloat() {
         previous = seed;
         seed = (a*seed+b) % m;
         return (float)seed / (float)m;
@@ -35,11 +30,12 @@ final public class Randomiser implements CustomRandom {
         return (seed) % n;
     }
 
-    public int getSeed(){
+    public long getSeed() {
         return seed;
     }
-    public void setSeed(int x){
-        seed = x;
+
+    public void setSeed(long x) {
+        seed = (int) x;
     }
     public void back(){
         seed = previous;

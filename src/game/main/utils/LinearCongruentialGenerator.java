@@ -56,12 +56,12 @@ public abstract class LinearCongruentialGenerator implements CustomRandom {
     public static LinearCongruentialGenerator getLikeNativeRandom() {
         return new LinearCongruentialGenerator(25214903917L, 11, 1L << 48) {
             {
-                seed = (long) (Math.random() * 1000000000d);
+                seed = (long) (Math.random() * 1000000d);
             }
 
             @Override
             protected int next(int bits) {
-                seed = (a * seed + c) & (m - 1);  //числозависимая штука, но при (...) % m появляются отрицительные числа
+                seed = (a * seed + c) & 0xFfffFfffFfffL;  //числозависимая штука, но при (...) % m появляются отрицительные числа
                 return (int) (seed >>> (48 - bits));
             }
         };

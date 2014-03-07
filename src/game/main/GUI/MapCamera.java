@@ -184,26 +184,26 @@ public abstract class MapCamera {
 
         private final RenderObject pair;
         private final Map map;
-        private int x, y, maxX, maxY, xx, yy;
+        private int x, y, minX, maxY, xx, yy;
         private boolean next = true;
 
         Frame(Map map) {
             this.map = map;
             pair = new RenderObject();
             y = Math.max(0, (int) YonMap(0) - 1);
-            x = Math.max(0, (int) XonMap(0, 0) - 1);
+            x = (int) XonMap(screenW, y * dy - position.y + 1);
             yy = MapToY(y);
             xx = MapToX(x, y);
             maxY = Math.min(map.height, (int) YonMap(screenH) + 1);
-            maxX = (int) XonMap(screenW, y * dy - position.y + 1) + 1;
+            minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
         }
 
         private void incXY() {
-            x++;
-            if (x >= maxX) {
+            x--;
+            if (x < minX) {
                 y++;
-                x = (int) XonMap(0, 1 + y * dy - position.y);
-                maxX = (int) XonMap(screenW, y * dy - position.y + 1) + 1;
+                x = (int) XonMap(screenW, y * dy - position.y + 1);
+                minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
                 yy = MapToY(y);
                 if (y >= maxY) {
                     next = false;

@@ -110,12 +110,7 @@ public class Unit implements iRender {
     }
 
     @Override
-    public void render(Canvas canv, Rect cell) {
-        canv.drawBitmap(type.sprite.bmp, type.sprite.rect, cell, null);
-    }
-
-    @Override
     public void render(Canvas canv, Rect cell, Paint paint) {
-        canv.drawBitmap(type.sprite.bmp, type.sprite.rect, cell, null);
+        canv.drawBitmap(type.sprite.bmp, type.sprite.rect, cell, paint);
     }
 }

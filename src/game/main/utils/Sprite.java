@@ -20,13 +20,17 @@ public class Sprite{
     }
 
     public static Sprite[] loadHorisontalN(Resources res, int id, int count){
+        return loadHorisontalSpecial(res, id, count, 0);
+    }
+
+    public static Sprite[] loadHorisontalSpecial(Resources res, int id, int count, int dh) {
         Bitmap bmp = loadBmp(res, id);
-        return fromBmp(bmp,count, bmp.getWidth()/count, bmp.getHeight());
+        return fromBmp(bmp, count, bmp.getWidth() / count, bmp.getHeight(), dh);
     }
 
     public static Sprite[] loadHorisontalWithWidth(Resources res, int id, int width){
         Bitmap bmp = loadBmp(res, id);
-        return fromBmp(bmp, bmp.getWidth()/width, bmp.getWidth(), bmp.getHeight());
+        return fromBmp(bmp, bmp.getWidth() / width, bmp.getWidth(), bmp.getHeight(), 0);
     }
 
     private static Bitmap loadBmp(Resources res, int id){
@@ -37,10 +41,10 @@ public class Sprite{
         return bmp;
     }
 
-    private static Sprite[] fromBmp(Bitmap bmp, int count, int w, int h){
+    private static Sprite[] fromBmp(Bitmap bmp, int count, int w, int h, int dh) {
         Sprite[] sp=new Sprite[count];
         for(int i=0;i<count;i++){
-            sp[i]=new Sprite(bmp, w*i,0,w,h);
+            sp[i] = new Sprite(bmp, w * i, dh, w, h - dh);
         }
         return sp;
     }

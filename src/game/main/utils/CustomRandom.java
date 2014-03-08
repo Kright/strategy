@@ -1,6 +1,6 @@
 package game.main.utils;
 
-import java.io.Serializable;
+import java.io.*;
 
 /**
  * для собственного генератора случайных чисел, так как в стандартном отсутствует возможность узнать его внутреннее

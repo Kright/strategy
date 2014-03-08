@@ -46,7 +46,7 @@ public class MapRender extends MapCamera {
         Iterator<RenderObject> iter = getIterator(world.map);
         while (iter.hasNext()) {
             RenderObject ro = iter.next();
-            ro.cell.render(canv, ro.rect);
+            ro.cell.render(canv, ro.rect, null);
         }
     }
 
@@ -55,7 +55,7 @@ public class MapRender extends MapCamera {
         while (iter.hasNext()) {
             RenderObject ro = iter.next();
             if (ro.cell.hasUnit()) {
-                ro.cell.getUnit().render(canvas, ro.rect);
+                ro.cell.getUnit().render(canvas, ro.rect, null);
             }
         }
     }

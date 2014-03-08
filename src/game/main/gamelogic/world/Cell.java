@@ -27,13 +27,8 @@ public class Cell implements iRender {
     }
 
     @Override
-    public void render(Canvas canv, Rect cell) {
-        render(canv, cell, null);
-    }
-
-    @Override
     public void render(Canvas canv, Rect cell, Paint paint) {
-        canv.drawBitmap(land.sprite.bmp, land.sprite.rect, cell, paint);
+        land.render(canv, cell, paint);
         if (settlement != null)
             settlement.render(canv, cell);
     }
@@ -107,15 +102,11 @@ public class Cell implements iRender {
 
     static private Cell empty = new Cell(-1, -1) {
         @Override
-        public void render(Canvas canv, Rect cell) {
+        public void render(Canvas canv, Rect cell, Paint paint) {
             /*
             ничего. Это же пустая клетка.
             Хотя, возможно, лучше рисовать что-нибудь чёрное
              */
-        }
-
-        @Override
-        public void render(Canvas canv, Rect cell, Paint paint) {
         }
 
         @Override

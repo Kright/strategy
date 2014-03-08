@@ -54,11 +54,13 @@ public class GameSession {
 
         rnd = LinearCongruentialGenerator.getLikeNativeRandom();
 
-        Sprite[] sprites = Sprite.loadHorisontalN(resources, R.drawable.land2, 5);
+        Sprite[] spritesL = Sprite.loadHorisontalN(resources, R.drawable.land4, 5);
+        Sprite[] sprites = Sprite.loadHorisontalSpecial(resources, R.drawable.land4, 5, 32);
+
         LandType[] landscape = new LandType[3];
-        for (int i = 0; i < 3; i++) {
-            landscape[i] = new LandType(sprites[i], i + 2);
-        }
+        landscape[0] = new LandType(sprites[0], 2, "Поле");
+        landscape[1] = new AdvancedLandType(spritesL[1], 4, 0, -0.25f, "Лес");
+        landscape[2] = new LandType(sprites[2], 4, "Холм");
         camera = new MapRender(192, 128);
         Settlement.init(new Sprite[]{sprites[3], sprites[4]});
 

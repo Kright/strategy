@@ -12,6 +12,8 @@ import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Unit;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,6 +29,7 @@ public class Way implements iRenderFeature {
     private int y0;
     private int mPoints;
     int[][][] s;
+    int[][] k = {{1, 1}, {0, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, 0}};// связь с какими клетками имеется
     public Way(Map map, Unit unit) {
         Cell cell = unit.getCell();
         mPoints = unit.getMovementPoints();
@@ -50,7 +53,7 @@ public class Way implements iRenderFeature {
         s[mPoints][mPoints][1] = 0;
 
 
-        int[][] k = {{1, 1}, {0, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, 0}};// связь с какими клетками имеется
+
         int x = mPoints;
         int y = mPoints;
         int movCost;
@@ -111,8 +114,8 @@ public class Way implements iRenderFeature {
         Cell cc=c;
         int x=c.x-x0+mPoints;
         int y=c.y-y0+mPoints;
-        int[][] k = {{1, 1}, {0, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, 0}};// связь с какими клетками имеется
-        while((x!=mPoints)&&(y!=mPoints)){
+        // связь с какими клетками имеется
+        while(s[x][y][1]!=0){
             for(int i=0; i<6; i++){
                 if(s[x + k[i][0]][y + k[i][1]][1] == s[x][y][1]-cc.getMovindCost()){
                     x=x + k[i][0];
@@ -127,13 +130,15 @@ public class Way implements iRenderFeature {
                 break;
             }
         }
-        int m=path.size();
+
+        Collections.reverse(path);
+        /*int m=path.size();
 
         for (int i=0; i<m/2;i++){
             cc=path.get(i);
             path.set(i,path.get(m-1-i));
             path.set(m-1-i,cc);
-        }
+        }*/
        // path.add(cells.get(0));
         //path.add(c);
         return new MoveUnit(cells.get(0).getUnit(), path);

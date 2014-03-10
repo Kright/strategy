@@ -30,7 +30,7 @@ public class Cell implements iRender {
     public void render(Canvas canv, Rect cell, Paint paint) {
         land.render(canv, cell, paint);
         if (settlement != null)
-            settlement.render(canv, cell);
+            settlement.render(canv, cell, paint);
     }
 
     protected int getPlayerID() {

@@ -31,32 +31,32 @@ public class MapRender extends MapCamera {
         checkPosition(screenW, screenH, session.world.map.width * w, session.world.map.height * dy + h - dy);
 
         canv.drawColor(0xFFFF00FF); //фон
-        drawLandscape(session.world, canv);
+        drawLandscape(session.world, canv, null);
         if (session.properties.renderBorders) {
             drawBorders(canv);
         }
         for (iRenderFeature rf : session.currentPlayer.getRenderFeatures()) {
             rf.render(this, canv);
         }
-        drawUnits(session.world, canv);
+        drawUnits(session.world, canv, null);
         if (session.properties.showFPS)
             canv.drawText("fps=" + fps.get(), 20, 20, p);
     }
 
-    private void drawLandscape(World world, Canvas canv) {
+    private void drawLandscape(World world, Canvas canv, Paint paint) {
         Iterator<RenderObject> iter = getIterator(world.map);
         while (iter.hasNext()) {
             RenderObject ro = iter.next();
-            ro.cell.render(canv, ro.rect, null);
+            ro.cell.render(canv, ro.rect, paint);
         }
     }
 
-    private void drawUnits(World world, Canvas canvas) {
+    private void drawUnits(World world, Canvas canvas, Paint paint) {
         Iterator<RenderObject> iter = getIterator(world.map);
         while (iter.hasNext()) {
             RenderObject ro = iter.next();
             if (ro.cell.hasUnit()) {
-                ro.cell.getUnit().render(canvas, ro.rect, null);
+                ro.cell.getUnit().render(canvas, ro.rect, paint);
             }
         }
     }

@@ -32,10 +32,6 @@ public class Settlement implements iRender {
         //заглушка
     }
 
-    public void render(Canvas canv, Rect r) {
-        canv.drawBitmap(sprite.bmp, sprite.rect, r, null);
-    }
-
     public void render(Canvas canv, Rect r, Paint paint) {
         canv.drawBitmap(sprite.bmp, sprite.rect, r, paint);
     }

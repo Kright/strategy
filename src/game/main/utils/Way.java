@@ -133,7 +133,7 @@ public class Way implements iRenderFeature { // Тру путь
                 break;
             }
         }
-        Log.d("mylog","2");
+        Log.d("mylog","2"+path.size());
         Collections.reverse(path);
         /*int m=path.size();
 

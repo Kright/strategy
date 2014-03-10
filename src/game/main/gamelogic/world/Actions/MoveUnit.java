@@ -17,12 +17,13 @@ public class MoveUnit extends Action {
     private final Cell finish;
 
     public MoveUnit(Unit unit, List<Cell> way) {
-        if (way.size() <= 1) {
-            throw new IllegalArgumentException("way have only " + way.size() + " cells, there mast be >1 !");
-        }
         this.way = way;
         this.unit = unit;
         this.savedUnit = unit.getClone();
+        if (way.size() <= 1) {
+            throw new IllegalArgumentException("way have cells,length == " + way.size() + ", cells == {" + getSequence() +
+                    "} , there must be >1 !");
+        }
         finish = way.get(way.size() - 1);
         assert unit.getCell() == way.get(0) && way.size() > 1 && !finish.hasUnit();
     }
@@ -34,7 +35,7 @@ public class MoveUnit extends Action {
                 unit.decreaseMovementPoints(way.get(i).getMovindCost());
             } else {    //если у юнита нет очков движения, нам подсунули какое-то левое действие, и мы его не произведём
                 cancel();
-                throw new RuntimeException("Way is wrong!");
+                throw new RuntimeException("way is wrong, " + getSequence());
                 //return false;
             }
         }
@@ -46,6 +47,14 @@ public class MoveUnit extends Action {
     protected void cancel() {
         finish.setUnit(null);
         world.map.setUnit(savedUnit, way.get(0));
+    }
+
+    private String getSequence() {
+        String s = "";
+        for (Cell c : way) {
+            s += "(" + c.x + "," + c.y + "), ";
+        }
+        return s;
     }
 
     @Override

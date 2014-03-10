@@ -11,7 +11,7 @@ import game.main.GUI.iRender;
  * Клетка карты.
  * Находящиеся на ней юнит и поселение должны иметь ссылку на неё - потому что только клетка знает свои координаты.
  */
-public class Cell implements iRender {
+public class Cell implements iRender, Comparable<Cell> {
     /*
     клетка карты, содержит всякую информацию - тип ландшафта, юнита, если он есть, улучшения и т.п.
     */
@@ -30,7 +30,7 @@ public class Cell implements iRender {
     public void render(Canvas canv, Rect cell, Paint paint) {
         land.render(canv, cell, paint);
         if (settlement != null)
-            settlement.render(canv, cell);
+            settlement.render(canv, cell, paint);
     }
 
     protected int getPlayerID() {
@@ -139,4 +139,12 @@ public class Cell implements iRender {
             //ничего. Нефиг сюда ходить
         }
     };
+
+    @Override
+    public int compareTo(Cell another) {
+        if (y != another.y) {
+            return y - another.y;
+        }
+        return x - another.x;
+    }
 }

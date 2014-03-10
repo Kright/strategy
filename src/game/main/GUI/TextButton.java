@@ -13,6 +13,8 @@ import game.main.gamelogic.world.Action;
  */
 public abstract class TextButton extends Button {
 
+    private Paint p = new Paint();
+
     protected String text;
     private Paint paint;
 

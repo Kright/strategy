@@ -34,6 +34,7 @@ public class GameSession {
     MapRender render;
     GameProperties properties;
     Player currentPlayer;
+    GamePanel panel;
     List<ActiveArea> gui = new ArrayList<ActiveArea>();
     private boolean newTouches = true;
     private ActiveArea currentActive;
@@ -74,7 +75,8 @@ public class GameSession {
         currentPlayer = world.getNextPlayer();
         world.map.getCell(2, 2).setUnit(new Unit(crusader, currentPlayer));
 
-        gui.add(GamePanel.getGamePanel(gamer, 60));
+        panel = GamePanel.getGamePanel(gamer, 60);
+        gui.add(panel);
     }
 
     public void doLogic(List<Touch> touches) {
@@ -109,7 +111,7 @@ public class GameSession {
     }
 
     public void render(Canvas canv) {
-        render.render(this, canv);
+        render.render(this, canv, panel);
         for (ActiveArea area : gui) {
             area.render(render, canv);
         }

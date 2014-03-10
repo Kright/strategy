@@ -2,6 +2,7 @@ package game.main.gamelogic;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import game.main.GUI.GamePanel;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
 import game.main.gamelogic.world.World;
@@ -24,8 +25,9 @@ public class MapRender extends MapCamera {
         super(spriteWidth, spriteHeight);
     }
 
-    public void render(GameSession session, Canvas canv) {
-        setScreenSize(canv.getWidth(), canv.getHeight());
+    public void render(GameSession session, Canvas canv, GamePanel panel) {
+        //setScreenSize(canv.getWidth(), canv.getHeight());
+        setScreenSize(panel.getFreeRight(canv.getWidth()), canv.getHeight());
         checkPosition(screenW, screenH, session.world.map.width * w, session.world.map.height * dy + h - dy);
 
         canv.drawColor(0xFFFF00FF); //фон

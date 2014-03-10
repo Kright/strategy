@@ -2,7 +2,9 @@ package game.main.gamelogic;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import game.main.GUI.*;
+import game.main.GUI.ActiveArea;
+import game.main.GUI.AdvancedLandType;
+import game.main.GUI.GamePanel;
 import game.main.R;
 import game.main.gamelogic.world.*;
 import game.main.utils.CustomRandom;
@@ -16,7 +18,6 @@ import java.util.List;
 /**
  * Created by lgor on 16.01.14.
  * Такой большой Singleton. Имеет статическую ссылку на себя, чтобы при сворачивании приложения ничего не пропадало
- * <p/>
  * Cостояние игры:
  * 1. Игровой мир
  * 2. Всё, что связано с GUI (картинки, положение экрана, последнее активное нажатие и т.п.)
@@ -30,10 +31,9 @@ public class GameSession {
     public boolean notFinished = true;
     public CustomRandom rnd;         //потом тут будет свой, особый генератор случайных чисел
     World world;
-    MapCamera camera;
+    MapRender render;
     GameProperties properties;
     Player currentPlayer;
-    List<iRenderFeature> renderFeatures = new ArrayList<iRenderFeature>();
     List<ActiveArea> gui = new ArrayList<ActiveArea>();
     private boolean newTouches = true;
     private ActiveArea currentActive;
@@ -51,7 +51,6 @@ public class GameSession {
 
     public void init(Resources resources) {
         properties = new GameProperties();
-
         rnd = LinearCongruentialGenerator.getLikeNativeRandom();
 
         Sprite[] spritesL = Sprite.loadHorisontalN(resources, R.drawable.land4, 5);
@@ -61,19 +60,21 @@ public class GameSession {
         landscape[0] = new LandType(sprites[0], 2, "Поле");
         landscape[1] = new AdvancedLandType(spritesL[1], 4, 0, -0.25f, "Лес");
         landscape[2] = new LandType(sprites[2], 4, "Холм");
-        camera = new MapRender(192, 128);
+
+        render = new MapRender(192, 128);
         Settlement.init(new Sprite[]{sprites[3], sprites[4]});
 
         UnitType crusader = new UnitType(6, 2, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
 
         world = new World(landscape);
-        world.addPlayer(new Gamer(world, 1, renderFeatures));
+
+        Gamer gamer = new Gamer(world, 1);
+        world.addPlayer(gamer);
+
         currentPlayer = world.getNextPlayer();
         world.map.getCell(2, 2).setUnit(new Unit(crusader, currentPlayer));
 
-        gui.add(new CancelButton(camera, (Gamer) currentPlayer));
-        gui.add(new MiniMap(camera));
-
+        gui.add(GamePanel.getGamePanel(gamer, 60));
     }
 
     public void doLogic(List<Touch> touches) {
@@ -96,7 +97,7 @@ public class GameSession {
                 tt.add(t);
             }
         }
-        if (!currentPlayer.update(camera, tt)) {
+        if (!currentPlayer.update(render, tt)) {
             setNextPlayer();
         }
     }
@@ -104,14 +105,13 @@ public class GameSession {
     private void setNextPlayer() {
         currentPlayer.theEnd();
         currentPlayer = world.getNextPlayer();
-        renderFeatures.clear();
         currentPlayer.nextStep();
     }
 
     public void render(Canvas canv) {
-        camera.render(world, canv, properties, renderFeatures);
+        render.render(this, canv);
         for (ActiveArea area : gui) {
-            area.render(camera, canv);
+            area.render(render, canv);
         }
     }
 

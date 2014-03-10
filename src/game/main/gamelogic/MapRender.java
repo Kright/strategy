@@ -1,16 +1,15 @@
-package game.main.GUI;
+package game.main.gamelogic;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import game.main.gamelogic.GameProperties;
-import game.main.gamelogic.world.Cell;
+import game.main.GUI.MapCamera;
+import game.main.GUI.iRenderFeature;
 import game.main.gamelogic.world.World;
 
 import java.util.Iterator;
-import java.util.List;
 
 /**
+ * объект, который рисует карту и эффекты на ней
  * Created by lgor on 20.02.14.
  */
 public class MapRender extends MapCamera {
@@ -25,20 +24,20 @@ public class MapRender extends MapCamera {
         super(spriteWidth, spriteHeight);
     }
 
-    public void render(World world, Canvas canv, GameProperties properties, List<iRenderFeature> features) {
+    public void render(GameSession session, Canvas canv) {
         setScreenSize(canv.getWidth(), canv.getHeight());
-        checkPosition(screenW, screenH, world.map.width * w, world.map.height * dy + h - dy);
+        checkPosition(screenW, screenH, session.world.map.width * w, session.world.map.height * dy + h - dy);
 
         canv.drawColor(0xFFFF00FF); //фон
-        drawLandscape(world, canv);
-        if (properties.renderBorders) {
+        drawLandscape(session.world, canv);
+        if (session.properties.renderBorders) {
             drawBorders(canv);
         }
-        if (features != null)
-            for (iRenderFeature rf : features)
-                rf.render(this, canv);
-        drawUnits(world, canv);
-        if (properties.showFPS)
+        for (iRenderFeature rf : session.currentPlayer.getRenderFeatures()) {
+            rf.render(this, canv);
+        }
+        drawUnits(session.world, canv);
+        if (session.properties.showFPS)
             canv.drawText("fps=" + fps.get(), 20, 20, p);
     }
 

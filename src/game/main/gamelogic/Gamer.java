@@ -1,8 +1,8 @@
 package game.main.gamelogic;
 
+import android.util.Log;
 import game.main.GUI.MapCamera;
 import game.main.GUI.UnitSelection;
-import game.main.GUI.iRenderFeature;
 import game.main.gamelogic.world.Action;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Player;
@@ -13,17 +13,16 @@ import game.main.utils.Way;
 import java.util.List;
 
 /**
- * Created by lgor on 09.02.14.
  * Класс игрока, который сидит и тыкает в экран пальцем.
+ * Created by lgor on 09.02.14.
  */
 public class Gamer extends Player {
 
-    private final List<iRenderFeature> features;
     private Way way = null;
+    private boolean nextTurnReady = false;
 
-    public Gamer(World world, int id, List<iRenderFeature> features) {
+    public Gamer(World world, int id) {
         super(world, id);
-        this.features = features;
     }
 
     @Override
@@ -31,7 +30,7 @@ public class Gamer extends Player {
         for (Touch t : touches) {
             update(camera, t);
         }
-        return true;
+        return !nextTurnReady;
     }
 
     private void update(MapCamera camera, Touch touch) {
@@ -73,11 +72,21 @@ public class Gamer extends Player {
     @Override
     public void nextStep() {
         super.nextStep();   //обязательно вызывать, там обновляются города
+        cancelAction();
+        nextTurnReady = false;
     }
 
     @Override
     public void theEnd() {
         super.theEnd();     //обязательно вызывать, обновляются очки движения юнитов
+    }
+
+    /**
+     * установить изве, что игроку пора закончить ход
+     */
+    public void setNextTurnReady() {
+        nextTurnReady = true;
+        Log.d("action", "Gamer : setNextTurnReady");
     }
 
     private float len2(float x, float y) {

@@ -1,22 +1,18 @@
 package game.main.GUI;
 
-import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import game.main.gamelogic.GameProperties;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
-import game.main.gamelogic.world.World;
 import game.main.utils.FPS;
 
 import java.util.Iterator;
-import java.util.List;
 
 /**
- * Created by lgor on 17.01.14.
  * Камера, которая показывает карту.
  * В будущем она должна показывать карту не всю, а так, как её видит игрок.
+ * Created by lgor on 17.01.14.
  */
 public abstract class MapCamera {
 
@@ -24,8 +20,6 @@ public abstract class MapCamera {
     protected float dy, h, w;
     protected FPS fps = new FPS();
     protected int screenH, screenW;
-
-    public abstract void render(World world, Canvas canv, GameProperties properties, List<iRenderFeature> features);
 
     protected MapCamera(int spriteWidth, int spriteHeight) {
         h = spriteHeight;
@@ -185,7 +179,7 @@ public abstract class MapCamera {
         private final RenderObject pair;
         private final Map map;
         private int x, y, minX, maxY, xx, yy;
-        private boolean next = true;
+        private boolean hasNext = true;
 
         Frame(Map map) {
             this.map = map;
@@ -206,7 +200,7 @@ public abstract class MapCamera {
                 minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
                 yy = MapToY(y);
                 if (y >= maxY) {
-                    next = false;
+                    hasNext = false;
                 }
             }
             xx = MapToX(x, y);
@@ -214,7 +208,7 @@ public abstract class MapCamera {
 
         @Override
         public boolean hasNext() {
-            return next;
+            return hasNext;
         }
 
         @Override

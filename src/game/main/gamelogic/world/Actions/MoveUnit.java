@@ -1,5 +1,6 @@
 package game.main.gamelogic.world.Actions;
 
+import android.util.Log;
 import game.main.gamelogic.world.Action;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Unit;
@@ -27,10 +28,12 @@ public class MoveUnit extends Action {
     @Override
     protected boolean doAction() {
         for (int i = 1; i < way.size(); i++) {
-            assert unit.hasMovementPoints();    //если нет, то это какое-то левое перемещение.
-            // Но assert почему-то не работает, и это печально
-            //пока что смены ходов нет, и чтобы полюбоваться на движение человечка, очки не снимаются
-            //unit.decreaseMovementPoints(way.get(i).getMovindCost());
+            if (unit.hasMovementPoints()) {
+                unit.decreaseMovementPoints(way.get(i).getMovindCost());
+            } else {    //если у юнита нет очков движения, нам подсунули какое-то левое действие, и мы его не произведём
+                cancel();
+                return false;
+            }
         }
         world.map.setUnit(unit, finish);
         return true;
@@ -38,7 +41,13 @@ public class MoveUnit extends Action {
 
     @Override
     protected void cancel() {
+        Log.d("action", "cancel moving");
         finish.setUnit(null);
         world.map.setUnit(savedUnit, way.get(0));
+    }
+
+    @Override
+    public String toString() {
+        return "moving unit from (" + way.get(0).x + "," + way.get(0).y + ") to (" + finish.x + "," + finish.y + ")";
     }
 }

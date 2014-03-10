@@ -5,6 +5,8 @@ import android.graphics.Paint;
 import game.main.utils.Touch;
 
 /**
+ * Реализация миникарты.
+ * В данный момент не используется, но раньше работало исправно и удалять жаль - думаю, код отсуюда может пригодиться
  * Created by lgor on 20.02.14.
  */
 public class MiniMap extends ActiveArea {

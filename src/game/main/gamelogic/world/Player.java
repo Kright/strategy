@@ -1,17 +1,20 @@
 package game.main.gamelogic.world;
 
 import game.main.GUI.MapCamera;
+import game.main.GUI.iRenderFeature;
 import game.main.utils.Touch;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * абстрактный класс игрока
  * Created by lgor on 09.02.14.
  */
 public abstract class Player {
 
     protected final World world;
+    protected List<iRenderFeature> features = new ArrayList<iRenderFeature>();
 
     /**
      * игрок с id==0 - тестовый, которому доступно всё - видит всю карту и т.п.
@@ -26,6 +29,10 @@ public abstract class Player {
         this.id = id;
     }
 
+    public List<iRenderFeature> getRenderFeatures() {
+        return features;
+    }
+
     /*
     обновить состояние городов, казны и т.п.
     вызывается до того, как будет вызван update
@@ -36,7 +43,6 @@ public abstract class Player {
             settlement.nextTurn();
         }
         //may be gold -= units.size();
-        //TODO
     }
 
     /*

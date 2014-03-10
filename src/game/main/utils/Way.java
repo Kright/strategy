@@ -41,8 +41,8 @@ public class Way implements iRenderFeature { // Тру путь
         for (int i = 0; i < 2 * mPoints + 1; i++)
             for (int j = 0; j < 2 * mPoints + 1; j++) {
                 if (!map.getCell(x0 - mPoints + i, y0 - mPoints + j).canMove()) {
-                    s[i][j][0] = 1; // клетку посетил
-                    s[i][j][1] = maxWay; // путь бусконечный
+                    s[i][j][0] = 2; // вершину нельзя в принципе достичь
+                    s[i][j][1] = maxWay+1; // путь бусконечный
                     controlSum += 1;
                 } else {
                     s[i][j][1] = maxWay;
@@ -60,13 +60,16 @@ public class Way implements iRenderFeature { // Тру путь
         while (controlSum != (2 * mPoints + 1) * (2 * mPoints + 1)) {
             for (int count = 0; count < 6; count++) {
                 if ((x + k[count][0] >= 0) && (x + k[count][0] <= 2 * mPoints) && (y + k[count][1] >= 0) && (y + k[count][1] <= 2 * mPoints)) {
+                    if((s[x+k[count][0]][y+k[count][1]][0]!=2)){
                     movCost = map.getCell(x0 - mPoints + x + k[count][0], y0 - mPoints + y + k[count][1]).getMovindCost();
 
-                    if (mPoints - s[x][y][1] >0) {
+                    if ((mPoints - s[x][y][1] >0)) {
                         if ((s[x + k[count][0]][y + k[count][1]][1] > movCost + s[x][y][1])) {
                             s[x + k[count][0]][y + k[count][1]][1] = movCost + s[x][y][1];
+                            //Log.d("mylog",""+(x + k[count][0])+(y + k[count][1]));
                         }
 
+                    }
                     }
                 }
             }
@@ -90,9 +93,10 @@ public class Way implements iRenderFeature { // Тру путь
                     }
                 }
         }
-    }
 
-        /*for (int i = -1; i <= 1; i++) {
+
+
+    }       /*for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (map.getInterval(i, j) == 1) {
                     Cell add = map.getCell(cell.x + i, cell.y + j);
@@ -118,22 +122,21 @@ public class Way implements iRenderFeature { // Тру путь
         while(s[x][y][1]!=0){
             for(int i=0; i<6; i++){
                 if((x + k[i][0]>=0)&&(x + k[i][0]<=2*mPoints)&&(y + k[i][1]>=0)&&(y + k[i][1]<=2*mPoints)){
-                    if(s[x + k[i][0]][y + k[i][1]][1] == s[x][y][1]-cc.getMovindCost()){
+                    if(s[x + k[i][0]][y + k[i][1]][1] == (s[x][y][1]-cc.getMovindCost())){
                         x=x + k[i][0];
                         y=y + k[i][1];
                         break;
                     }
                 }
             }
-        for(Cell cCount: cells)
+        for(Cell cCount: cells){
             if ((cCount.x==x+x0-mPoints)&&(cCount.y==y+y0-mPoints)){
                 path.add(cCount);
-                Log.d("mylog","1"+(x-mPoints)+(y-mPoints));
                 cc=cCount;
                 break;
             }
         }
-        Log.d("mylog","2"+path.size());
+        }
         Collections.reverse(path);
         /*int m=path.size();
 

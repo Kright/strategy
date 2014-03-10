@@ -40,7 +40,7 @@ public class Way implements iRenderFeature { // Тру путь
         s= new int[2 * mPoints + 1][2 * mPoints + 1][2];
         for (int i = 0; i < 2 * mPoints + 1; i++)
             for (int j = 0; j < 2 * mPoints + 1; j++) {
-                if (!map.getCell(x0 - mPoints + i, y0 - mPoints + j).canMove()) {
+                if (!map.getCell(x0 - mPoints + i, y0 - mPoints + j).accessible()) {
                     s[i][j][0] = 2; // вершину нельзя в принципе достичь
                     s[i][j][1] = maxWay+1; // путь бусконечный
                     controlSum += 1;

@@ -19,7 +19,7 @@ import java.util.List;
  * Created by Michael-PC on 10.03.14.
  */
 
-public class Way2 implements iRenderFeature {
+public class Way2 implements iRenderFeature { // Не тру путь
 
     private List<Cell> cells = new ArrayList<Cell>();
     private Paint p = new Paint();

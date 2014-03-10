@@ -26,9 +26,9 @@ public class MapRender extends MapCamera {
     }
 
     public void render(GameSession session, Canvas canv, GamePanel panel) {
-        //setScreenSize(canv.getWidth(), canv.getHeight());
         setScreenSize(panel.getFreeRight(canv.getWidth()), canv.getHeight());
-        checkPosition(screenW, screenH, session.world.map.width * w, session.world.map.height * dy + h - dy);
+        //              временно убрал для удобства отладки. В частности, чтобы понять, почему ушедший за край карты юнит вызывает Exception
+        //checkPosition(screenW, screenH, session.world.map.width * w, session.world.map.height * dy + h - dy);
 
         canv.drawColor(0xFFFF00FF); //фон
         drawLandscape(session.world, canv, null);

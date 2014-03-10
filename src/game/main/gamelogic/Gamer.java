@@ -7,8 +7,8 @@ import game.main.gamelogic.world.Action;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Player;
 import game.main.gamelogic.world.World;
+import game.main.utils.AlternativeWay;
 import game.main.utils.Touch;
-import game.main.utils.Way;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class Gamer extends Player {
 
-    private Way way = null;
+    private AlternativeWay way = null;
     private boolean nextTurnReady = false;
 
     public Gamer(World world, int id) {
@@ -48,7 +48,7 @@ public class Gamer extends Player {
                 features.clear();
                 if (c.hasUnit()) {
                     features.add(new UnitSelection(c.getUnit()));
-                    way = new Way(world.map, c.getUnit());
+                    way = new AlternativeWay(world.map, c.getUnit());
                     features.add(way);
                 }
                 moveUnit.apply();

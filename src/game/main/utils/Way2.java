@@ -38,7 +38,7 @@ public class Way2 implements iRenderFeature {
                 if (!map.getCell(x0 - mPoints + i, y0 - mPoints + j).canMove()) {
                     Log.d("log", "" + i + "" + j);
                     s[i][j][0] = 1; // клетку посетил
-                    s[i][j][1] = mPoints + 1; // путь бусконечный
+                    s[i][j][1] = mPoints + 1; // путь бесконечный
                     controlSum += 1;
                 } else {
                     s[i][j][1] = mPoints + 1;

@@ -1,6 +1,5 @@
 package game.main.gamelogic.world.Actions;
 
-import android.util.Log;
 import game.main.gamelogic.world.Action;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Unit;
@@ -18,6 +17,9 @@ public class MoveUnit extends Action {
     private final Cell finish;
 
     public MoveUnit(Unit unit, List<Cell> way) {
+        if (way.size() <= 1) {
+            throw new IllegalArgumentException("way have only " + way.size() + " cells, there mast be >1 !");
+        }
         this.way = way;
         this.unit = unit;
         this.savedUnit = unit.getClone();
@@ -32,7 +34,8 @@ public class MoveUnit extends Action {
                 unit.decreaseMovementPoints(way.get(i).getMovindCost());
             } else {    //если у юнита нет очков движения, нам подсунули какое-то левое действие, и мы его не произведём
                 cancel();
-                return false;
+                throw new RuntimeException("Way is wrong!");
+                //return false;
             }
         }
         world.map.setUnit(unit, finish);
@@ -41,7 +44,6 @@ public class MoveUnit extends Action {
 
     @Override
     protected void cancel() {
-        Log.d("action", "cancel moving");
         finish.setUnit(null);
         world.map.setUnit(savedUnit, way.get(0));
     }

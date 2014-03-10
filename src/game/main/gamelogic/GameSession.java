@@ -65,7 +65,7 @@ public class GameSession {
         render = new MapRender(192, 128);
         Settlement.init(new Sprite[]{sprites[3], sprites[4]});
 
-        UnitType crusader = new UnitType(6, 2, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
+        UnitType crusader = new UnitType(5, 2, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
 
         world = new World(landscape);
 

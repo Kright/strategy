@@ -128,7 +128,7 @@ public class Way implements iRenderFeature { // Тру путь
         for(Cell cCount: cells)
             if ((cCount.x==x+x0-mPoints)&&(cCount.y==y+y0-mPoints)){
                 path.add(cCount);
-                Log.d("mylog","1");
+                Log.d("mylog","1"+(x-mPoints)+(y-mPoints));
                 cc=cCount;
                 break;
             }

@@ -12,6 +12,7 @@ import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Unit;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -127,13 +128,9 @@ public class Way2 implements iRenderFeature {
                     break;
                 }
         }
-        int m=path.size();
 
-        for (int i=0; i<m/2;i++){
-            cc=path.get(i);
-            path.set(i,path.get(m-1-i));
-            path.set(m-1-i,cc);
-        }
+        Collections.reverse(path);
+
         //path.add(cells.get(0));
         //path.add(c);
         return new MoveUnit(cells.get(0).getUnit(), path);

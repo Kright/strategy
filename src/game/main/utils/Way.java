@@ -117,20 +117,23 @@ public class Way implements iRenderFeature { // Тру путь
         // связь с какими клетками имеется
         while(s[x][y][1]!=0){
             for(int i=0; i<6; i++){
-                if(s[x + k[i][0]][y + k[i][1]][1] == s[x][y][1]-cc.getMovindCost()){
-                    x=x + k[i][0];
-                    y=y + k[i][1];
-                    break;
+                if((x + k[i][0]>=0)&&(x + k[i][0]<=2*mPoints)&&(y + k[i][1]>=0)&&(y + k[i][1]<=2*mPoints)){
+                    if(s[x + k[i][0]][y + k[i][1]][1] == s[x][y][1]-cc.getMovindCost()){
+                        x=x + k[i][0];
+                        y=y + k[i][1];
+                        break;
+                    }
                 }
             }
         for(Cell cCount: cells)
-            if ((cCount.x==x)&&(cCount.y==y)){
+            if ((cCount.x==x+x0-mPoints)&&(cCount.y==y+y0-mPoints)){
                 path.add(cCount);
+                Log.d("mylog","1");
                 cc=cCount;
                 break;
             }
         }
-
+        Log.d("mylog","2");
         Collections.reverse(path);
         /*int m=path.size();
 

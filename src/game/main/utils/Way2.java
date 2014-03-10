@@ -19,30 +19,33 @@ import java.util.List;
  * Created by Michael-PC on 10.03.14.
  */
 
-public class Way2 implements iRenderFeature { // Не тру путь
+public class Way2 implements iRenderFeature { // Тру путь
 
     private List<Cell> cells = new ArrayList<Cell>();
     private Paint p = new Paint();
-    int x0;
-    int y0;
-    int mPoints;
-    int s[][][];
+    private int maxWay=1000;
+    private int x0;
+    private int y0;
+    private int mPoints;
+    int[][][] s;
+    int[][] k = {{1, 1}, {0, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, 0}};// связь с какими клетками имеется
+
     public Way2(Map map, Unit unit) {
         Cell cell = unit.getCell();
         mPoints = unit.getMovementPoints();
         x0 = cell.x;
         y0 = cell.y;
+
         int controlSum = 0;
-        s = new int[2 * mPoints + 1][2 * mPoints + 1][2];
+        s= new int[2 * mPoints + 1][2 * mPoints + 1][2];
         for (int i = 0; i < 2 * mPoints + 1; i++)
             for (int j = 0; j < 2 * mPoints + 1; j++) {
                 if (!map.getCell(x0 - mPoints + i, y0 - mPoints + j).canMove()) {
-                    Log.d("log", "" + i + "" + j);
-                    s[i][j][0] = 1; // клетку посетил
-                    s[i][j][1] = mPoints + 1; // путь бесконечный
+                    s[i][j][0] = 2; // вершину нельзя в принципе достичь
+                    s[i][j][1] = maxWay+1; // путь бусконечный
                     controlSum += 1;
                 } else {
-                    s[i][j][1] = mPoints + 1;
+                    s[i][j][1] = maxWay;
                     s[i][j][0] = 0; // клетку еще не посещал
                 }
             }
@@ -50,33 +53,35 @@ public class Way2 implements iRenderFeature { // Не тру путь
         s[mPoints][mPoints][1] = 0;
 
 
-        int[][] k = {{1, 1}, {0, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, 0}};// связь с какими клетками имеется
+
         int x = mPoints;
         int y = mPoints;
         int movCost;
         while (controlSum != (2 * mPoints + 1) * (2 * mPoints + 1)) {
             for (int count = 0; count < 6; count++) {
                 if ((x + k[count][0] >= 0) && (x + k[count][0] <= 2 * mPoints) && (y + k[count][1] >= 0) && (y + k[count][1] <= 2 * mPoints)) {
-                    movCost = map.getCell(x0 - mPoints + x + k[count][0], y0 - mPoints + y + k[count][1]).getMovindCost();
+                    if((s[x+k[count][0]][y+k[count][1]][0]!=2)){
+                        movCost = map.getCell(x0 - mPoints + x + k[count][0], y0 - mPoints + y + k[count][1]).getMovindCost();
 
-                    if (mPoints - s[x][y][1] >= movCost) {
-                        if ((s[x + k[count][0]][y + k[count][1]][1] > movCost + s[x][y][1])) {
-                            s[x + k[count][0]][y + k[count][1]][1] = movCost + s[x][y][1];
+                        if ((mPoints - s[x][y][1] >0)) {
+                            if ((s[x + k[count][0]][y + k[count][1]][1] > movCost + s[x][y][1])) {
+                                s[x + k[count][0]][y + k[count][1]][1] = movCost + s[x][y][1];
+                                //Log.d("mylog",""+(x + k[count][0])+(y + k[count][1]));
+                            }
+
                         }
-
                     }
                 }
             }
 
             s[x][y][0] = 1;
-            if (s[x][y][1] <= mPoints) {
+            if (s[x][y][1] <= maxWay-1) {
                 cells.add(map.getCell(x0 - mPoints + x, y0 - mPoints + y));
-                Log.d("log", "" + x + "" + y);
             }
             controlSum += 1;
             if (controlSum == (2 * mPoints + 1) * (2 * mPoints + 1))
                 break;
-            int min = mPoints + 2;
+            int min = maxWay + 1;
             for (int i = 0; i < 2 * mPoints + 1; i++)
                 for (int j = 0; j < 2 * mPoints + 1; j++) {
                     if (s[i][j][0] == 0) {
@@ -88,9 +93,10 @@ public class Way2 implements iRenderFeature { // Не тру путь
                     }
                 }
         }
-    }
 
-        /*for (int i = -1; i <= 1; i++) {
+
+
+    }       /*for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (map.getInterval(i, j) == 1) {
                     Cell add = map.getCell(cell.x + i, cell.y + j);
@@ -112,26 +118,34 @@ public class Way2 implements iRenderFeature { // Не тру путь
         Cell cc=c;
         int x=c.x-x0+mPoints;
         int y=c.y-y0+mPoints;
-        int[][] k = {{1, 1}, {0, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, 0}};// связь с какими клетками имеется
-        while((x!=mPoints)&&(y!=mPoints)){
+        // связь с какими клетками имеется
+        while(s[x][y][1]!=0){
             for(int i=0; i<6; i++){
-                if(s[x + k[i][0]][y + k[i][1]][1] == s[x][y][1]-cc.getMovindCost()){
-                    x=x + k[i][0];
-                    y=y + k[i][1];
-                    break;
+                if((x + k[i][0]>=0)&&(x + k[i][0]<=2*mPoints)&&(y + k[i][1]>=0)&&(y + k[i][1]<=2*mPoints)){
+                    if(s[x + k[i][0]][y + k[i][1]][1] == (s[x][y][1]-cc.getMovindCost())){
+                        x=x + k[i][0];
+                        y=y + k[i][1];
+                        break;
+                    }
                 }
             }
-            for(Cell cCount: cells)
-                if ((cCount.x==x)&&(cCount.y==y)){
+            for(Cell cCount: cells){
+                if ((cCount.x==x+x0-mPoints)&&(cCount.y==y+y0-mPoints)){
                     path.add(cCount);
                     cc=cCount;
                     break;
                 }
+            }
         }
-
         Collections.reverse(path);
+        /*int m=path.size();
 
-        //path.add(cells.get(0));
+        for (int i=0; i<m/2;i++){
+            cc=path.get(i);
+            path.set(i,path.get(m-1-i));
+            path.set(m-1-i,cc);
+        }*/
+        // path.add(cells.get(0));
         //path.add(c);
         return new MoveUnit(cells.get(0).getUnit(), path);
     }
@@ -156,4 +170,3 @@ public class Way2 implements iRenderFeature { // Не тру путь
         }
     }
 }
-

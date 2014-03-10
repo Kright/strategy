@@ -15,34 +15,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * класс, описывающий доступные для юнита клетки
- * Created by lgor on 25.02.14.
+ * Created by Michael-PC on 10.03.14.
  */
-public class Way implements iRenderFeature {
+
+public class Way2 implements iRenderFeature {
 
     private List<Cell> cells = new ArrayList<Cell>();
     private Paint p = new Paint();
-    private int maxWay=1000;
-    private int x0;
-    private int y0;
-    private int mPoints;
-    int[][][] s;
-    public Way(Map map, Unit unit) {
+    int x0;
+    int y0;
+    int mPoints;
+    int s[][][];
+    public Way2(Map map, Unit unit) {
         Cell cell = unit.getCell();
         mPoints = unit.getMovementPoints();
         x0 = cell.x;
         y0 = cell.y;
-
         int controlSum = 0;
-        s= new int[2 * mPoints + 1][2 * mPoints + 1][2];
+        s = new int[2 * mPoints + 1][2 * mPoints + 1][2];
         for (int i = 0; i < 2 * mPoints + 1; i++)
             for (int j = 0; j < 2 * mPoints + 1; j++) {
                 if (!map.getCell(x0 - mPoints + i, y0 - mPoints + j).canMove()) {
+                    Log.d("log", "" + i + "" + j);
                     s[i][j][0] = 1; // клетку посетил
-                    s[i][j][1] = maxWay; // путь бусконечный
+                    s[i][j][1] = mPoints + 1; // путь бусконечный
                     controlSum += 1;
                 } else {
-                    s[i][j][1] = maxWay;
+                    s[i][j][1] = mPoints + 1;
                     s[i][j][0] = 0; // клетку еще не посещал
                 }
             }
@@ -59,7 +58,7 @@ public class Way implements iRenderFeature {
                 if ((x + k[count][0] >= 0) && (x + k[count][0] <= 2 * mPoints) && (y + k[count][1] >= 0) && (y + k[count][1] <= 2 * mPoints)) {
                     movCost = map.getCell(x0 - mPoints + x + k[count][0], y0 - mPoints + y + k[count][1]).getMovindCost();
 
-                    if (mPoints - s[x][y][1] >0) {
+                    if (mPoints - s[x][y][1] >= movCost) {
                         if ((s[x + k[count][0]][y + k[count][1]][1] > movCost + s[x][y][1])) {
                             s[x + k[count][0]][y + k[count][1]][1] = movCost + s[x][y][1];
                         }
@@ -69,13 +68,14 @@ public class Way implements iRenderFeature {
             }
 
             s[x][y][0] = 1;
-            if (s[x][y][1] <= maxWay-1) {
+            if (s[x][y][1] <= mPoints) {
                 cells.add(map.getCell(x0 - mPoints + x, y0 - mPoints + y));
+                Log.d("log", "" + x + "" + y);
             }
             controlSum += 1;
             if (controlSum == (2 * mPoints + 1) * (2 * mPoints + 1))
                 break;
-            int min = maxWay + 1;
+            int min = mPoints + 2;
             for (int i = 0; i < 2 * mPoints + 1; i++)
                 for (int j = 0; j < 2 * mPoints + 1; j++) {
                     if (s[i][j][0] == 0) {
@@ -120,12 +120,12 @@ public class Way implements iRenderFeature {
                     break;
                 }
             }
-        for(Cell cCount: cells)
-            if ((cCount.x==x)&&(cCount.y==y)){
-                path.add(cCount);
-                cc=cCount;
-                break;
-            }
+            for(Cell cCount: cells)
+                if ((cCount.x==x)&&(cCount.y==y)){
+                    path.add(cCount);
+                    cc=cCount;
+                    break;
+                }
         }
         int m=path.size();
 
@@ -134,7 +134,7 @@ public class Way implements iRenderFeature {
             path.set(i,path.get(m-1-i));
             path.set(m-1-i,cc);
         }
-       // path.add(cells.get(0));
+        //path.add(cells.get(0));
         //path.add(c);
         return new MoveUnit(cells.get(0).getUnit(), path);
     }
@@ -159,3 +159,4 @@ public class Way implements iRenderFeature {
         }
     }
 }
+

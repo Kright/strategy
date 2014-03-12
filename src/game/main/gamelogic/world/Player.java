@@ -15,18 +15,11 @@ public abstract class Player {
 
     protected final World world;
     protected List<iRenderFeature> features = new ArrayList<iRenderFeature>();
+    protected Country country;
 
-    /**
-     * игрок с id==0 - тестовый, которому доступно всё - видит всю карту и т.п.
-     */
-    public final int id;
-
-    protected final List<Unit> units = new ArrayList<Unit>();
-    protected final List<Settlement> settlements = new ArrayList<Settlement>();
-
-    public Player(World world, int id) {
+    public Player(World world, Country country) {
         this.world = world;
-        this.id = id;
+        this.country = country;
     }
 
     public List<iRenderFeature> getRenderFeatures() {
@@ -37,22 +30,16 @@ public abstract class Player {
     обновить состояние городов, казны и т.п.
     вызывается до того, как будет вызван update
      */
-    public void nextStep() {
-        world.map.listsUnitsSettlements(this, units, settlements);
-        for (Settlement settlement : settlements) {
-            settlement.nextTurn();
-        }
-        //may be gold -= units.size();
+    public void startNextTurn() {
+        country.startNextTurn();
     }
 
     /*
     вызывается после update==false
     подлечить юнитов, восполнить очки ходов и т.п.
      */
-    public void theEnd() {
-        for (Unit unit : units) {
-            unit.endTurn();
-        }
+    public void beforeEndTurn() {
+        country.beforeEndTurn();
     }
 
     /*

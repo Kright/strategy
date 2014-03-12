@@ -61,7 +61,7 @@ public abstract class LinearCongruentialGenerator implements CustomRandom {
 
             @Override
             protected int next(int bits) {
-                seed = (a * seed + c) & 0xFfffFfffFfffL;  //числозависимая штука, но при (...) % m появляются отрицительные числа
+                seed = (a * seed + c) & ((1L << 48) - 1);  //числозависимая штука, но при (...) % m появляются отрицительные числа
                 return (int) (seed >>> (48 - bits));
             }
         };

@@ -12,15 +12,15 @@ import game.main.GUI.iRender;
 public class Unit implements iRender {
 
     public final UnitType type;
-    public final int playerID;
+    public final int countryID;
     private int movementPoints;     //очки перемещения
     private int hitPoints;          //
     private Settlement home;
     private Cell cell;      //при перемещении надо обновлять
 
-    public Unit(UnitType type, Player player) {
+    public Unit(UnitType type, int id) {
         this.type = type;
-        playerID = player.id;
+        countryID = id;
         this.cell = Cell.getEmpty();
         hitPoints = type.hitPoints;
         movementPoints = type.movementPoints;
@@ -28,7 +28,7 @@ public class Unit implements iRender {
 
     private Unit(Unit u) {
         this.type = u.type;
-        this.playerID = u.playerID;
+        this.countryID = u.countryID;
         this.movementPoints = u.getMovementPoints();
         this.hitPoints = u.hitPoints;
         this.home = u.home;
@@ -43,7 +43,7 @@ public class Unit implements iRender {
      * Вызывается в конце каждого хода
      */
     public void endTurn() {
-        if (hitPoints < getMaxHitPoints() && movementPoints == type.movementPoints && cell.getPlayerID() == playerID) {
+        if (hitPoints < getMaxHitPoints() && movementPoints == type.movementPoints && cell.getPlayerID() == countryID) {
             hitPoints++;
         }
         movementPoints = type.movementPoints;

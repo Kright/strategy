@@ -3,10 +3,7 @@ package game.main.gamelogic;
 import android.util.Log;
 import game.main.GUI.MapCamera;
 import game.main.GUI.UnitSelection;
-import game.main.gamelogic.world.Action;
-import game.main.gamelogic.world.Cell;
-import game.main.gamelogic.world.Player;
-import game.main.gamelogic.world.World;
+import game.main.gamelogic.world.*;
 import game.main.utils.AlternativeWay;
 import game.main.utils.Touch;
 
@@ -21,8 +18,8 @@ public class Gamer extends Player {
     private AlternativeWay way = null;
     private boolean nextTurnReady = false;
 
-    public Gamer(World world, int id) {
-        super(world, id);
+    public Gamer(World world, Country country) {
+        super(world, country);
     }
 
     @Override
@@ -70,15 +67,15 @@ public class Gamer extends Player {
     }
 
     @Override
-    public void nextStep() {
-        super.nextStep();   //обязательно вызывать, там обновляются города
+    public void startNextTurn() {
+        super.startNextTurn();      //обязательно вызывать, там обновляются города
         cancelAction();
         nextTurnReady = false;
     }
 
     @Override
-    public void theEnd() {
-        super.theEnd();     //обязательно вызывать, обновляются очки движения юнитов
+    public void beforeEndTurn() {
+        super.beforeEndTurn();     //обязательно вызывать, обновляются очки движения юнитов
     }
 
     /**

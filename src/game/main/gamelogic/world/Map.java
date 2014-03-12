@@ -36,8 +36,8 @@ public class Map implements Iterable<Cell> {
     /**
      * заполняет списки всех юнитов и поселений на карте, принадлежащих игроку
      */
-    public void listsUnitsSettlements(Player player, List<Unit> units, List<Settlement> settlements) {
-        int id = player.id;
+    public void listsUnitsSettlements(int countryID, List<Unit> units, List<Settlement> settlements) {
+        int id = countryID;
         units.clear();
         settlements.clear();
         for (int i = 0; i < height; i++) {
@@ -45,7 +45,7 @@ public class Map implements Iterable<Cell> {
                 Cell c = table[j][i];
                 if (c != null) {
                     Unit unit = c.getUnit();
-                    if (unit != null && unit.playerID == id) {
+                    if (unit != null && unit.countryID == id) {
                         units.add(unit);
                     }
                     if (c.settlement != null && c.settlement.playerID == id) {

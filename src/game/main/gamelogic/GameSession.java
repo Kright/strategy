@@ -69,12 +69,13 @@ public class GameSession {
 
         world = new World(landscape);
 
-        Gamer gamer = new Gamer(world, 1);
+        Country country = new Country(world.map, 1);
+        Gamer gamer = new Gamer(world, country);
         world.addPlayer(gamer);
 
         currentPlayer = world.getNextPlayer();
-        world.map.getCell(2, 2).setUnit(new Unit(crusader, currentPlayer));
-        world.map.getCell(6, 6).setUnit(new Unit(crusader, currentPlayer));
+        world.map.getCell(2, 2).setUnit(new Unit(crusader, 1));
+        world.map.getCell(6, 6).setUnit(new Unit(crusader, 1));
 
         panel = GamePanel.getGamePanel(gamer, 60);
         gui.add(panel);
@@ -106,9 +107,9 @@ public class GameSession {
     }
 
     private void setNextPlayer() {
-        currentPlayer.theEnd();
+        currentPlayer.beforeEndTurn();
         currentPlayer = world.getNextPlayer();
-        currentPlayer.nextStep();
+        currentPlayer.startNextTurn();
     }
 
     public void render(Canvas canv) {

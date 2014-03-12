@@ -3,13 +3,14 @@ package game.main.gamelogic.world;
 import game.main.gamelogic.GameSession;
 import game.main.utils.CustomRandom;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by lgor on 31.12.13.
  * Класс карты. В перспективе будет туман войны и прочее, для этого в методе getCell будет нужен id игрока
  */
-public class Map {
+public class Map implements Iterable<Cell> {
 
     public final int width, height;
     /**
@@ -123,6 +124,33 @@ public class Map {
         if (dy >= 0)
             return dy - dx;
         return dx < dy ? -dx : -dy;
+    }
+
+    /**
+     * итератор по всем клеткам карты. Обход - строчками слева направо, сверху вниз
+     *
+     * @return итератор
+     */
+    @Override
+    public Iterator<Cell> iterator() {
+        return new Iterator<Cell>() {
+            private int counter = -1;
+
+            @Override
+            public boolean hasNext() {
+                return counter + 1 < width * height;
+            }
+
+            @Override
+            public Cell next() {
+                counter++;
+                return table[counter / width][counter % width];
+            }
+
+            @Override
+            public void remove() {
+            }
+        };
     }
 
     /*

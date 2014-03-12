@@ -96,6 +96,13 @@ public class Cell implements iRender, Comparable<Cell> {
         return false;
     }
 
+    /**
+     * @return есть ли поселение на этой клетке
+     */
+    public boolean hasSettlement() {
+        return settlement != null;
+    }
+
     public static Cell getEmpty() {
         return empty;
     }

@@ -1,5 +1,7 @@
 package game.main.gamelogic.world;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,8 @@ public class Country {
     public Country(Map map, int id) {
         this.id = id;
         this.map = map;
+        map.listsUnitsSettlements(this.id, units, settlements);
+        Log.d("action", "Country constructor : " + settlements.size() + " settlements, " + units.size() + " units");
     }
 
     /**

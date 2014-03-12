@@ -43,14 +43,11 @@ public class Map implements Iterable<Cell> {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 Cell c = table[j][i];
-                if (c != null) {
-                    Unit unit = c.getUnit();
-                    if (unit != null && unit.countryID == id) {
-                        units.add(unit);
-                    }
-                    if (c.settlement != null && c.settlement.playerID == id) {
-                        settlements.add(c.settlement);
-                    }
+                if (c.hasUnit() && c.getUnit().countryID == id) {
+                    units.add(c.getUnit());
+                }
+                if (c.hasSettlement() && c.settlement.playerID == id) {
+                    settlements.add(c.settlement);
                 }
             }
         }

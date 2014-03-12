@@ -68,14 +68,14 @@ public class GameSession {
         UnitType crusader = new UnitType(4, 2, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
 
         world = new World(landscape);
+        world.map.getCell(2, 2).setUnit(new Unit(crusader, 1));
+        world.map.getCell(6, 6).setUnit(new Unit(crusader, 1));
 
         Country country = new Country(world.map, 1);
         Gamer gamer = new Gamer(world, country);
         world.addPlayer(gamer);
 
         currentPlayer = world.getNextPlayer();
-        world.map.getCell(2, 2).setUnit(new Unit(crusader, 1));
-        world.map.getCell(6, 6).setUnit(new Unit(crusader, 1));
 
         panel = GamePanel.getGamePanel(gamer, 60);
         gui.add(panel);

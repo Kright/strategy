@@ -1,6 +1,5 @@
 package game.main.gamelogic;
 
-import android.util.Log;
 import game.main.GUI.MapCamera;
 import game.main.GUI.UnitSelection;
 import game.main.gamelogic.world.*;
@@ -83,7 +82,6 @@ public class Gamer extends Player {
      */
     public void setNextTurnReady() {
         nextTurnReady = true;
-        Log.d("action", "Gamer : setNextTurnReady");
     }
 
     private float len2(float x, float y) {

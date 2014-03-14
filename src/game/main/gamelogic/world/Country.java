@@ -39,10 +39,17 @@ public class Country {
 
     /**
      * вызывать перед концом хода, тут лечатся юниты и т.п.
+     * надо принудительно пробежать по карте, потому что во время хода могли появиться новые юниты,
+     * например, при отмене игроком действия
      */
     public void beforeEndTurn() {
-        for (Unit u : units) {
-            u.endTurn();
+        for (Cell c : map) {
+            if (c.hasUnit()) {
+                Unit u = c.getUnit();
+                if (u.countryID == this.id) {
+                    u.endTurn();
+                }
+            }
         }
     }
 
@@ -62,8 +69,6 @@ public class Country {
 
     /**
      * добавляет в список все поселения
-     *
-     * @param settlements
      */
     public void addSettlements(List<Settlement> settlements) {
         for (Cell c : map) {

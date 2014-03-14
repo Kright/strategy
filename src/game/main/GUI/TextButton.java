@@ -23,6 +23,15 @@ public abstract class TextButton extends Button {
     private TextButton(String text, float textSize) {
         this.text = text;
         paint = new Paint();
+        setTextSize(textSize);
+    }
+
+    /**
+     * установить размер шрифта (размер кнопки может измениться)
+     *
+     * @param textSize
+     */
+    public void setTextSize(float textSize) {
         paint.setTextSize(textSize);
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);

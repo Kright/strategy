@@ -21,8 +21,8 @@ public class MapRender extends MapCamera {
         p.setTextSize(p.getTextSize() * 2);
     }
 
-    public MapRender(int spriteWidth, int spriteHeight) {
-        super(spriteWidth, spriteHeight);
+    public MapRender(int spriteHeight) {
+        super(spriteHeight / 2 * 3, spriteHeight);
     }
 
     public void render(GameSession session, Canvas canv, GamePanel panel) {

@@ -62,7 +62,7 @@ public class GameSession {
         landscape[1] = new AdvancedLandType(spritesL[1], 4, 0, -0.25f, "Лес");
         landscape[2] = new LandType(sprites[2], 4, "Холм");
 
-        render = new MapRender(192, 128);
+        render = new MapRender(128);
         Settlement.init(new Sprite[]{sprites[3], sprites[4]});
 
         UnitType crusader = new UnitType(4, 2, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);

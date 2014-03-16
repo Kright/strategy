@@ -18,6 +18,7 @@ public abstract class MapCamera {
 
     protected Point position = new Point(); //левый верхний угол экрана
     protected float dy, h, w;
+
     protected FPS fps = new FPS();
     protected int screenH, screenW;
 
@@ -32,8 +33,8 @@ public abstract class MapCamera {
      */
     public void scale(float scale, float centerX, float centerY) {
         h *= scale;
-        w *= scale;
-        dy = h * 3 / 4;
+        w = h * 1.5f;
+        dy = h * 0.75f;
         position.x = (int) (position.x * scale + centerX * (scale - 1));
         position.y = (int) (position.y * scale + centerY * (scale - 1));
     }

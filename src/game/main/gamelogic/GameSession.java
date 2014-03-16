@@ -65,14 +65,15 @@ public class GameSession {
         render = new MapRender(128);
         Settlement.init(new Sprite[]{sprites[3], sprites[4]});
 
-        UnitType crusader = new UnitType(4, 2, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
-
         world = new World(landscape);
-        world.map.getCell(2, 2).setUnit(new Unit(crusader, 1));
-        world.map.getCell(6, 6).setUnit(new Unit(crusader, 1));
 
-        Country country = new Country(world.map, 1);
+        Country country = new Country(world, 1);
         Gamer gamer = new Gamer(world, country);
+
+        UnitType crusader = new UnitType(4, 2, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
+        country.createUnit(crusader, 2, 2);
+        country.createUnit(crusader, 4, 4);
+
         world.addPlayer(gamer);
 
         currentPlayer = world.getNextPlayer();

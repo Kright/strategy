@@ -1,6 +1,7 @@
 package game.main.gamelogic.world;
 
 import android.util.Log;
+import game.main.gamelogic.world.Actions.AddUnit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,15 @@ public class Country {
 
     private final int id;
     protected final Map map;
+    protected final World world;
 
     protected List<Unit> units = new ArrayList<Unit>();
     protected List<Settlement> settlements = new ArrayList<Settlement>();
 
-    public Country(Map map, int id) {
+    public Country(World world, int id) {
         this.id = id;
-        this.map = map;
+        this.world = world;
+        this.map = world.map;
         map.listsUnitsSettlements(this.id, units, settlements);
         Log.d("action", "Country constructor : " + settlements.size() + " settlements, " + units.size() + " units");
     }
@@ -56,7 +59,7 @@ public class Country {
     /**
      * добавляет в список всех юнитов своей страны с карты
      */
-    public void addAllUnits(List<Unit> units) {
+    void addAllUnits(List<Unit> units) {
         for (Cell c : map) {
             if (c.hasUnit()) {
                 Unit u = c.getUnit();
@@ -70,11 +73,16 @@ public class Country {
     /**
      * добавляет в список все поселения
      */
-    public void addSettlements(List<Settlement> settlements) {
+    void addSettlements(List<Settlement> settlements) {
         for (Cell c : map) {
             if (c.settlement != null) {
                 settlements.add(c.settlement);
             }
         }
+    }
+
+    public void createUnit(UnitType unitType, int x, int y){
+        Action addUnit = new AddUnit(new Unit(unitType, id), map.getCell(x,y));
+        addUnit.apply();
     }
 }

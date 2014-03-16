@@ -47,6 +47,7 @@ public class Cell implements iRender, Comparable<Cell> {
 
     /**
      * записываем, что юнит в нашей клетке, и ещё обновляем ссылку на клетку в юните
+     * @param unit may be null
      */
     public void setUnit(Unit unit) {
         this.unit = unit;
@@ -101,6 +102,10 @@ public class Cell implements iRender, Comparable<Cell> {
      */
     public boolean hasSettlement() {
         return settlement != null;
+    }
+
+    public Settlement getSettlement(){
+        return settlement;
     }
 
     public static Cell getEmpty() {

@@ -18,7 +18,7 @@ public class Unit implements iRender {
     private Settlement home;
     private Cell cell;      //при перемещении надо обновлять
 
-    public Unit(UnitType type, int id) {
+    Unit(UnitType type, int id) {
         this.type = type;
         countryID = id;
         this.cell = Cell.getEmpty();
@@ -77,9 +77,7 @@ public class Unit implements iRender {
     }
 
     /**
-     * оставшиеся очки перемещения
-     *
-     * @return
+     * @return оставшиеся очки перемещения
      */
     public int getMovementPoints() {
         return movementPoints;
@@ -94,8 +92,7 @@ public class Unit implements iRender {
 
     /**
      * отнимаются очки перемещения, если это возможно
-     *
-     * @param count
+     * @param count - отнимаемое количество очков
      */
     public void decreaseMovementPoints(int count) {
         if (movementPoints > count) {

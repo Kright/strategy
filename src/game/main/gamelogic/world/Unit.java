@@ -63,6 +63,13 @@ public class Unit implements iRender {
     }
 
     /**
+     * @return unitType.pay: стоимость содержания юнита
+     */
+    public int upkeep(){
+        return type.pay;
+    }
+
+    /**
      * Этот метод используется вместо type.hitPoints, потому что юнит может быть улучшен - тогда хп будет больше
      */
     public int getMaxHitPoints() {

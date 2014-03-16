@@ -23,6 +23,11 @@ public class Castle extends Settlement {
     }
 
     @Override
+    public int getTaxes(){
+        return 1; //заглушка
+    }
+
+    @Override
     public void render(Canvas canv, Rect r, Paint paint) {
         canv.drawBitmap(sprite.bmp, sprite.rect, r, paint);
     }

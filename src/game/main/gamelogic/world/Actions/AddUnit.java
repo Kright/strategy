@@ -20,7 +20,7 @@ public class AddUnit extends Action{
 
     @Override
     protected boolean doAction() {
-        if (!cell.canMove() || (cell.hasSettlement() && cell.getSettlement().playerID!=unit.countryID))
+        if (!cell.canMove(unit))
             return false;
         world.map.setUnit(unit, cell);
         return true;

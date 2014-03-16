@@ -11,7 +11,7 @@ import game.main.utils.Sprite;
 public class UnitType {
     public String name;
 
-    public final int movementPoints, hitPoints; //у мирных hitPoints == 0
+    public final int movementPoints, hitPoints, pay;    //pay - стоимость содержания юнита
 
     /*
     float attack, defence, //атака и защита - способность наносить урон в ближнем бою,
@@ -24,9 +24,10 @@ public class UnitType {
 
     public final Sprite sprite;
 
-    public UnitType(int movementPoints, int hitPoints, Sprite sprite) {
+    public UnitType(int movementPoints, int hitPoints, int pay, Sprite sprite) {
         this.movementPoints = movementPoints;
         this.hitPoints = hitPoints;
         this.sprite = sprite;
+        this.pay = pay;                                                           //заглушка
     }
 }

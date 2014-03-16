@@ -21,6 +21,8 @@ public class Country {
     protected List<Unit> units = new ArrayList<Unit>();
     protected List<Settlement> settlements = new ArrayList<Settlement>();
 
+    protected int gold; //казна
+
     public Country(World world, int id) {
         this.id = id;
         this.world = world;
@@ -37,6 +39,9 @@ public class Country {
         map.listsUnitsSettlements(this.id, units, settlements);
         for (Settlement settlement : settlements) {
             settlement.nextTurn();
+            if (settlement.playerID == id){
+                gold+=settlement.getTaxes();
+            }
         }
     }
 
@@ -59,7 +64,7 @@ public class Country {
     /**
      * добавляет в список всех юнитов своей страны с карты
      */
-    void addAllUnits(List<Unit> units) {
+    protected void addAllUnits(List<Unit> units) {
         for (Cell c : map) {
             if (c.hasUnit()) {
                 Unit u = c.getUnit();
@@ -73,7 +78,7 @@ public class Country {
     /**
      * добавляет в список все поселения
      */
-    void addSettlements(List<Settlement> settlements) {
+    protected void addSettlements(List<Settlement> settlements) {
         for (Cell c : map) {
             if (c.settlement != null) {
                 settlements.add(c.settlement);

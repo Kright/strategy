@@ -70,7 +70,7 @@ public class GameSession {
         Country country = new Country(world, 1);
         Gamer gamer = new Gamer(world, country);
 
-        UnitType crusader = new UnitType(4, 2, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
+        UnitType crusader = new UnitType(4, 2, 0, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
         country.createUnit(crusader, 2, 2);
         country.createUnit(crusader, 4, 4);
 

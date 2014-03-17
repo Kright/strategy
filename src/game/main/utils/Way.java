@@ -2,17 +2,15 @@ package game.main.utils;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
 import game.main.gamelogic.world.Action;
-import game.main.gamelogic.world.Actions.MoveUnit;
+import game.main.gamelogic.world.MoveUnit;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Unit;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

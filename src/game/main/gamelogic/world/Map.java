@@ -82,6 +82,10 @@ public class Map implements Iterable<Cell> {
         cell.setUnit(unit);                 //сажаем его на новую
     }
 
+    public final void addSettlement(Settlement settlement, Cell c){
+        c.settlement = settlement;
+    }
+
     void fillRandom(LandType[] types) {
         CustomRandom rnd = GameSession.now.rnd;
         for (Cell[] cc : table) {

@@ -1,13 +1,14 @@
 package game.main.gamelogic.world;
 
 /**
+ * действие игрока над миром - команда юниту, выбор улучшения города, дипломатическое соглашение и т.п.
+ * нужен единый интерфейс для возможности отмены действия в случае ошибки пользователя
+ *
+ * Action.addUnit(), Action.addSettlement() дают Action, добавляющие юнита или поселение на карту
+ *
  * Created by lgor on 08.01.14.
  */
 public abstract class Action {
-    /**
-     * действие игрока над миром - команда юниту, выбор улучшения города, дипломатическое соглашение и т.п.
-     * нужен единый интерфейс для возможности отмены действия в случае ошибки пользователя
-     */
     protected static World world;
 
     /**
@@ -41,13 +42,6 @@ public abstract class Action {
         return cancel;
     }
 
-    /**
-     * Action, метод apply не изменяет вообще ничего, как будто его и не было.
-     */
-    public static Action getNullAction() {
-        return nullAction;
-    }
-
     private static Action cancel = new Action() {
         @Override
         protected boolean doAction() {
@@ -60,6 +54,13 @@ public abstract class Action {
         }  //нечего отменять отмену предыдущего действия
     };
 
+    /**
+     * Action, метод apply не изменяет вообще ничего, как будто его и не было.
+     */
+    public static Action getNullAction() {
+        return nullAction;
+    }
+
     private static Action nullAction = new Action() {
         @Override
         protected boolean doAction() {
@@ -71,4 +72,45 @@ public abstract class Action {
         protected void cancel() {
         }
     };
+
+    /**
+     * добавление поселения на карту
+     */
+    public static Action addSettlement(final Settlement settlement, final Cell cell){
+        return new Action() {
+            @Override
+            protected boolean doAction() {
+                if (cell.accessible() && !cell.hasSettlement()){
+                    world.map.addSettlement(settlement, cell);
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            protected void cancel() {
+                world.map.addSettlement(null, cell);
+            }
+        };
+    }
+
+    //добавление юнита на акрту
+    public static Action addUnit(final Unit unit, final Cell cell){
+        return new Action() {
+            @Override
+            protected boolean doAction() {
+                if (!cell.canMove(unit))
+                    return false;
+                world.map.setUnit(unit, cell);
+                return true;
+            }
+
+            @Override
+            protected void cancel() {
+                unit.getCell().setUnit(null);
+            }
+        };
+    }
+
+
 }

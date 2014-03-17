@@ -1,7 +1,6 @@
 package game.main.gamelogic.world;
 
 import android.util.Log;
-import game.main.gamelogic.world.Actions.AddUnit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +86,6 @@ public class Country {
     }
 
     public void createUnit(UnitType unitType, int x, int y){
-        Action addUnit = new AddUnit(new Unit(unitType, id), map.getCell(x,y));
-        addUnit.apply();
+        Action.addUnit(new Unit(unitType, id), map.getCell(x,y)).apply();
     }
 }

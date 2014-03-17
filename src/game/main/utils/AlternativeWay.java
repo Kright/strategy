@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
 import game.main.gamelogic.world.Action;
-import game.main.gamelogic.world.Actions.MoveUnit;
+import game.main.gamelogic.world.MoveUnit;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Unit;
@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
+ * находит все возможные перемещения юнита за данный ход
+ * выдаёт action - перемещение в нужную клетку
  * Created by lgor on 10.03.14.
  */
 public class AlternativeWay implements iRenderFeature {
@@ -53,12 +55,12 @@ public class AlternativeWay implements iRenderFeature {
         return null;
     }
 
+    /**
+     * true, если путь до клетки найден и он равен goal
+     */
     private boolean isVal(int x, int y, int val) {
         Cell c = map.getCell(x, y);
-        if (cells.containsKey(c)) {
-            return cells.get(c) == val;
-        }
-        return false;
+        return (cells.containsKey(c) && cells.get(c) == val);
     }
 
     public AlternativeWay(Map map, Unit unit) {
@@ -104,15 +106,14 @@ public class AlternativeWay implements iRenderFeature {
             open.add(c);
             all.add(c);
         } else {
-            if (c.canMove()) {
+            if (c.canMove(unit)) {
                 all.add(c);
             }
         }
     }
 
     public boolean isInto(Cell c) {
-        //return all.contains(c);
-        return cells.containsKey(c) && c.canMove();
+        return cells.containsKey(c) && c.canMove(unit);
     }
 
     public void render(MapCamera camera, Canvas canvas) {

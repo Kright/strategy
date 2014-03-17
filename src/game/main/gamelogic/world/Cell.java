@@ -47,6 +47,7 @@ public class Cell implements iRender, Comparable<Cell> {
 
     /**
      * записываем, что юнит в нашей клетке, и ещё обновляем ссылку на клетку в юните
+     * @param unit may be null
      */
     public void setUnit(Unit unit) {
         this.unit = unit;
@@ -81,11 +82,10 @@ public class Cell implements iRender, Comparable<Cell> {
     }
 
     /**
-     * можно ли переместиться на эту клетку прямо сейчас (На ней нет юнитов и по ней можно ходить)
+     * может ли Unit переместиться на эту клетку прямо сейчас (На ней нет юнитов, вражеских поселений и можно ходить)
      */
-    public boolean canMove() {
-        //TODO
-        return accessible() && !hasUnit();
+    public boolean canMove(Unit unit) {
+        return accessible() && !hasUnit() && (settlement==null || settlement.playerID != unit.countryID);
     }
 
     /**
@@ -108,6 +108,10 @@ public class Cell implements iRender, Comparable<Cell> {
      */
     public boolean hasSettlement() {
         return settlement != null;
+    }
+
+    public Settlement getSettlement(){
+        return settlement;
     }
 
     public static Cell getEmpty() {

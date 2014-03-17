@@ -21,6 +21,14 @@ public abstract class Settlement implements iRender {
         this.cell = cell;
     }
 
+    /**
+     * called when new turn starts
+     * @return taxes from this settlement, may be positive or 0 or negative (if unprofitable)
+     */
+    public int getTaxes(){
+        return  0;
+    }
+
     public abstract void nextTurn();
 
     public abstract void render(Canvas canv, Rect r, Paint paint);

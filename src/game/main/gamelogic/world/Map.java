@@ -16,7 +16,7 @@ public class Map implements Iterable<Cell> {
     /**
      * клетки хранятся хитро, не стоит присваивать значения в table напрямую.
      */
-    private final Cell[][] table;
+    protected final Cell[][] table;
 
     /**
      * тестовый генератор карты
@@ -80,6 +80,10 @@ public class Map implements Iterable<Cell> {
     public final void setUnit(Unit unit, Cell cell) {
         unit.getCell().setUnit(null);       //убираем юнита со старой клетки
         cell.setUnit(unit);                 //сажаем его на новую
+    }
+
+    public final void addSettlement(Settlement settlement, Cell c){
+        c.settlement = settlement;
     }
 
     void fillRandom(LandType[] types) {
@@ -157,15 +161,15 @@ public class Map implements Iterable<Cell> {
     когда-нибудь многие методы Map станут приватными, а каждому игроку дадут по объекту PlayerMap, который
     будет учитывать туман войны для игрока
 
-    public PlayerMap getMap4Player(Player player){
-        return new PlayerMap(player);
+    public Map getMap4Player(int id){
+        return new PlayerMap(int id);
     }
 
-    public class PlayerMap{
+    private class PlayerMap{
         private final int id;
 
-        private PlayerMap(Player player){
-            id= player.id;
+        private PlayerMap(int id){
+            this.id=id;
         }
 
         public Cell getCell(int x,int y){

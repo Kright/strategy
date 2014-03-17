@@ -13,8 +13,8 @@ public class Village extends Settlement {
 
     protected static Sprite sprite;
 
-    public Village(Cell cell, int countryID) {
-        super(cell, countryID);
+    public Village(Country country, Cell cell) {
+        super(country, cell);
     }
 
     @Override

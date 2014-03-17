@@ -42,10 +42,10 @@ public class Map implements Iterable<Cell> {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 Cell c = table[j][i];
-                if (c.hasUnit() && c.getUnit().countryID == id) {
+                if (c.hasUnit() && c.getUnit().country.id == id) {
                     units.add(c.getUnit());
                 }
-                if (c.hasSettlement() && c.settlement.playerID == id) {
+                if (c.hasSettlement() && c.settlement.country.id == id) {
                     settlements.add(c.settlement);
                 }
             }
@@ -55,10 +55,6 @@ public class Map implements Iterable<Cell> {
     /**
      * возвращает нормальную клетку или Cell.getEmpty(). В перспективе будет туман войны
      */
-    public Cell getCell(int x, int y, int playerId) {
-        return getCell(x, y);
-    }
-
     public final Cell getCell(int x, int y) {
         x -= y / 2;
         if (x >= 0 && y >= 0 && x < width && y < height) {
@@ -91,17 +87,13 @@ public class Map implements Iterable<Cell> {
         for (Cell[] cc : table) {
             for (Cell c : cc) {
                 c.land = types[rnd.get(types.length)];
-                if (c.land == types[0] && rnd.get(4) == 0) {
-                    if (rnd.get(3) == 0) {
-                        c.settlement = new Castle(c, 0);
-                    } else {
-                        c.settlement = new Village(c, 0);
-                    }
-                }
             }
         }
     }
 
+    /**
+     * есть ли клетка с такими координатами в пределах карты
+     */
     public final boolean isOnMap(int x, int y) {
         x -= y / 2;
         return y >= 0 && y < height && x >= 0 && x < width;
@@ -119,7 +111,7 @@ public class Map implements Iterable<Cell> {
      * sign(x)==sign(y) -> max(|x|,|y|)
      * else             -> |x|+|y|
      */
-    public final int getInterval(int dx, int dy) {
+    public static int getInterval(int dx, int dy) {
         if (dx >= 0) {
             if (dy >= 0)
                 return dx > dy ? dx : dy;

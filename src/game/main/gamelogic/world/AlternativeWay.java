@@ -35,7 +35,7 @@ public class AlternativeWay extends Region {
             for (int j = -1; j <= 1; j++) {
                 if (i != -j) {     //if interval is 1
                     if (isVal(c.x + i, c.y + j, goal)) {
-                        return map.getCell(c.x + i, c.y + j, goal);
+                        return map.getCell(c.x + i, c.y + j);
                     }
                 }
             }
@@ -43,12 +43,12 @@ public class AlternativeWay extends Region {
         return null;
     }
 
+    /**
+     * true если до этой клетки найден путь и он равен val
+     */
     private boolean isVal(int x, int y, int val) {
         Cell c = map.getCell(x, y);
-        if (cellsMap.containsKey(c)) {
-            return cellsMap.get(c) == val;
-        }
-        return false;
+        return (cellsMap.containsKey(c) && cellsMap.get(c) == val);
     }
 
     public AlternativeWay(Map map, Unit unit) {
@@ -95,7 +95,7 @@ public class AlternativeWay extends Region {
             open.add(c);
             cells.add(c);
         } else {
-            if (c.canMove()) {
+            if (c.canMove(unit)) {
                 cells.add(c);
             }
         }
@@ -103,6 +103,6 @@ public class AlternativeWay extends Region {
 
     @Override
     public boolean isInto(Cell c) {
-        return cellsMap.containsKey(c) && c.canMove();
+        return cellsMap.containsKey(c) && c.canMove(unit);
     }
 }

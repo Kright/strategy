@@ -73,6 +73,7 @@ public class GameSession {
         UnitType crusader = new UnitType(4, 2, 0, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
         country.createUnit(crusader, 2, 2);
         country.createUnit(crusader, 4, 4);
+        world.map.getCell(2, 2).getUnit().buildCastle().apply();
 
         world.addPlayer(gamer);
 

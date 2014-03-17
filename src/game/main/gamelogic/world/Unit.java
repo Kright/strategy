@@ -12,15 +12,15 @@ import game.main.GUI.iRender;
 public class Unit implements iRender {
 
     public final UnitType type;
-    public final int countryID;
+    public final Country country;   //страна
     private int movementPoints;     //очки перемещения
     private int hitPoints;          //
     private Settlement home;
     private Cell cell;      //при перемещении надо обновлять
 
-    Unit(UnitType type, int id) {
+    Unit(Country country, UnitType type) {
         this.type = type;
-        countryID = id;
+        this.country = country;
         this.cell = Cell.getEmpty();
         hitPoints = type.hitPoints;
         movementPoints = type.movementPoints;
@@ -28,7 +28,7 @@ public class Unit implements iRender {
 
     private Unit(Unit u) {
         this.type = u.type;
-        this.countryID = u.countryID;
+        this.country = u.country;
         this.movementPoints = u.getMovementPoints();
         this.hitPoints = u.hitPoints;
         this.home = u.home;
@@ -43,7 +43,7 @@ public class Unit implements iRender {
      * Вызывается в конце каждого хода
      */
     public void endTurn() {
-        if (hitPoints < getMaxHitPoints() && movementPoints == type.movementPoints && cell.getPlayerID() == countryID) {
+        if (hitPoints < getMaxHitPoints() && movementPoints == type.movementPoints && cell.getPlayerID() == country.id) {
             hitPoints++;
         }
         movementPoints = type.movementPoints;
@@ -116,5 +116,25 @@ public class Unit implements iRender {
     @Override
     public void render(Canvas canv, Rect cell, Paint paint) {
         canv.drawBitmap(type.sprite.bmp, type.sprite.rect, cell, paint);
+    }
+
+    /**
+     * @return Action which adds Castle on map
+     */
+    public Action buildCastle() {
+        return new Action() {
+            @Override
+            protected boolean doAction() {
+                if (cell.hasSettlement())
+                    return false;
+                cell.settlement = new Castle(country, cell);
+                return true;
+            }
+
+            @Override
+            protected void cancel() {
+                cell.settlement = null;
+            }
+        };
     }
 }

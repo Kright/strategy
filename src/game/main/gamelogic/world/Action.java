@@ -3,9 +3,9 @@ package game.main.gamelogic.world;
 /**
  * действие игрока над миром - команда юниту, выбор улучшения города, дипломатическое соглашение и т.п.
  * нужен единый интерфейс для возможности отмены действия в случае ошибки пользователя
- *
+ * <p/>
  * Action.addUnit(), Action.addSettlement() дают Action, добавляющие юнита или поселение на карту
- *
+ * <p/>
  * Created by lgor on 08.01.14.
  */
 public abstract class Action {
@@ -76,11 +76,11 @@ public abstract class Action {
     /**
      * добавление поселения на карту
      */
-    public static Action addSettlement(final Settlement settlement, final Cell cell){
+    public static Action addSettlement(final Settlement settlement, final Cell cell) {
         return new Action() {
             @Override
             protected boolean doAction() {
-                if (cell.accessible() && !cell.hasSettlement()){
+                if (cell.accessible() && !cell.hasSettlement()) {
                     world.map.addSettlement(settlement, cell);
                     return true;
                 }
@@ -95,7 +95,7 @@ public abstract class Action {
     }
 
     //добавление юнита на акрту
-    public static Action addUnit(final Unit unit, final Cell cell){
+    public static Action addUnit(final Unit unit, final Cell cell) {
         return new Action() {
             @Override
             protected boolean doAction() {
@@ -111,6 +111,4 @@ public abstract class Action {
             }
         };
     }
-
-
 }

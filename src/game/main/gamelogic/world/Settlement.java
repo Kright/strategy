@@ -13,11 +13,12 @@ import game.main.utils.Sprite;
  */
 public abstract class Settlement implements iRender {
 
-    public final int playerID;
+    protected Country country;
+
     protected Cell cell;
 
-    public Settlement(Cell cell, int playerID) {
-        this.playerID = playerID;
+    public Settlement(Country country, Cell cell) {
+        this.country = country;
         this.cell = cell;
     }
 

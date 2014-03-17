@@ -13,8 +13,8 @@ import java.util.List;
  */
 public class Country {
 
-    private final int id;
-    protected final Map map;
+    public final int id;
+    final Map map;
     protected final World world;
 
     protected List<Unit> units = new ArrayList<Unit>();
@@ -38,9 +38,12 @@ public class Country {
         map.listsUnitsSettlements(this.id, units, settlements);
         for (Settlement settlement : settlements) {
             settlement.nextTurn();
-            if (settlement.playerID == id){
+            if (settlement.country.id == id) {
                 gold+=settlement.getTaxes();
             }
+        }
+        for (Unit unit : units) {
+            gold -= unit.upkeep();
         }
     }
 
@@ -53,7 +56,7 @@ public class Country {
         for (Cell c : map) {
             if (c.hasUnit()) {
                 Unit u = c.getUnit();
-                if (u.countryID == this.id) {
+                if (u.country == this) {
                     u.endTurn();
                 }
             }
@@ -67,7 +70,7 @@ public class Country {
         for (Cell c : map) {
             if (c.hasUnit()) {
                 Unit u = c.getUnit();
-                if (u.countryID == id) {
+                if (u.country == this) {
                     units.add(u);
                 }
             }
@@ -86,6 +89,6 @@ public class Country {
     }
 
     public void createUnit(UnitType unitType, int x, int y){
-        Action.addUnit(new Unit(unitType, id), map.getCell(x,y)).apply();
+        Action.addUnit(new Unit(this, unitType), map.getCell(x, y)).apply();
     }
 }

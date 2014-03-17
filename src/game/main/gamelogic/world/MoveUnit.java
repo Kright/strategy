@@ -1,8 +1,4 @@
-package game.main.gamelogic.world.Actions;
-
-import game.main.gamelogic.world.Action;
-import game.main.gamelogic.world.Cell;
-import game.main.gamelogic.world.Unit;
+package game.main.gamelogic.world;
 
 import java.util.List;
 

@@ -63,6 +63,13 @@ public class Cell implements iRender, Comparable<Cell> {
         road = hasRoad;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Cell)) return false;
+        Cell c = (Cell) o;
+        return c.x == x && c.y == y;
+    }
+
     /**
      * отнимаемые очки перемещения
      */
@@ -144,6 +151,11 @@ public class Cell implements iRender, Comparable<Cell> {
         @Override
         public void setUnit(Unit unit) {
             //ничего. Нефиг сюда ходить
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return false;                   //пустая клетка не равна другой пустой клетке
         }
     };
 

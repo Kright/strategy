@@ -3,7 +3,6 @@ package game.main.gamelogic;
 import game.main.GUI.MapCamera;
 import game.main.GUI.UnitSelection;
 import game.main.gamelogic.world.*;
-import game.main.utils.AlternativeWay;
 import game.main.utils.Touch;
 
 import java.util.List;

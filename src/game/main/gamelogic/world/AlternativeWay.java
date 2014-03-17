@@ -1,14 +1,4 @@
-package game.main.utils;
-
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import game.main.GUI.MapCamera;
-import game.main.GUI.iRenderFeature;
-import game.main.gamelogic.world.Action;
-import game.main.gamelogic.world.Actions.MoveUnit;
-import game.main.gamelogic.world.Cell;
-import game.main.gamelogic.world.Map;
-import game.main.gamelogic.world.Unit;
+package game.main.gamelogic.world;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,25 +6,25 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
+ * множество возможных перемещнию юнита, выдаёт Action перемещения в конкретную клетку
  * Created by lgor on 10.03.14.
  */
-public class AlternativeWay implements iRenderFeature {
+public class AlternativeWay extends Region {
 
     protected List<Cell> open = new ArrayList<Cell>();
     protected final Map map;
     protected final Unit unit;
-    private Paint p = new Paint();
-    protected List<Cell> all = new ArrayList<Cell>();
-    protected java.util.Map<Cell, Integer> cells = new TreeMap<Cell, Integer>();
+
+    protected java.util.Map<Cell, Integer> cellsMap = new TreeMap<Cell, Integer>();
 
     public Action getMoveTo(Cell c) {
         if (!isInto(c)) {
-            throw new RuntimeException("Way has't this cell!");
+            throw new IllegalArgumentException("Way hasn't this cell!");
         }
         List<Cell> way = new ArrayList<Cell>();
         while (c != null) {
             way.add(c);
-            c = getPrev(c, cells.get(c) + c.getMovindCost());
+            c = getPrev(c, cellsMap.get(c) + c.getMovindCost());
         }
         Collections.reverse(way);
         return new MoveUnit(unit, way);
@@ -55,13 +45,14 @@ public class AlternativeWay implements iRenderFeature {
 
     private boolean isVal(int x, int y, int val) {
         Cell c = map.getCell(x, y);
-        if (cells.containsKey(c)) {
-            return cells.get(c) == val;
+        if (cellsMap.containsKey(c)) {
+            return cellsMap.get(c) == val;
         }
         return false;
     }
 
     public AlternativeWay(Map map, Unit unit) {
+        super(new ArrayList<Cell>(24));
         this.map = map;
         this.unit = unit;
 
@@ -70,7 +61,7 @@ public class AlternativeWay implements iRenderFeature {
 
         while (!open.isEmpty()) {
             c = removeBest();
-            int val = cells.get(c);
+            int val = cellsMap.get(c);
             add(c.x + 1, c.y, val);
             add(c.x - 1, c.y, val);
             add(c.x, c.y + 1, val);
@@ -84,7 +75,7 @@ public class AlternativeWay implements iRenderFeature {
         int a = -1;
         Cell result = null;
         for (Cell c : open) {
-            int v = cells.get(c);
+            int v = cellsMap.get(c);
             if (v > a) {
                 result = c;
                 a = v;
@@ -96,37 +87,22 @@ public class AlternativeWay implements iRenderFeature {
 
     private void add(int x, int y, int val) {
         Cell c = map.getCell(x, y);
-        if (cells.containsKey(c) || !c.accessible())
+        if (cellsMap.containsKey(c) || !c.accessible())
             return;
         int d = val - c.getMovindCost();
-        cells.put(c, d);
+        cellsMap.put(c, d);
         if (d > 0) {
             open.add(c);
-            all.add(c);
+            cells.add(c);
         } else {
             if (c.canMove()) {
-                all.add(c);
+                cells.add(c);
             }
         }
     }
 
+    @Override
     public boolean isInto(Cell c) {
-        //return all.contains(c);
-        return cells.containsKey(c) && c.canMove();
-    }
-
-    public void render(MapCamera camera, Canvas canvas) {
-        for (Cell c : all) {
-            float y = camera.MapToY(c.y);
-            float x = camera.MapToX(c.x, c.y);
-            float h = camera.getCellHeight();
-            float w = camera.getCellWidth();
-            canvas.drawLine(x, y + h / 4, x + w / 2, y, p);
-            canvas.drawLine(x + w / 2, y, x + w, y + h / 4, p);
-            canvas.drawLine(x, y + h / 4, x, y + h * 3 / 4, p);
-            canvas.drawLine(x + w, y + h / 4, x + w, y + h * 3 / 4, p);
-            canvas.drawLine(x, y + h * 3 / 4, x + w / 2, y + h, p);
-            canvas.drawLine(x + w / 2, y + h, x + w, y + h * 3 / 4, p);
-        }
+        return cellsMap.containsKey(c) && c.canMove();
     }
 }

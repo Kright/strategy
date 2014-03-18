@@ -1,6 +1,7 @@
 package game.main.gamelogic.world;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by lgor on 31.12.13.
@@ -13,9 +14,8 @@ public class World {
     private ArrayList<Player> players = new ArrayList<Player>();
     private int currentPlayer = -1;
 
-    public World(LandType[] types) {
-        map = new Map(64, 64);
-        map.fillRandom(types);
+    public World(int width, int height, List<LandType> types) {
+        map = new Map(Map.getTestConstructor(width, height, types));
         Action.init(this);
     }
 

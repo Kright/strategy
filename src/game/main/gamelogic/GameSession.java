@@ -13,6 +13,7 @@ import game.main.utils.Sprite;
 import game.main.utils.Touch;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -57,15 +58,15 @@ public class GameSession {
         Sprite[] spritesL = Sprite.loadHorisontalN(resources, R.drawable.land4, 5);
         Sprite[] sprites = Sprite.loadHorisontalSpecial(resources, R.drawable.land4, 5, 32);
 
-        LandType[] landscape = new LandType[3];
-        landscape[0] = new LandType(sprites[0], 2, "Поле");
-        landscape[1] = new AdvancedLandType(spritesL[1], 4, 0, -0.25f, "Лес");
-        landscape[2] = new LandType(sprites[2], 4, "Холм");
+        ArrayList<LandType> landscape = new ArrayList<LandType>();
+        landscape.add(new LandType(sprites[0], 2, "Поле"));
+        landscape.add(new AdvancedLandType(spritesL[1], 4, 0, -0.25f, "Лес"));
+        landscape.add(new LandType(sprites[2], 4, "Холм"));
 
         render = new MapRender(128);
         Settlement.init(new Sprite[]{sprites[3], sprites[4]});
 
-        world = new World(landscape);
+        world = new World(120,120, landscape);
 
         Country country = new Country(world, 1);
         Gamer gamer = new Gamer(world, country);

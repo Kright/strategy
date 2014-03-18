@@ -8,9 +8,20 @@ import java.util.List;
 
 /**
  * Created by lgor on 31.12.13.
- * Класс карты. В перспективе будет туман войны и прочее, для этого в методе getCell будет нужен id игрока
+ * Класс карты.
+ *
+ * Оригинальная карта создаётся при помощи MapConstructor - тот обязан передать прямоугольный массив клеток
+ * Первоисточник актуальной информации - эта карта.
+ *
+ * Карта, которую видит игрок, создаётся при помощи map.createPlayerMap
+ * Та карта может отличаться от "правильной" карты - часть клеток может быть невидима или затенена (т.е, находиться в
+ * том состоянии, в котором её видели последний раз, и без юнитов)
  */
 public class Map implements Iterable<Cell> {
+
+    public interface MapConstructor {
+        public Cell[][] getCells();
+    }
 
     public final int width, height;
     /**
@@ -18,17 +29,20 @@ public class Map implements Iterable<Cell> {
      */
     protected final Cell[][] table;
 
-    /**
-     * тестовый генератор карты
-     * как минимум в будущем надо сделать, чтобы потенциально невидимые клетки (внизу слева и вверху справа) не Cell.empty
-     */
-    public Map(int width, int height) {
+
+    public Map(MapConstructor constructor) {
+        table = constructor.getCells();
+        this.width = table[0].length;
+        this.height = table.length;
+    }
+
+    protected Map(int width, int height) {
         this.height = height;
         this.width = width;
         table = new Cell[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                table[y][x] = new Cell(x + y / 2, y);
+                table[y][x] = Cell.getEmpty();
             }
         }
     }
@@ -53,7 +67,7 @@ public class Map implements Iterable<Cell> {
     }
 
     /**
-     * возвращает нормальную клетку или Cell.getEmpty(). В перспективе будет туман войны
+     * возвращает нормальную клетку, Cell.getEmpty() или затенённую клетку.
      */
     public final Cell getCell(int x, int y) {
         x -= y / 2;
@@ -63,22 +77,12 @@ public class Map implements Iterable<Cell> {
         return Cell.getEmpty();
     }
 
-    /**
-     * устанавливает клетку, использует поля cell.x и cell.y
-     */
-    protected final void setCell(Cell cell) {
-        int x = cell.x - cell.y / 2;
-        if (x >= 0 && cell.y >= 0 && x < width && cell.y < height) {
-            table[cell.y][x] = cell;
-        }
-    }
-
-    public final void setUnit(Unit unit, Cell cell) {
+    public void setUnit(Unit unit, Cell cell) {
         unit.getCell().setUnit(null);       //убираем юнита со старой клетки
         cell.setUnit(unit);                 //сажаем его на новую
     }
 
-    public final void addSettlement(Settlement settlement, Cell c){
+    public void addSettlement(Settlement settlement, Cell c){
         c.settlement = settlement;
     }
 
@@ -100,13 +104,6 @@ public class Map implements Iterable<Cell> {
     }
 
     /**
-     * кратчайшее расстояние между двумя клетками
-     */
-    public final int getInterval(Cell c1, Cell c2) {
-        return getInterval(c1.x - c2.x, c1.y - c2.y);
-    }
-
-    /**
      * расстояние между двумя клетками c разницей в dx, dy по обычным координатам. Метрика хитрая
      * sign(x)==sign(y) -> max(|x|,|y|)
      * else             -> |x|+|y|
@@ -124,7 +121,6 @@ public class Map implements Iterable<Cell> {
 
     /**
      * итератор по всем клеткам карты. Обход - строчками слева направо, сверху вниз
-     *
      * @return итератор
      */
     @Override
@@ -144,29 +140,48 @@ public class Map implements Iterable<Cell> {
             }
 
             @Override
-            public void remove() {
+            public void remove() {}
+        };
+    }
+
+    public static MapConstructor getTestConstructor(final int width, final int height, final List<LandType> types) {
+        return new MapConstructor() {
+            @Override
+            public Cell[][] getCells() {
+                Cell[][] cc = new Cell[height][width];
+                CustomRandom rnd = GameSession.now.rnd;
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        cc[y][x] = new Cell(x+y/2, y, types.get(rnd.get(types.size())));
+                    }
+                }
+                return cc;
             }
         };
     }
 
-    /*
-    когда-нибудь многие методы Map станут приватными, а каждому игроку дадут по объекту PlayerMap, который
-    будет учитывать туман войны для игрока
+    /**
+     * методы типа создания юнита и поселения делегируются оригинальной карте, а потом эти изменения, возможно, станут
+     * видны на остальных картах, если рядом есть наблюдатель (юнит или город данной нации)
+     * @return персонализированную карту мира для игрока
+     */
+    public Map createPlayerMap(){
+        return new Map(width, height){
+            @Override
+            public void setUnit(Unit unit, Cell cell) {
+                Map.this.setUnit(unit, cell);
+            }
 
-    public Map getMap4Player(int id){
-        return new PlayerMap(int id);
+            @Override
+            public void addSettlement(Settlement settlement, Cell c) {
+                Map.this.addSettlement(settlement, c);
+            }
+
+            @Override
+            public void listsUnitsSettlements(int id, List<Unit> units, List<Settlement> settlements) {
+                Map.this.listsUnitsSettlements(id, units, settlements);
+            }
+        };
     }
 
-    private class PlayerMap{
-        private final int id;
-
-        private PlayerMap(int id){
-            this.id=id;
-        }
-
-        public Cell getCell(int x,int y){
-            return Map.this.getCell(x, y, id);
-        }
-    }
-    */
 }

@@ -21,9 +21,10 @@ public class Cell implements iRender, Comparable<Cell> {
     private Unit unit = null;
     private boolean road = false;
 
-    public Cell(int x, int y) {
+    Cell(int x, int y, LandType land) {
         this.x = x;
         this.y = y;
+        this.land = land;
     }
 
     @Override
@@ -47,6 +48,7 @@ public class Cell implements iRender, Comparable<Cell> {
 
     /**
      * записываем, что юнит в нашей клетке, и ещё обновляем ссылку на клетку в юните
+     *
      * @param unit may be null
      */
     public void setUnit(Unit unit) {
@@ -110,7 +112,7 @@ public class Cell implements iRender, Comparable<Cell> {
         return settlement != null;
     }
 
-    public Settlement getSettlement(){
+    public Settlement getSettlement() {
         return settlement;
     }
 
@@ -118,7 +120,7 @@ public class Cell implements iRender, Comparable<Cell> {
         return empty;
     }
 
-    static private Cell empty = new Cell(-1, -1) {
+    static private Cell empty = new Cell(-1, -1, null) {
         @Override
         public void render(Canvas canv, Rect cell, Paint paint) {
             /*

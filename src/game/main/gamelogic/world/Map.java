@@ -20,7 +20,11 @@ import java.util.List;
 public class Map implements Iterable<Cell> {
 
     public interface MapConstructor {
-        public Cell[][] getCells();
+        public int getWidth();
+
+        public int getHeight();
+
+        public Cell getCell(int x, int y);
     }
 
     public final int width, height;
@@ -31,9 +35,14 @@ public class Map implements Iterable<Cell> {
 
 
     public Map(MapConstructor constructor) {
-        table = constructor.getCells();
-        this.width = table[0].length;
-        this.height = table.length;
+        this.width = constructor.getWidth();
+        this.height = constructor.getHeight();
+        table = new Cell[height][width];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                table[y][x] = constructor.getCell(x + y / 2, y);
+            }
+        }
     }
 
     protected Map(int width, int height) {
@@ -146,16 +155,21 @@ public class Map implements Iterable<Cell> {
 
     public static MapConstructor getTestConstructor(final int width, final int height, final List<LandType> types) {
         return new MapConstructor() {
+            CustomRandom rnd = GameSession.now.rnd;
+
             @Override
-            public Cell[][] getCells() {
-                Cell[][] cc = new Cell[height][width];
-                CustomRandom rnd = GameSession.now.rnd;
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        cc[y][x] = new Cell(x+y/2, y, types.get(rnd.get(types.size())));
-                    }
-                }
-                return cc;
+            public int getWidth() {
+                return width;
+            }
+
+            @Override
+            public int getHeight() {
+                return height;
+            }
+
+            @Override
+            public Cell getCell(int x, int y) {
+                return new Cell(x, y, types.get(rnd.get(types.size())));
             }
         };
     }

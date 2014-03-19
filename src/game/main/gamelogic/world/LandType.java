@@ -17,12 +17,14 @@ public class LandType implements iRender {
 
     String name;
     public final int movingCost;  //заглушка
+    public final boolean accessable;
     protected final Sprite sprite;
 
     public LandType(Sprite sprite, int movingCost, String name) {
         this.sprite = sprite;
-        this.movingCost = movingCost;
         this.name = name;
+        this.movingCost = movingCost;
+        this.accessable = (movingCost>0);
     }
 
     @Override

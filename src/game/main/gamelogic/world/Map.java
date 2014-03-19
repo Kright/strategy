@@ -9,10 +9,10 @@ import java.util.List;
 /**
  * Created by lgor on 31.12.13.
  * Класс карты.
- *
+ * <p/>
  * Оригинальная карта создаётся при помощи MapConstructor - тот обязан передать прямоугольный массив клеток
  * Первоисточник актуальной информации - эта карта.
- *
+ * <p/>
  * Карта, которую видит игрок, создаётся при помощи map.createPlayerMap
  * Та карта может отличаться от "правильной" карты - часть клеток может быть невидима или затенена (т.е, находиться в
  * том состоянии, в котором её видели последний раз, и без юнитов)
@@ -86,22 +86,27 @@ public class Map implements Iterable<Cell> {
         return Cell.getEmpty();
     }
 
+    /**
+     * открывает клетку для карты игрока, делая её актуальной.
+     * Для оригинальной карты, конечно, эта функция бесполезна
+     */
+    public void openCell(int x, int y) {
+    }
+
+    /**
+     * затеняет клетку.
+     * Опять же, для оригинальной карты это бесполезно
+     */
+    public void shadowCell(int x, int y) {
+    }
+
     public void setUnit(Unit unit, Cell cell) {
         unit.getCell().setUnit(null);       //убираем юнита со старой клетки
         cell.setUnit(unit);                 //сажаем его на новую
     }
 
-    public void addSettlement(Settlement settlement, Cell c){
+    public void addSettlement(Settlement settlement, Cell c) {
         c.settlement = settlement;
-    }
-
-    void fillRandom(LandType[] types) {
-        CustomRandom rnd = GameSession.now.rnd;
-        for (Cell[] cc : table) {
-            for (Cell c : cc) {
-                c.land = types[rnd.get(types.length)];
-            }
-        }
     }
 
     /**
@@ -130,6 +135,7 @@ public class Map implements Iterable<Cell> {
 
     /**
      * итератор по всем клеткам карты. Обход - строчками слева направо, сверху вниз
+     *
      * @return итератор
      */
     @Override
@@ -149,7 +155,8 @@ public class Map implements Iterable<Cell> {
             }
 
             @Override
-            public void remove() {}
+            public void remove() {
+            }
         };
     }
 
@@ -177,10 +184,11 @@ public class Map implements Iterable<Cell> {
     /**
      * методы типа создания юнита и поселения делегируются оригинальной карте, а потом эти изменения, возможно, станут
      * видны на остальных картах, если рядом есть наблюдатель (юнит или город данной нации)
+     *
      * @return персонализированную карту мира для игрока
      */
-    public Map createPlayerMap(){
-        return new Map(width, height){
+    public Map createPlayerMap() {
+        return new Map(width, height) {
             @Override
             public void setUnit(Unit unit, Cell cell) {
                 Map.this.setUnit(unit, cell);
@@ -194,6 +202,20 @@ public class Map implements Iterable<Cell> {
             @Override
             public void listsUnitsSettlements(int id, List<Unit> units, List<Settlement> settlements) {
                 Map.this.listsUnitsSettlements(id, units, settlements);
+            }
+
+            @Override
+            public void openCell(int x, int y) {
+                if (isOnMap(x, y)) {
+                    table[y][x] = Map.this.table[y][x];
+                }
+            }
+
+            @Override
+            public void shadowCell(int x, int y) {
+                if (isOnMap(x,y)){
+                    table[y][x] = table[y][x].getShadowded();
+                }
             }
         };
     }

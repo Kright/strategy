@@ -16,6 +16,7 @@ public class Cell implements iRender, Comparable<Cell> {
     клетка карты, содержит всякую информацию - тип ландшафта, юнита, если он есть, улучшения и т.п.
     */
     public final int x, y;
+    public final boolean shadowded;
     public LandType land;
     Settlement settlement = null;
     private Unit unit = null;
@@ -25,6 +26,26 @@ public class Cell implements iRender, Comparable<Cell> {
         this.x = x;
         this.y = y;
         this.land = land;
+        shadowded = false;
+    }
+
+    /**
+     * затенённая копия клетки
+     */
+    private Cell(Cell c){
+        x=c.x;
+        y=c.y;
+        shadowded=true;
+        land=c.land;
+        settlement=c.settlement;
+        road=c.road;
+    }
+
+    /**
+     * @return затенённую клетку. та не меняется со временем и на ней не видны юниты.
+     */
+    public Cell getShadowded(){
+        return shadowded?this:new Cell(this);
     }
 
     @Override
@@ -94,8 +115,7 @@ public class Cell implements iRender, Comparable<Cell> {
      * проходима ли клетка в принципе (т.е, не гора и не река)
      */
     public boolean accessible() {
-        //TODO
-        return true;
+        return land.accessable;
     }
 
     /**
@@ -137,6 +157,11 @@ public class Cell implements iRender, Comparable<Cell> {
         @Override
         public boolean accessible() {
             return false;
+        }
+
+        @Override
+        public Cell getShadowded() {
+            return this;    //теоретически, метод никогда не будет вызван, но - реализованное поведение вполне логично.
         }
 
         @Override

@@ -32,20 +32,20 @@ public class Cell implements iRender, Comparable<Cell> {
     /**
      * затенённая копия клетки
      */
-    private Cell(Cell c){
-        x=c.x;
-        y=c.y;
-        shadowded=true;
-        land=c.land;
-        settlement=c.settlement;
-        road=c.road;
+    private Cell(Cell c) {
+        x = c.x;
+        y = c.y;
+        shadowded = true;
+        land = c.land;
+        settlement = c.settlement;
+        road = c.road;
     }
 
     /**
      * @return затенённую клетку. та не меняется со временем и на ней не видны юниты.
      */
-    public Cell getShadowded(){
-        return shadowded?this:new Cell(this);
+    public Cell getShadowded() {
+        return shadowded ? this : new Cell(this);
     }
 
     @Override

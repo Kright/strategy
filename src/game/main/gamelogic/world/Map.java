@@ -100,13 +100,14 @@ public class Map implements Iterable<Cell> {
     public void shadowCell(int x, int y) {
     }
 
-    public void setUnit(Unit unit, Cell cell) {
+    public void setUnit(Unit unit, int x, int y) {
+        if (!isOnMap(x, y)) return;
         unit.getCell().setUnit(null);       //убираем юнита со старой клетки
-        cell.setUnit(unit);                 //сажаем его на новую
+        getCell(x, y).setUnit(unit);                 //сажаем его на новую
     }
 
-    public void addSettlement(Settlement settlement, Cell c) {
-        c.settlement = settlement;
+    public void addSettlement(Settlement settlement, int x, int y) {
+        getCell(x, y).settlement = settlement;
     }
 
     /**
@@ -190,13 +191,13 @@ public class Map implements Iterable<Cell> {
     public Map createPlayerMap() {
         return new Map(width, height) {
             @Override
-            public void setUnit(Unit unit, Cell cell) {
-                Map.this.setUnit(unit, cell);
+            public void setUnit(Unit unit, int x, int y) {
+                Map.this.setUnit(unit, x, y);
             }
 
             @Override
-            public void addSettlement(Settlement settlement, Cell c) {
-                Map.this.addSettlement(settlement, c);
+            public void addSettlement(Settlement settlement, int x, int y) {
+                Map.this.addSettlement(settlement, x, y);
             }
 
             @Override
@@ -207,13 +208,15 @@ public class Map implements Iterable<Cell> {
             @Override
             public void openCell(int x, int y) {
                 if (isOnMap(x, y)) {
+                    x-=y/2;
                     table[y][x] = Map.this.table[y][x];
                 }
             }
 
             @Override
             public void shadowCell(int x, int y) {
-                if (isOnMap(x,y)){
+                if (isOnMap(x, y)) {
+                    x-=y/2;
                     table[y][x] = table[y][x].getShadowded();
                 }
             }

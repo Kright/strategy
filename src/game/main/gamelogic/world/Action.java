@@ -76,12 +76,13 @@ public abstract class Action {
     /**
      * добавление поселения на карту
      */
-    public static Action addSettlement(final Settlement settlement, final Cell cell) {
+    public static Action addSettlement(final Settlement settlement, final int x, final int y) {
         return new Action() {
             @Override
             protected boolean doAction() {
+                Cell cell = world.map.getCell(x, y);
                 if (cell.accessible() && !cell.hasSettlement()) {
-                    world.map.addSettlement(settlement, cell);
+                    world.map.addSettlement(settlement, x, y);
                     return true;
                 }
                 return false;
@@ -89,19 +90,19 @@ public abstract class Action {
 
             @Override
             protected void cancel() {
-                world.map.addSettlement(null, cell);
+                world.map.addSettlement(null, x, y);
             }
         };
     }
 
     //добавление юнита на акрту
-    public static Action addUnit(final Unit unit, final Cell cell) {
+    public static Action addUnit(final Unit unit, final int x, final int y) {
         return new Action() {
             @Override
             protected boolean doAction() {
-                if (!cell.canMove(unit))
+                if (!world.map.getCell(x, y).canMove(unit))
                     return false;
-                world.map.setUnit(unit, cell);
+                world.map.setUnit(unit, x, y);
                 return true;
             }
 

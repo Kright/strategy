@@ -14,7 +14,7 @@ public class Unit implements iRender {
     public final UnitType type;
     public final Country country;   //страна
     private int movementPoints;     //очки перемещения
-    private int hitPoints;          //
+    private int hitPoints;
     private Settlement home;
     private Cell cell;      //при перемещении надо обновлять
 

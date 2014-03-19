@@ -35,14 +35,14 @@ public class MoveUnit extends Action {
                 //return false;
             }
         }
-        world.map.setUnit(unit, finish);
+        world.map.setUnit(unit, finish.x, finish.y);
         return true;
     }
 
     @Override
     protected void cancel() {
         finish.setUnit(null);
-        world.map.setUnit(savedUnit, way.get(0));
+        world.map.setUnit(savedUnit, way.get(0).x, way.get(0).y);
     }
 
     private String getSequence() {

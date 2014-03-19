@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import game.main.GUI.GamePanel;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
-import game.main.gamelogic.world.World;
+import game.main.gamelogic.world.Map;
 
 import java.util.Iterator;
 
@@ -25,33 +25,33 @@ public class MapRender extends MapCamera {
         super(spriteHeight / 2 * 3, spriteHeight);
     }
 
-    public void render(GameSession session, Canvas canv, GamePanel panel) {
+    public void render(GameSession session, Map map,Canvas canv, GamePanel panel) {
         setScreenSize(panel.getFreeRight(canv.getWidth()), canv.getHeight());
-        checkPosition(screenW, screenH, session.world.map.width * w, session.world.map.height * dy + h - dy);
+        checkPosition(screenW, screenH, map.width * w,map.height * dy + h - dy);
 
         canv.drawColor(0xFFFF00FF); //фон
-        drawLandscape(session.world, canv, null);
+        drawLandscape(map, canv, null);
         if (session.properties.renderBorders) {
             drawBorders(canv);
         }
         for (iRenderFeature rf : session.currentPlayer.getRenderFeatures()) {
             rf.render(this, canv);
         }
-        drawUnits(session.world, canv, null);
+        drawUnits(map, canv, null);
         if (session.properties.showFPS)
             canv.drawText("fps=" + fps.get(), 20, 20, p);
     }
 
-    private void drawLandscape(World world, Canvas canv, Paint paint) {
-        Iterator<RenderObject> iter = getIterator(world.map);
+    private void drawLandscape(Map map, Canvas canv, Paint paint) {
+        Iterator<RenderObject> iter = getIterator(map);
         while (iter.hasNext()) {
             RenderObject ro = iter.next();
             ro.cell.render(canv, ro.rect, paint);
         }
     }
 
-    private void drawUnits(World world, Canvas canvas, Paint paint) {
-        Iterator<RenderObject> iter = getIterator(world.map);
+    private void drawUnits(Map map, Canvas canvas, Paint paint) {
+        Iterator<RenderObject> iter = getIterator(map);
         while (iter.hasNext()) {
             RenderObject ro = iter.next();
             if (ro.cell.hasUnit()) {

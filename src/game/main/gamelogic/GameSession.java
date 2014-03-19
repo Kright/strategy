@@ -13,7 +13,6 @@ import game.main.utils.Sprite;
 import game.main.utils.Touch;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -116,7 +115,7 @@ public class GameSession {
     }
 
     public void render(Canvas canv) {
-        render.render(this, canv, panel);
+        render.render(this, currentPlayer.getCountry().map, canv, panel);
         for (ActiveArea area : gui) {
             area.render(render, canv);
         }

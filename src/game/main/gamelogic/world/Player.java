@@ -26,6 +26,10 @@ public abstract class Player {
         return features;
     }
 
+    public Country getCountry(){
+        return country;
+    }
+
     /*
     обновить состояние городов, казны и т.п.
     вызывается до того, как будет вызван update

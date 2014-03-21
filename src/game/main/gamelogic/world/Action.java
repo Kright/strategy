@@ -95,7 +95,7 @@ public abstract class Action {
         };
     }
 
-    //добавление юнита на акрту
+    //добавление юнита на карту
     public static Action addUnit(final Unit unit, final int x, final int y) {
         return new Action() {
             @Override
@@ -103,6 +103,7 @@ public abstract class Action {
                 if (!world.map.getCell(x, y).canMove(unit))
                     return false;
                 world.map.setUnit(unit, x, y);
+                unit.country.map.openСellsNear(x, y);
                 return true;
             }
 

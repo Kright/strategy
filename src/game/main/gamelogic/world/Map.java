@@ -94,6 +94,19 @@ public class Map implements Iterable<Cell> {
     }
 
     /**
+     * открывает клетки, соседние с данной
+     */
+    public void openСellsNear(int x, int y) {
+        openCell(x, y);
+        openCell(x - 1, y - 1);
+        openCell(x - 1, y);
+        openCell(x, y - 1);
+        openCell(x + 1, y);
+        openCell(x, y + 1);
+        openCell(x + 1, y + 1);
+    }
+
+    /**
      * затеняет клетку.
      * Опять же, для оригинальной карты это бесполезно
      */

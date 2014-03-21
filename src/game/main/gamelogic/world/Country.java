@@ -28,10 +28,6 @@ public class Country {
         this.map = world.map.createPlayerMap();
         map.listsUnitsSettlements(this.id, units, settlements);
         Log.d("action", "Country constructor : " + settlements.size() + " settlements, " + units.size() + " units");
-
-        for(int i=0;i<100;i++){
-            map.openCell(i/10, i%10);
-        }
     }
 
     /**

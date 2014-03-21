@@ -29,7 +29,7 @@ public class MapRender extends MapCamera {
         setScreenSize(panel.getFreeRight(canv.getWidth()), canv.getHeight());
         checkPosition(screenW, screenH, map.width * w,map.height * dy + h - dy);
 
-        canv.drawColor(0xFFFF00FF); //фон
+        canv.drawColor(0xFF444444); //фон
         drawLandscape(map, canv, null);
         if (session.properties.renderBorders) {
             drawBorders(canv);

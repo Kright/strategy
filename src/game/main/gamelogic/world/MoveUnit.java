@@ -28,11 +28,12 @@ public class MoveUnit extends Action {
     protected boolean doAction() {
         for (int i = 1; i < way.size(); i++) {
             if (unit.hasMovementPoints()) {
-                unit.decreaseMovementPoints(way.get(i).getMovindCost());
+                Cell c = way.get(i);
+                unit.decreaseMovementPoints(c.getMovindCost());
+                unit.country.map.openСellsNear(c.x, c.y);
             } else {    //если у юнита нет очков движения, нам подсунули какое-то левое действие, и мы его не произведём
                 cancel();
                 throw new RuntimeException("way is wrong, " + getSequence());
-                //return false;
             }
         }
         world.map.setUnit(unit, finish.x, finish.y);

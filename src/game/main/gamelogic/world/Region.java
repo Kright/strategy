@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class Region implements iRenderFeature, Iterable<Cell> {
 
     protected Region(List<Cell> cells) {
         this.cells = cells;
+        Collections.sort(cells);    //сортируем, чтобы работал бинарный поиск
         p = new Paint();
     }
 
@@ -27,11 +29,7 @@ public class Region implements iRenderFeature, Iterable<Cell> {
      * принадлежит ли клетка области
      */
     public boolean isInto(Cell cell) {
-        for (Cell c : cells) {
-            if (c.equals(cell))
-                return true;
-        }
-        return false;
+        return -1 != Collections.binarySearch(cells, cell);
     }
 
     @Override

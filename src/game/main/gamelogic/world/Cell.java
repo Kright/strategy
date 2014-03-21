@@ -87,13 +87,6 @@ public class Cell implements iRender, Comparable<Cell> {
         road = hasRoad;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Cell)) return false;
-        Cell c = (Cell) o;
-        return c.x == x && c.y == y;
-    }
-
     /**
      * отнимаемые очки перемещения
      */
@@ -123,6 +116,29 @@ public class Cell implements iRender, Comparable<Cell> {
      */
     public boolean isNull() {
         return false;
+    }
+
+    @Override
+    public int compareTo(Cell another) {
+        if (y != another.y) {
+            return y - another.y;
+        }
+        return x - another.x;
+    }
+
+    /**
+     * две разные клетки с одинаковыми координатами считаюстя эквивалентными
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Cell)) return false;
+        Cell c = (Cell) o;
+        return c.x == x && c.y == y;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (y << 20) | (int) (x << 8);
     }
 
     /**
@@ -189,12 +205,4 @@ public class Cell implements iRender, Comparable<Cell> {
             return false;                   //пустая клетка не равна другой пустой клетке
         }
     };
-
-    @Override
-    public int compareTo(Cell another) {
-        if (y != another.y) {
-            return y - another.y;
-        }
-        return x - another.x;
-    }
 }

@@ -107,7 +107,7 @@ public class Cell implements iRender, Comparable<Cell> {
      */
     public int getMovindCost() {
         //TODO движение по дорогам
-        if (road && hasSettlement())
+        if (road || hasSettlement())
             return 1;
         return land.movingCost;
     }
@@ -116,7 +116,7 @@ public class Cell implements iRender, Comparable<Cell> {
      * может ли Unit переместиться на эту клетку прямо сейчас (На ней нет юнитов, вражеских поселений и можно ходить)
      */
     public boolean canMove(Unit unit) {
-        return accessible() && !hasUnit() && (settlement == null || settlement.country != unit.country);
+        return accessible() && !hasUnit() && (settlement == null || settlement.country == unit.country);
     }
 
     /**

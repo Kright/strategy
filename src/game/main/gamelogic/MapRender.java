@@ -34,6 +34,7 @@ public class MapRender extends MapCamera {
         if (session.properties.renderBorders) {
             drawBorders(canv);
         }
+        drawLandscape2(map, canv, null);
         for (iRenderFeature rf : session.currentPlayer.getRenderFeatures()) {
             rf.render(this, canv);
         }
@@ -47,6 +48,14 @@ public class MapRender extends MapCamera {
         while (iter.hasNext()) {
             RenderObject ro = iter.next();
             ro.cell.render(canv, ro.rect, paint);
+        }
+    }
+
+    private void drawLandscape2(Map map, Canvas canv, Paint paint) {
+        Iterator<RenderObject> iter = getIterator(map);
+        while (iter.hasNext()) {
+            RenderObject ro = iter.next();
+            ro.cell.nextRender.render(canv, ro.rect, paint);
         }
     }
 

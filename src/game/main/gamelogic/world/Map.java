@@ -68,8 +68,8 @@ public class Map implements Iterable<Cell> {
                 if (c.hasUnit() && c.getUnit().country.id == id) {
                     units.add(c.getUnit());
                 }
-                if (c.hasSettlement() && c.settlement.country.id == id) {
-                    settlements.add(c.settlement);
+                if (c.hasSettlement() && c.getSettlement().country.id == id) {
+                    settlements.add(c.getSettlement());
                 }
             }
         }
@@ -120,7 +120,7 @@ public class Map implements Iterable<Cell> {
     }
 
     public void addSettlement(Settlement settlement, int x, int y) {
-        getCell(x, y).settlement = settlement;
+        getCell(x, y).setSettlement(settlement);
     }
 
     /**
@@ -190,7 +190,8 @@ public class Map implements Iterable<Cell> {
 
             @Override
             public Cell getCell(int x, int y) {
-                return new Cell(x, y, types.get(rnd.get(types.size())));
+                LandType type = types.get(rnd.get(types.size()));
+                return new Cell(x, y, type, type.nextLayer());
             }
         };
     }

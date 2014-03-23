@@ -82,8 +82,8 @@ public class Country {
      */
     protected void addSettlements(List<Settlement> settlements) {
         for (Cell c : map) {
-            if (c.settlement != null) {
-                settlements.add(c.settlement);
+            if (c.hasSettlement()) {
+                settlements.add(c.getSettlement());
             }
         }
     }

@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import game.main.GUI.iRender;
-import game.main.utils.Sprite;
+import game.main.utils.SpriteBank;
 
 /**
  * поселение
@@ -34,8 +34,8 @@ public abstract class Settlement implements iRender {
 
     public abstract void render(Canvas canv, Rect r, Paint paint);
 
-    public static void init(Sprite[] sprites) {
-        Village.sprite = sprites[0];
-        Castle.sprite = sprites[1];
+    public static void init(SpriteBank sprites) {
+        Village.sprite = sprites.get("village");
+        Castle.sprite = sprites.get("castle");
     }
 }

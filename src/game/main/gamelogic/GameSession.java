@@ -3,14 +3,9 @@ package game.main.gamelogic;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import game.main.GUI.ActiveArea;
-import game.main.GUI.AdvancedLandType;
 import game.main.GUI.GamePanel;
-import game.main.R;
 import game.main.gamelogic.world.*;
-import game.main.utils.CustomRandom;
-import game.main.utils.LinearCongruentialGenerator;
-import game.main.utils.Sprite;
-import game.main.utils.Touch;
+import game.main.utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,25 +49,29 @@ public class GameSession {
         properties = new GameProperties();
         rnd = LinearCongruentialGenerator.getLikeNativeRandom();
 
-        Sprite[] spritesL = Sprite.loadHorisontalN(resources, R.drawable.land4, 5);
-        Sprite[] sprites = Sprite.loadHorisontalSpecial(resources, R.drawable.land4, 5, 32);
+        //Sprite[] spritesL = Sprite.loadHorisontalN(resources, R.drawable.land4, 5);
+        //Sprite[] sprites = Sprite.loadHorisontalSpecial(resources, R.drawable.land4, 5, 32);
 
         ArrayList<LandType> landscape = new ArrayList<LandType>();
-        landscape.add(new LandType(sprites[0], 2, "Поле"));
-        landscape.add(new AdvancedLandType(spritesL[1], 4, 0, -0.25f, "Лес"));
-        landscape.add(new LandType(sprites[2], 4, "Холм"));
+
+        SpriteBank sprites = new SpriteBank(resources);
+
+        landscape.add(new LandType(sprites.get("grass"), 2, "Поле"));
+        landscape.add(new LandType(sprites.get("grass"), 4, "Лес", sprites.get("forest"), 0.25f, -0.25f));
+        landscape.add(new LandType(sprites.get("hill"), 4, "Холм"));
+        Settlement.init(sprites);
 
         render = new MapRender(128);
-        Settlement.init(new Sprite[]{sprites[3], sprites[4]});
 
-        world = new World(120,120, landscape);
+        world = new World(120, 120, landscape);
 
         Country country = new Country(world, 1);
         Gamer gamer = new Gamer(world, country);
 
-        UnitType crusader = new UnitType(4, 2, 0, Sprite.loadHorisontalN(resources, R.drawable.xz2, 1)[0]);
+        UnitType crusader = new UnitType(4, 2, 0, sprites.get("crusader"));
         country.createUnit(crusader, 2, 2);
         country.createUnit(crusader, 4, 4);
+
         world.map.getCell(2, 2).getUnit().buildCastle().apply();
 
         world.addPlayer(gamer);

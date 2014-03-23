@@ -127,13 +127,13 @@ public class Unit implements iRender {
             protected boolean doAction() {
                 if (cell.hasSettlement())
                     return false;
-                cell.settlement = new Castle(country, cell);
+                cell.setSettlement(new Castle(country, cell));
                 return true;
             }
 
             @Override
             protected void cancel() {
-                cell.settlement = null;
+                cell.setSettlement(null);
             }
         };
     }

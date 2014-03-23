@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.util.Log;
 
 /**
+ * спрайт. Содержит картинку и прямоугольник - то место картинки, которое надо использовать
  * Created by lgor on 17.01.14.
  */
 public class Sprite {
@@ -19,21 +20,7 @@ public class Sprite {
         rect = new Rect(x, y, x + width, y + height);
     }
 
-    public static Sprite[] loadHorisontalN(Resources res, int id, int count) {
-        return loadHorisontalSpecial(res, id, count, 0);
-    }
-
-    public static Sprite[] loadHorisontalSpecial(Resources res, int id, int count, int dh) {
-        Bitmap bmp = loadBmp(res, id);
-        return fromBmp(bmp, count, bmp.getWidth() / count, bmp.getHeight(), dh);
-    }
-
-    public static Sprite[] loadHorisontalWithWidth(Resources res, int id, int width) {
-        Bitmap bmp = loadBmp(res, id);
-        return fromBmp(bmp, bmp.getWidth() / width, bmp.getWidth(), bmp.getHeight(), 0);
-    }
-
-    private static Bitmap loadBmp(Resources res, int id) {
+    public static Bitmap loadBmp(Resources res, int id) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         Bitmap bmp = BitmapFactory.decodeResource(res, id, options);
@@ -41,7 +28,7 @@ public class Sprite {
         return bmp;
     }
 
-    private static Sprite[] fromBmp(Bitmap bmp, int count, int w, int h, int dh) {
+    public static Sprite[] fromBmp(Bitmap bmp, int count, int w, int h, int dh) {
         Sprite[] sp = new Sprite[count];
         for (int i = 0; i < count; i++) {
             sp[i] = new Sprite(bmp, w * i, dh, w, h - dh);

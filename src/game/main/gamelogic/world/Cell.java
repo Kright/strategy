@@ -18,15 +18,30 @@ public class Cell implements iRender, Comparable<Cell> {
     public final int x, y;
     public final boolean shadowded;
     public LandType land;
-    Settlement settlement = null;
+    public iRender nextRender;
+    private Settlement settlement = null;
     private Unit unit = null;
     private boolean road = false;
+
+    /**
+     * почему-то вариант с со строчкой nextRender = land.nextRender выдаёт ошибку java.lang.ExceptionInInitializerError
+     * потому nextRender передаётся вручную
+     */
+
+    Cell(int x, int y, LandType land, iRender nextRender) {
+        this.x = x;
+        this.y = y;
+        this.land = land;
+        shadowded = false;
+        this.nextRender = nextRender;
+    }
 
     Cell(int x, int y, LandType land) {
         this.x = x;
         this.y = y;
         this.land = land;
         shadowded = false;
+        this.nextRender = iRender.NullRender.get();
     }
 
     /**
@@ -39,6 +54,7 @@ public class Cell implements iRender, Comparable<Cell> {
         land = c.land;
         settlement = c.settlement;
         road = c.road;
+        nextRender = c.nextRender;
     }
 
     /**
@@ -51,8 +67,7 @@ public class Cell implements iRender, Comparable<Cell> {
     @Override
     public void render(Canvas canv, Rect cell, Paint paint) {
         land.render(canv, cell, paint);
-        if (settlement != null)
-            settlement.render(canv, cell, paint);
+        //nextRender.render(canv, cell, paint);
     }
 
     protected int getPlayerID() {
@@ -92,7 +107,7 @@ public class Cell implements iRender, Comparable<Cell> {
      */
     public int getMovindCost() {
         //TODO движение по дорогам
-        if (road)
+        if (road && hasSettlement())
             return 1;
         return land.movingCost;
     }
@@ -146,6 +161,11 @@ public class Cell implements iRender, Comparable<Cell> {
      */
     public boolean hasSettlement() {
         return settlement != null;
+    }
+
+    public void setSettlement(Settlement settlement) {
+        this.settlement = settlement;
+        nextRender = settlement==null ? land.nextLayer(): settlement;
     }
 
     public Settlement getSettlement() {

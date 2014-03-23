@@ -1,7 +1,5 @@
 package game.main.gamelogic.world;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +15,6 @@ public class World {
     private int currentPlayer = -1;
 
     public World(int width, int height, List<LandType> types) {
-        Log.d("mylog",types.toString());
-
         map = new Map(Map.getTestConstructor(width, height, types));
         Action.init(this);
     }

@@ -6,6 +6,7 @@ import game.main.GUI.GamePanel;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
 import game.main.gamelogic.world.Map;
+import game.main.gamelogic.world.Settlement;
 
 import java.util.Iterator;
 
@@ -25,9 +26,9 @@ public class MapRender extends MapCamera {
         super(spriteHeight / 2 * 3, spriteHeight);
     }
 
-    public void render(GameSession session, Map map,Canvas canv, GamePanel panel) {
+    public void render(GameSession session, Map map, Canvas canv, GamePanel panel) {
         setScreenSize(panel.getFreeRight(canv.getWidth()), canv.getHeight());
-        checkPosition(screenW, screenH, map.width * w,map.height * dy + h - dy);
+        checkPosition(screenW, screenH, map.width * w, map.height * dy + h - dy);
 
         canv.drawColor(0xFF444444); //фон
         drawLandscape(map, canv, null);
@@ -35,6 +36,7 @@ public class MapRender extends MapCamera {
             drawBorders(canv);
         }
         drawLandscape2(map, canv, null);
+        drawShadows(map, canv, null);
         for (iRenderFeature rf : session.currentPlayer.getRenderFeatures()) {
             rf.render(this, canv);
         }
@@ -56,6 +58,16 @@ public class MapRender extends MapCamera {
         while (iter.hasNext()) {
             RenderObject ro = iter.next();
             ro.cell.nextRender.render(canv, ro.rect, paint);
+        }
+    }
+
+    private void drawShadows(Map map, Canvas canv, Paint paint) {
+        Iterator<RenderObject> iter = getIterator(map);
+        while (iter.hasNext()) {
+            RenderObject ro = iter.next();
+            if (ro.cell.shadowded) {
+                canv.drawBitmap(Settlement.shadow.bmp, Settlement.shadow.rect, ro.rect, paint);
+            }
         }
     }
 

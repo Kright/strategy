@@ -5,6 +5,7 @@ import game.main.utils.CustomRandom;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by lgor on 31.12.13.
@@ -32,7 +33,6 @@ public class Map implements Iterable<Cell> {
      * клетки хранятся хитро, не стоит присваивать значения в table напрямую.
      */
     protected final Cell[][] table;
-
 
     public Map(MapConstructor constructor) {
         this.width = constructor.getWidth();
@@ -107,10 +107,29 @@ public class Map implements Iterable<Cell> {
     }
 
     /**
+     * добавляет соседние и данную клетку в множество клеток
+     */
+    public void addCellsNear(Set<Cell> set, int x, int y) {
+        set.add(getCell(x, y));
+        set.add(getCell(x - 1, y - 1));
+        set.add(getCell(x - 1, y));
+        set.add(getCell(x, y - 1));
+        set.add(getCell(x + 1, y));
+        set.add(getCell(x, y + 1));
+        set.add(getCell(x + 1, y + 1));
+    }
+
+    /**
      * затеняет клетку.
      * Опять же, для оригинальной карты это бесполезно
      */
     public void shadowCell(int x, int y) {
+    }
+
+    /**
+     * затеняет клетку, если рядом нет видящих её юнитов и поселений)
+     */
+    public void checkShadows(int x, int y) {
     }
 
     public void setUnit(Unit unit, int x, int y) {
@@ -222,7 +241,7 @@ public class Map implements Iterable<Cell> {
             @Override
             public void openCell(int x, int y) {
                 if (isOnMap(x, y)) {
-                    x-=y/2;
+                    x -= y / 2;
                     table[y][x] = Map.this.table[y][x];
                 }
             }
@@ -230,9 +249,61 @@ public class Map implements Iterable<Cell> {
             @Override
             public void shadowCell(int x, int y) {
                 if (isOnMap(x, y)) {
-                    x-=y/2;
+                    x -= y / 2;
                     table[y][x] = table[y][x].getShadowded();
                 }
+            }
+
+            @Override
+            public void checkShadows(int x, int y) {
+                if ((check(x, y) || check(x - 1, y - 1) || check(x - 1, y) || check(x, y - 1) ||
+                        check(x + 1, y) || check(x, y + 1) || check(x + 1, y + 1))) {
+                    if (getCell(x, y).shadowded) {
+                        openCell(x, y);
+                    }
+                } else {
+                    if (!getCell(x, y).shadowded) {
+                        shadowCell(x, y);
+                    }
+                }
+            }
+
+            /**
+             * есть ли на клетке С союзные юнит или поселение
+             */
+            private boolean check(int x, int y) {
+                Cell c = Map.this.getCell(x, y);
+                return c.hasUnit() && c.getUnit().country.map == this ||
+                        c.hasSettlement() && c.getSettlement().country.map == this;
+            }
+
+            /**
+             * итератор по всем непустым клеткам карты
+             * @return итератор
+             */
+            @Override
+            public Iterator<Cell> iterator() {
+                return new Iterator<Cell>() {
+                    private int counter = -1;
+
+                    @Override
+                    public boolean hasNext() {
+                        counter++;
+                        for (; counter < width * height; counter++)
+                            if (!table[counter / width][counter % width].isNull())
+                                return true;
+                        return false;
+                    }
+
+                    @Override
+                    public Cell next() {
+                        return table[counter / width][counter % width];
+                    }
+
+                    @Override
+                    public void remove() {
+                    }
+                };
             }
         };
     }

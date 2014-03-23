@@ -1,9 +1,6 @@
 package game.main.gamelogic.world;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * множество возможных перемещнию юнита, выдаёт Action перемещения в конкретную клетку
@@ -11,11 +8,10 @@ import java.util.TreeMap;
  */
 public class AlternativeWay extends Region {
 
-    protected List<Cell> open = new ArrayList<Cell>();
+    protected List<Cell> open = new ArrayList<Cell>(16);
+    protected java.util.Map<Cell, Integer> cellsMap = new HashMap<Cell, Integer>(32);
     protected final Map map;
     protected final Unit unit;
-
-    protected java.util.Map<Cell, Integer> cellsMap = new TreeMap<Cell, Integer>();
 
     public Action getMoveTo(Cell c) {
         if (!isInto(c)) {
@@ -52,7 +48,7 @@ public class AlternativeWay extends Region {
     }
 
     public AlternativeWay(Map map, Unit unit) {
-        super(new ArrayList<Cell>(24));
+        super(new ArrayList<Cell>(32));
         this.map = map;
         this.unit = unit;
 

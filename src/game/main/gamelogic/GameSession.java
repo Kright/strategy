@@ -5,7 +5,10 @@ import android.graphics.Canvas;
 import game.main.GUI.ActiveArea;
 import game.main.GUI.GamePanel;
 import game.main.gamelogic.world.*;
-import game.main.utils.*;
+import game.main.utils.CustomRandom;
+import game.main.utils.LinearCongruentialGenerator;
+import game.main.utils.SpriteBank;
+import game.main.utils.Touch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,21 +52,16 @@ public class GameSession {
         properties = new GameProperties();
         rnd = LinearCongruentialGenerator.getLikeNativeRandom();
 
-        //Sprite[] spritesL = Sprite.loadHorisontalN(resources, R.drawable.land4, 5);
-        //Sprite[] sprites = Sprite.loadHorisontalSpecial(resources, R.drawable.land4, 5, 32);
-
         ArrayList<LandType> landscape = new ArrayList<LandType>();
 
         SpriteBank sprites = new SpriteBank(resources);
-
         landscape.add(new LandType(sprites.get("grass"), 2, "Поле"));
         landscape.add(new LandType(sprites.get("grass"), 4, "Лес", sprites.get("forest"), 0.25f, -0.25f));
         landscape.add(new LandType(sprites.get("hill"), 4, "Холм"));
         Settlement.init(sprites);
 
         render = new MapRender(128);
-
-        world = new World(120, 120, landscape);
+        world = new World(60, 60, landscape);
 
         Country country = new Country(world, 1);
         Gamer gamer = new Gamer(world, country);

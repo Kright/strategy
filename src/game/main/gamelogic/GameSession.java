@@ -76,7 +76,7 @@ public class GameSession {
 
         currentPlayer = world.getNextPlayer();
 
-        panel = GamePanel.getGamePanel(gamer, 60);
+        panel = GamePanel.getGamePanel2(gamer, sprites);
         gui.add(panel);
     }
 

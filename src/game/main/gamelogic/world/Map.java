@@ -3,9 +3,9 @@ package game.main.gamelogic.world;
 import game.main.gamelogic.GameSession;
 import game.main.utils.CustomRandom;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by lgor on 31.12.13.
@@ -109,7 +109,7 @@ public class Map implements Iterable<Cell> {
     /**
      * добавляет соседние и данную клетку в множество клеток
      */
-    public void addCellsNear(Set<Cell> set, int x, int y) {
+    public void addCellsNear(Collection<Cell> set, int x, int y) {
         set.add(getCell(x, y));
         set.add(getCell(x - 1, y - 1));
         set.add(getCell(x - 1, y));
@@ -151,6 +151,20 @@ public class Map implements Iterable<Cell> {
     }
 
     /**
+     * возвращает крепость, владеющую данной клеткой или null, если такой нет
+     */
+    public Castle getControllingCastle(int x, int y){
+        return Map.this.getCell(x,y).controlledByCastle();
+    }
+
+    /**
+     * @param castle устанавливается владение этой крепостью на клетки из castle.region
+     */
+    public void setCastleControll(Castle castle){
+        castle.country.map.setCastleControll(castle);
+    }
+
+    /**
      * расстояние между двумя клетками c разницей в dx, dy по обычным координатам. Метрика хитрая
      * sign(x)==sign(y) -> max(|x|,|y|)
      * else             -> |x|+|y|
@@ -167,8 +181,7 @@ public class Map implements Iterable<Cell> {
     }
 
     /**
-     * итератор по всем клеткам карты. Обход - строчками слева направо, сверху вниз
-     *
+     * итератор по всем непустым клеткам карты
      * @return итератор
      */
     @Override
@@ -178,12 +191,15 @@ public class Map implements Iterable<Cell> {
 
             @Override
             public boolean hasNext() {
-                return counter + 1 < width * height;
+                counter++;
+                for (; counter < width * height; counter++)
+                    if (!table[counter / width][counter % width].isNull())
+                        return true;
+                return false;
             }
 
             @Override
             public Cell next() {
-                counter++;
                 return table[counter / width][counter % width];
             }
 
@@ -238,6 +254,16 @@ public class Map implements Iterable<Cell> {
                 Map.this.listsUnitsSettlements(id, units, settlements);
             }
 
+            /**
+             * @param castle устанавливается владение этой крепостью на клетки из castle.region
+             */
+            public void setCastleControll(Castle castle){
+                for(Cell c:castle.region){
+                    openСellsNear(c.x, c.y);
+                    getCell(c.x,c.y).setCastleControl(castle);
+                }
+            }
+
             @Override
             public void openCell(int x, int y) {
                 if (isOnMap(x, y)) {
@@ -269,41 +295,12 @@ public class Map implements Iterable<Cell> {
             }
 
             /**
-             * есть ли на клетке С союзные юнит или поселение
+             * есть ли на клетке С союзные юнит или контролируется ли оно поселением
              */
             private boolean check(int x, int y) {
                 Cell c = Map.this.getCell(x, y);
                 return c.hasUnit() && c.getUnit().country.map == this ||
-                        c.hasSettlement() && c.getSettlement().country.map == this;
-            }
-
-            /**
-             * итератор по всем непустым клеткам карты
-             * @return итератор
-             */
-            @Override
-            public Iterator<Cell> iterator() {
-                return new Iterator<Cell>() {
-                    private int counter = -1;
-
-                    @Override
-                    public boolean hasNext() {
-                        counter++;
-                        for (; counter < width * height; counter++)
-                            if (!table[counter / width][counter % width].isNull())
-                                return true;
-                        return false;
-                    }
-
-                    @Override
-                    public Cell next() {
-                        return table[counter / width][counter % width];
-                    }
-
-                    @Override
-                    public void remove() {
-                    }
-                };
+                        c.controlledByCastle()!=null && c.controlledByCastle().country.map == this;
             }
         };
     }

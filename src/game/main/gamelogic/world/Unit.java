@@ -43,12 +43,12 @@ public class Unit implements iRender {
      * Вызывается в конце каждого хода
      */
     public void endTurn() {
-        if (hitPoints < getMaxHitPoints() && movementPoints == type.movementPoints && cell.getPlayerID() == country.id) {
+        if (hitPoints < getMaxHitPoints() && movementPoints == type.movementPoints) {
             hitPoints++;
         }
         movementPoints = type.movementPoints;
         /*
-        восполнение запасов хп, если на союзной территории и ничего не сделал за прошлый ход.
+        восполнение запасов хп, если ничего не сделал за прошлый ход.
         строительство улучшений, если занят постройкой (рабочий например)
          */
     }

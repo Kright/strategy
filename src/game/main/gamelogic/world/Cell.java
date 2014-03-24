@@ -22,6 +22,7 @@ public class Cell implements iRender, Comparable<Cell> {
     private Settlement settlement = null;
     private Unit unit = null;
     private boolean road = false;
+    private Castle controlledByCastle = null;
 
     /**
      * почему-то вариант с со строчкой nextRender = land.nextRender выдаёт ошибку java.lang.ExceptionInInitializerError
@@ -70,8 +71,15 @@ public class Cell implements iRender, Comparable<Cell> {
         //nextRender.render(canv, cell, paint);
     }
 
-    protected int getPlayerID() {
-        return 0; //заглушка
+    /**
+     * @return крепость, которая контролирует эту клетку
+     */
+    public Castle controlledByCastle(){
+        return controlledByCastle;
+    }
+
+    public void setCastleControl(Castle castle){
+        controlledByCastle = castle;
     }
 
     public Unit getUnit() {
@@ -186,11 +194,6 @@ public class Cell implements iRender, Comparable<Cell> {
         }
 
         @Override
-        protected int getPlayerID() {
-            return 0;
-        }
-
-        @Override
         public boolean accessible() {
             return false;
         }
@@ -211,13 +214,18 @@ public class Cell implements iRender, Comparable<Cell> {
         }
 
         @Override
-        public boolean hasUnit() {
-            return false;
+        public void setUnit(Unit unit) {
+            //ничего. Нефиг сюда ходить
         }
 
         @Override
-        public void setUnit(Unit unit) {
-            //ничего. Нефиг сюда ходить
+        public void setCastleControl(Castle castle) {
+            //эту клетку нельзя контролировать
+        }
+
+        @Override
+        public void setSettlement(Settlement settlement) {
+            //и строить на ней тоже нельзя
         }
 
         @Override

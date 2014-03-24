@@ -66,7 +66,7 @@ public class Country {
     /**
      * добавляет в список всех юнитов своей страны с карты
      */
-    protected void addAllUnits(List<Unit> units) {
+    protected void addOwnUnits(List<Unit> units) {
         for (Cell c : map) {
             if (c.hasUnit()) {
                 Unit u = c.getUnit();
@@ -78,11 +78,11 @@ public class Country {
     }
 
     /**
-     * добавляет в список все поселения
+     * добавляет в список все поселения своей страны
      */
-    protected void addSettlements(List<Settlement> settlements) {
+    protected void addOwnSettlements(List<Settlement> settlements) {
         for (Cell c : map) {
-            if (c.hasSettlement()) {
+            if (c.hasSettlement() && c.getSettlement().country == this) {
                 settlements.add(c.getSettlement());
             }
         }

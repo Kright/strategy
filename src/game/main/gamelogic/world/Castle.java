@@ -27,11 +27,20 @@ public class Castle extends Settlement {
             }
         }
         region = new Region(near);
+        this.country.map.addCellsNear(region.cells, cell.x, cell.y);
+        region.updateAfrerChange();
+        country.map.setCastleControll(this);
     }
 
     @Override
     public void nextTurn() {
+    }
 
+    /**
+     * @return область, которую контролирует данный замок
+     */
+    public Region getControlledRegion(){
+        return region;
     }
 
     @Override

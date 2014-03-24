@@ -65,6 +65,7 @@ public class AlternativeWay extends Region {
             add(c.x + 1, c.y + 1, val);
             add(c.x - 1, c.y - 1, val);
         }
+        super.updateAfrerChange();
     }
 
     private Cell removeBest() {

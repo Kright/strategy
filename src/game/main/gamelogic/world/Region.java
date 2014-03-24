@@ -21,8 +21,8 @@ public class Region implements iRenderFeature, Iterable<Cell> {
 
     protected Region(List<Cell> cells) {
         this.cells = cells;
-        Collections.sort(cells);    //сортируем, чтобы работал бинарный поиск
         p = new Paint();
+        updateAfrerChange();
     }
 
     /**
@@ -30,6 +30,13 @@ public class Region implements iRenderFeature, Iterable<Cell> {
      */
     public boolean isInto(Cell cell) {
         return -1 != Collections.binarySearch(cells, cell);
+    }
+
+    /**
+     * обновление внутреннего состояния, после того как были добавлены или убраны новые клетки.
+     */
+    public void updateAfrerChange(){
+        Collections.sort(cells);            //сортируем, чтобы работал бинарный поиск
     }
 
     @Override

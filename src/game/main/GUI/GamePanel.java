@@ -2,8 +2,12 @@ package game.main.GUI;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 import game.main.gamelogic.Gamer;
+import game.main.gamelogic.world.Action;
+import game.main.utils.Sprite;
+import game.main.utils.SpriteBank;
 import game.main.utils.Touch;
 
 import java.util.ArrayList;
@@ -17,11 +21,11 @@ import java.util.List;
  */
 public class GamePanel extends ActiveArea {
 
-    private int x = 0, width = 0;
-    private List<Button> buttons;
+    protected int x = 0, width = 0;
+    protected List<Button> buttons;
     private boolean rightSide;
-    private Paint paint = new Paint();
-
+    protected Button activeButton = null;
+    protected Paint paint = new Paint();
     {
         paint.setColor(0xFFAAAAAA);
     }
@@ -38,8 +42,6 @@ public class GamePanel extends ActiveArea {
     public boolean interestedInTouch(Touch touch) {
         return touch.x >= x && touch.x <= x + width;
     }
-
-    private Button activeButton = null;
 
     @Override
     public void update(Touch touch) {
@@ -101,4 +103,67 @@ public class GamePanel extends ActiveArea {
         buttons.add(TextButton.getCancelButton(textSize, gamer));
         return new GamePanel(buttons, true);
     }
+
+    //панель-картинка
+    public static GamePanel getGamePanel2(final Gamer gamer, final SpriteBank sprites) {
+        final Paint paint = new Paint();
+        ArrayList<Button> buttons = new ArrayList<Button>();
+        buttons.add(new Button() {
+            @Override
+            public void click() {
+                Log.d("action", "button \"next turn\" is clicked");
+                gamer.setNextTurnReady();
+            }
+
+            @Override
+            public void render(Canvas canv, int x, int y, boolean isPressed) {
+                if (isPressed) {
+                    paint.setColor(0x44000000);
+                    canv.drawRect(x, y, x + width, y + height, paint);
+                    paint.setColor(0xFF000000);
+                }
+            }
+        });
+        buttons.add(new Button() {
+            @Override
+            public void click() {
+                Log.d("action", "button \"cancel\" is clicked");
+                Action.getCancelAction().apply();
+                gamer.cancelAction();
+            }
+
+            @Override
+            public void render(Canvas canv, int x, int y, boolean isPressed) {
+                if (isPressed) {
+                    paint.setColor(0x44000000);
+                    canv.drawRect(x, y, x + width, y + height, paint);
+                    paint.setColor(0xFF000000);
+                }
+            }
+        });
+
+        return new GamePanel(buttons, true) {
+            private Rect result = new Rect();
+            Sprite panel = sprites.get("game panel");
+
+            @Override
+            public void render(MapCamera camera, Canvas canvas) {
+                float scale = camera.getScreenHeight() / panel.rect.height();
+                width = (int) (panel.rect.width() * scale);
+                x = canvas.getWidth() - width;
+                result.set(x, 0, x + width, camera.getScreenHeight());
+                for (Button b : buttons) {
+                    b.setSize(width, (int) (scale * 240));
+                }
+                canvas.drawBitmap(panel.bmp, panel.rect, result, paint);
+                int dy = 0;
+                for (Button b : buttons) {
+                    b.render(canvas, x, dy, activeButton == b);
+                    dy += b.getHeight();
+                }
+            }
+        };
+    }
+
+    ;
 }

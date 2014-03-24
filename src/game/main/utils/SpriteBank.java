@@ -39,6 +39,8 @@ public class SpriteBank {
 
         arr = Sprite.fromBmp(units, 1, 192, 128, 0);
         sprites.put("crusader", arr[0]);
+
+        sprites.put("game panel" ,Sprite.fromBmp(Sprite.loadBmp(resources, R.drawable.menu),1,320, 1080, 0)[0]);
     }
 
     public Sprite get(String name) {

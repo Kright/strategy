@@ -17,6 +17,11 @@ public abstract class Button {
 
     public abstract void render(Canvas canv, int x, int y, boolean isPressed);
 
+    public void setSize(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
     public int getWidth() {
         return width;
     }

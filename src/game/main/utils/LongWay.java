@@ -64,6 +64,7 @@ public class LongWay {
 
     private void addClose(CellWay p){
         open.remove(p);
+        closed.add(p);
     }
 
 

@@ -57,7 +57,7 @@ public class LongWay {
 
     private void addOpen(CellWay p,int dx ,int dy){
         Cell c=map.getCell(p.c.x+dx,p.c.y+dy);
-        if (contain(c) || !c.accessible())
+        if (contain(c) || !c.accessible()||containClose(c))
             return;
         open.add(new CellWay(c,p,hDistance(c,target)));
     }
@@ -77,6 +77,17 @@ public class LongWay {
 
     private boolean contain(Cell c){
         if(indexOf(c)==-1) return false;
+        return true;
+    }
+    private int closeIndexOf(Cell c){
+        for(CellWay cW:open){
+            if(cW.c==c) return open.indexOf(cW);
+        }
+        return -1;
+    }
+
+    private boolean containClose(Cell c){
+        if(closeIndexOf(c)==-1) return false;
         return true;
     }
 

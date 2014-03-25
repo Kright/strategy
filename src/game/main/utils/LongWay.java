@@ -69,7 +69,7 @@ public class LongWay {
 
     private int indexOf(Cell c){
         for(CellWay cW:open){
-            if(cW.c==c) return open.indexOf(cW.c);
+            if(cW.c==c) return open.indexOf(cW);
         }
         return -1;
     }

@@ -1,5 +1,6 @@
 package game.main.utils;
 
+import android.util.Log;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 
@@ -22,8 +23,8 @@ public class LongWay {
         this.map = map;
         target=B;
         open.add(new CellWay(A,null,hDistance(A,target)));
-        CellWay parent;
-        while(!open.isEmpty()|| contain(target)){
+        CellWay parent=null;
+        while(!open.isEmpty()&& !contain(target)){
             parent=getMinOpen();
             addOpen(parent, 0, 1);
             addOpen(parent, 1, 1);
@@ -49,6 +50,7 @@ public class LongWay {
             if(((minf)==-1) || (cW.f()<minf)){
                 p=cW;
                 minf=cW.f();
+                Log.d("mylog","2"+cW.c.x+" " +cW.c.y+" "+minf);
             }
         }
         return p;
@@ -80,8 +82,8 @@ public class LongWay {
         return true;
     }
     private int closeIndexOf(Cell c){
-        for(CellWay cW:open){
-            if(cW.c==c) return open.indexOf(cW);
+        for(CellWay cW:closed){
+            if(cW.c==c) return closed.indexOf(cW);
         }
         return -1;
     }
@@ -92,7 +94,7 @@ public class LongWay {
     }
 
     int hDistance(Cell c1, Cell c2) { // эвристическая функция расстояния
-        return Map.getInterval(c1.x - c2.x, c1.y - c2.y)+c1.getMovindCost();
+        return Map.getInterval(c1.x - c2.x, c1.y - c2.y);//+c1.getMovindCost();
     }
 
     public List<Cell> getPath(){

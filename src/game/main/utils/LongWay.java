@@ -1,18 +1,20 @@
 package game.main.utils;
 
+
 import android.util.Log;
+
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+
 import java.util.List;
 
 /**
  * Created by Michael-PC on 25.03.14.
  */
-public class LongWay {
+public class LongWay  {
     protected final Map map;
     protected java.util.List<CellWay> closed = new ArrayList<CellWay>();
     protected java.util.List<CellWay> open = new ArrayList<CellWay>();
@@ -39,8 +41,8 @@ public class LongWay {
             path.add(pathMember.c);
             pathMember=pathMember.parent;
         }
+        path.add(pathMember.c);
         Collections.reverse(path);
-
     }
 
     private CellWay getMinOpen(){
@@ -50,7 +52,6 @@ public class LongWay {
             if(((minf)==-1) || (cW.f()<minf)){
                 p=cW;
                 minf=cW.f();
-                Log.d("mylog","2"+cW.c.x+" " +cW.c.y+" "+minf);
             }
         }
         return p;
@@ -78,8 +79,10 @@ public class LongWay {
     }
 
     private boolean contain(Cell c){
-        if(indexOf(c)==-1) return false;
-        return true;
+        for(CellWay cW:open){
+            if(cW.c==c) return true;
+        }
+        return false;
     }
     private int closeIndexOf(Cell c){
         for(CellWay cW:closed){
@@ -89,12 +92,14 @@ public class LongWay {
     }
 
     private boolean containClose(Cell c){
-        if(closeIndexOf(c)==-1) return false;
-        return true;
+        for(CellWay cW:closed){
+            if(cW.c==c) return true;
+        }
+        return false;
     }
 
     int hDistance(Cell c1, Cell c2) { // эвристическая функция расстояния
-        return Map.getInterval(c1.x - c2.x, c1.y - c2.y);//+c1.getMovindCost();
+        return (int)(3*Map.getInterval(c1.x - c2.x, c1.y - c2.y))+3*c1.getMovindCost();
     }
 
     public List<Cell> getPath(){
@@ -119,5 +124,6 @@ public class LongWay {
             return h+way;
         }
     }
+
 }
 

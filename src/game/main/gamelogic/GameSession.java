@@ -5,10 +5,7 @@ import android.graphics.Canvas;
 import game.main.GUI.ActiveArea;
 import game.main.GUI.GamePanel;
 import game.main.gamelogic.world.*;
-import game.main.utils.CustomRandom;
-import game.main.utils.LinearCongruentialGenerator;
-import game.main.utils.SpriteBank;
-import game.main.utils.Touch;
+import game.main.utils.*;
 
 import java.util.ArrayList;
 import java.util.List;

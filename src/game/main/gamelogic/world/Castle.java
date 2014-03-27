@@ -43,9 +43,19 @@ public class Castle extends Settlement {
         return region;
     }
 
+    /**
+     * собираем налоги с подконтрольных территорий.
+     * @return
+     */
     @Override
     public int getTaxes(){
-        return 1; //TODO
+        int sum=0;
+        for(Cell c:region){
+            if (c.hasSettlement() && c.getSettlement()!=this){
+                sum+=c.getSettlement().getTaxes();
+            }
+        }
+        return sum; //-стоимость содержания, которой пока нет
     }
 
     @Override

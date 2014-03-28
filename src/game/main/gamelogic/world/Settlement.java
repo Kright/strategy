@@ -17,7 +17,7 @@ public abstract class Settlement implements iRender {
     public static Sprite shadow;
 
     protected Country country;
-    protected Cell cell;
+    public final Cell cell;
 
     public Settlement(Country country, Cell cell) {
         this.country = country;
@@ -28,9 +28,7 @@ public abstract class Settlement implements iRender {
      * called when new turn starts
      * @return taxes from this settlement, may be positive or 0 or negative (if unprofitable)
      */
-    public int getTaxes(){
-        return  0;
-    }
+    public abstract int getTaxes();
 
     public abstract void nextTurn();
 

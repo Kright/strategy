@@ -2,6 +2,7 @@ package game.main.gamelogic;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.util.Log;
 import game.main.GUI.ActiveArea;
 import game.main.GUI.GamePanel;
 import game.main.gamelogic.world.*;
@@ -58,7 +59,7 @@ public class GameSession {
         Settlement.init(sprites);
 
         render = new MapRender(128);
-        world = new World(60, 60, landscape);
+        world = new World(120, 120, landscape);
 
         Country country = new Country(world, 1);
         Gamer gamer = new Gamer(world, country);
@@ -75,7 +76,7 @@ public class GameSession {
 
         panel = GamePanel.getGamePanel2(gamer, sprites);
         gui.add(panel);
-    }
+        }
 
     public void doLogic(List<Touch> touches) {
         newTouches = (!touches.isEmpty());

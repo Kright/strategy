@@ -18,6 +18,11 @@ public class Village extends Settlement {
     }
 
     @Override
+    public int getTaxes() {
+        return 2;
+    }
+
+    @Override
     public void nextTurn() {
 
     }

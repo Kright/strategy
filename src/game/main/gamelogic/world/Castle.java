@@ -12,9 +12,7 @@ import java.util.ArrayList;
  * Created by lgor on 14.03.14.
  */
 public class Castle extends Settlement {
-    protected static Sprite sprite;
-
-    protected Region region;    //подконтрольная территория
+    private Region region;    //подконтрольная территория
 
     public Castle(Country country, Cell cell) {
         super(country, cell);
@@ -39,24 +37,25 @@ public class Castle extends Settlement {
     /**
      * @return область, которую контролирует данный замок
      */
-    public Region getControlledRegion(){
+    public Region getControlledRegion() {
         return region;
     }
 
     /**
-     * собираем налоги с подконтрольных территорий.
-     * @return
+     * @return налоги с подконтрольных территорий.
      */
     @Override
-    public int getTaxes(){
-        int sum=0;
-        for(Cell c:region){
-            if (c.hasSettlement() && c.getSettlement()!=this){
-                sum+=c.getSettlement().getTaxes();
+    public int getTaxes() {
+        int sum = 0;
+        for (Cell c : region) {
+            if (c.hasSettlement() && c.getSettlement() != this) {
+                sum += c.getSettlement().getTaxes();
             }
         }
-        return sum; //-стоимость содержания, которой пока нет
+        return sum; //и ещё вычесть стоимость содержания замка, которой пока нет
     }
+
+    protected static Sprite sprite;
 
     @Override
     public void render(Canvas canv, Rect r, Paint paint) {

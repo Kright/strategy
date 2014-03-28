@@ -129,8 +129,8 @@ public class LongWay  {
         public int compareTo(Object obj){
             CellWay T=(CellWay)obj;
             if (T.f()!=f()) return f()-T.f();
-            if(T.c.x!=c.x) return signx*T.signx*(c.x-T.c.x);
-            if(T.c.y!=c.y) return signy*T.signy*(c.y-T.c.y);
+            if(T.c.x!=c.x) return signx*(c.x-T.c.x);
+            if(T.c.y!=c.y) return signx*(c.y-T.c.y);
             return 0;
 
         }

@@ -38,7 +38,7 @@ public class Country {
         map.listsUnitsSettlements(this.id, units, settlements);
         for (Settlement settlement : settlements) {
             settlement.nextTurn();
-            if (settlement.country.id == id) {
+            if (settlement.country==this) {
                 gold += settlement.getTaxes();
             }
         }

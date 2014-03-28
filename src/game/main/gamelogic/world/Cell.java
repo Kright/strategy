@@ -141,6 +141,11 @@ public class Cell implements iRender, Comparable<Cell> {
         return false;
     }
 
+    public String toString(){
+        return ""+x+" "+y;
+    }
+
+
     @Override
     public int compareTo(Cell another) {
         if (y != another.y) {

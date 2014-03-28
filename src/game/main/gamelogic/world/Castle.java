@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import game.main.utils.Sprite;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * замок
@@ -42,17 +43,20 @@ public class Castle extends Settlement {
     }
 
     /**
-     * @return налоги с подконтрольных территорий.
+     * @return доход от замка. Налог с подконтрольных территорий собирается без ведома замка в классе Country
      */
     @Override
     public int getTaxes() {
-        int sum = 0;
-        for (Cell c : region) {
-            if (c.hasSettlement() && c.getSettlement() != this) {
-                sum += c.getSettlement().getTaxes();
-            }
-        }
-        return sum; //и ещё вычесть стоимость содержания замка, которой пока нет
+        return 0; //и ещё вычесть стоимость содержания замка, которой пока нет
+    }
+
+    /**
+     * пока что заглушка
+     * @return пустой список улучшений
+     */
+    @Override
+    public List<Upgrade> getUpgrades() {
+        return new ArrayList<Upgrade>();
     }
 
     protected static Sprite sprite;

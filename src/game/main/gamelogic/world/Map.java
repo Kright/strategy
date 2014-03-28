@@ -255,12 +255,16 @@ public class Map implements Iterable<Cell> {
             }
 
             /**
-             * @param castle устанавливается владение этой крепостью на клетки из castle.region
+             * @param castle устанавливается владение этой крепостью на клетки из castle.region и поселения в нём
              */
             public void setCastleControll(Castle castle){
                 for(Cell c:castle.getControlledRegion()){
                     openСellsNear(c.x, c.y);
-                    getCell(c.x,c.y).setCastleControl(castle);
+                    Cell cell = getCell(c.x,c.y);
+                    cell.setCastleControl(castle);
+                    if (cell.hasSettlement()){
+                        cell.getSettlement().country = castle.country;
+                    }
                 }
             }
 

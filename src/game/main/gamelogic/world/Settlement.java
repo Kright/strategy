@@ -7,6 +7,8 @@ import game.main.GUI.iRender;
 import game.main.utils.Sprite;
 import game.main.utils.SpriteBank;
 
+import java.util.List;
+
 /**
  * поселение
  * Наследуются - замок, деревушка, город
@@ -25,11 +27,19 @@ public abstract class Settlement implements iRender {
     }
 
     /**
-     * called when new turn starts
+     * called once per turn
      * @return taxes from this settlement, may be positive or 0 or negative (if unprofitable)
      */
     public abstract int getTaxes();
 
+    /**
+     * @return список доступных улучшний поселения
+     */
+    public abstract List<Upgrade> getUpgrades();
+
+    /**
+     * called after start of new turn
+     */
     public abstract void nextTurn();
 
     public abstract void render(Canvas canv, Rect r, Paint paint);
@@ -38,5 +48,9 @@ public abstract class Settlement implements iRender {
         Village.sprite = sprites.get("village");
         Castle.sprite = sprites.get("castle");
         shadow = sprites.get("shadow");
+    }
+
+    //доступные улучшения поселения
+    public abstract class Upgrade extends Action{
     }
 }

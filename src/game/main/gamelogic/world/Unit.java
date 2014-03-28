@@ -104,10 +104,11 @@ public class Unit implements iRender {
     public void decreaseMovementPoints(int count) {
         if (movementPoints > count) {
             movementPoints -= count;
-        } else {
-            movementPoints = 0;
+        }else{
+        movementPoints = 0;
         }
-    }
+     }
+
 
     public int getMaxMovementPoints() {
         return type.movementPoints;

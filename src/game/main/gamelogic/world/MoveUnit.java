@@ -4,6 +4,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+
+import android.util.Log;
+import game.main.gamelogic.world.Action;
+import game.main.gamelogic.world.Cell;
+import game.main.gamelogic.world.Unit;
+import game.main.utils.LongWay;
+
+import java.util.List;
+
 /**
  * перемещение юнита по пути из клеток за один ход
  * Created by lgor on 26.02.14.
@@ -16,6 +26,11 @@ public class MoveUnit extends Action {
     private Set<Cell> nearest = new HashSet<Cell>();
 
     public MoveUnit(Unit unit, List<Cell> way) {
+        long time = System.currentTimeMillis();
+        LongWay way2 = new LongWay(world.map, world.map.getCell(2,2), world.map.getCell(11,11));
+        List<Cell> path = way2.getPath();
+        time = System.currentTimeMillis()-time;
+        Log.d("mylog", "Time is " + time + ", path size " + path);
         this.way = way;
         this.unit = unit;
         this.savedUnit = unit.getClone();

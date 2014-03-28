@@ -6,41 +6,32 @@ import android.util.Log;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Michael-PC on 25.03.14.
- *
- * некоторые предложения по оптимизации (lgor):
- * можно вместо линейного поиска по "open" сделать, например, SortedSet, аккуратно ввести операцию сравнения,
- * и в getMinOpen просто брать самый первый элемент.
- *
- * Кроме того, часто вызывается contain(), которая работает за O(n), наверно, лучше ввести коллекцию Cell на основе
- * дерева или хеш-таблиц и проверять наличие в ней за O(log(n)), аналогично с containClose()
- *
- * в цикле while( ... contain(target)) лучше смотреть, не добавили ли мы такую клетку в момент добавления.
- * например, можно было бы поставить проверку в addOpen и возврашать с!=target, а в цикле while(){...
- * if (addOpen(...) ||
- *     addOpen(...) ||
- *                  ...) then { pathMember = ... ; break; }
- *
+
  */
 public class LongWay  {
     protected final Map map;
-    protected java.util.List<CellWay> closed = new ArrayList<CellWay>();
-    protected java.util.List<CellWay> open = new ArrayList<CellWay>();
+    //protected java.util.List<CellWay> closed = new ArrayList<CellWay>();
+    protected TreeSet<CellWay> open = new TreeSet<CellWay>();
+    protected HashSet<Cell> openCell=new HashSet<Cell>();
+    protected HashSet<Cell> closeCell=new HashSet<Cell>();
     protected List<Cell> path = new ArrayList<Cell>();
     protected final Cell target;
+    protected CellWay cWTarget;
+    protected boolean targetContained;
 
     public LongWay(Map map, Cell A, Cell B) {
         this.map = map;
         target=B;
-        open.add(new CellWay(A,null,hDistance(A,target)));
+        open.add(new CellWay(A, null, hDistance(A, target),B.x-A.x, B.y-B.y));
+        openCell.add(A);
         CellWay parent=null;
-        while(!open.isEmpty()&& !contain(target)){
+        targetContained=false;
+
+        while(!open.isEmpty()&& !targetContained){
             parent=getMinOpen();
             addOpen(parent, 0, 1);
             addOpen(parent, 1, 1);
@@ -50,7 +41,7 @@ public class LongWay  {
             addOpen(parent, 0, -1);
             addClose(parent);
         }
-        CellWay pathMember=open.get(indexOf(target));
+        CellWay pathMember=cWTarget;
         while(pathMember.parent!=null){
             path.add(pathMember.c);
             pathMember=pathMember.parent;
@@ -60,15 +51,7 @@ public class LongWay  {
     }
 
     private CellWay getMinOpen(){
-        int minf=-1;
-        CellWay p=null;
-        for(CellWay cW:open){
-            if(((minf)==-1) || (cW.f()<minf)){
-                p=cW;
-                minf=cW.f();
-            }
-        }
-        return p;
+        return open.first();
 
     }
 
@@ -76,48 +59,44 @@ public class LongWay  {
         Cell c=map.getCell(p.c.x+dx,p.c.y+dy);
         if (contain(c) || !c.accessible()||containClose(c))
             return;
-        open.add(new CellWay(c,p,hDistance(c,target)));
+        CellWay cW=new CellWay(c,p,hDistance(c,target),target.x-c.x,target.y-c.y);
+
+        open.add(cW);
+
+        openCell.add(c);
+
+        if(c==target) {targetContained=true;
+            cWTarget=cW;
+        }
     }
 
     private void addClose(CellWay p){
+
         open.remove(p);
-        closed.add(p);
+        openCell.remove(p.c);
+        closeCell.add(p.c);
     }
 
 
-    private int indexOf(Cell c){
-        for(CellWay cW:open){
-            if(cW.c==c) return open.indexOf(cW);
-        }
-        return -1;
-    }
+
 
     private boolean contain(Cell c){
-        for(CellWay cW:open){
-            if(cW.c==c) return true;
-        }
-        return false;
-    }
-    private int closeIndexOf(Cell c){
-        for(CellWay cW:closed){
-            if(cW.c==c) return closed.indexOf(cW);
-        }
-        return -1;
+        return openCell.contains(c);
     }
 
     private boolean containClose(Cell c){
-        for(CellWay cW:closed){
-            if(cW.c==c) return true;
-        }
-        return false;
+
+        return closeCell.contains(c);
     }
 
-    /**
-     * эвристическая функция расстояния
-     * бонус за уменьшение интервала не стоит делать слишком большим (больше, чем минимальная стоимость перемещения)
-     */
-    int hDistance(Cell c1, Cell c2) {
-        return (int)(3*Map.getInterval(c1.x - c2.x, c1.y - c2.y))+3*c1.getMovindCost();
+
+    int hDistance(Cell c1, Cell c2) { // эвристическая функция расстояния
+        return (int)(2*Map.getInterval(c1.x - c2.x, c1.y - c2.y))+2*c1.getMovindCost();
+    }
+
+    int code(int x, int y){
+        return (x << 8)+y;
+
     }
 
     public List<Cell> getPath(){
@@ -125,22 +104,37 @@ public class LongWay  {
     }
 
 
-    private static class CellWay {
+    private static class CellWay implements Comparable{
         Cell c;
         CellWay parent;
         private int way=0;
         private int h;
-
-        CellWay(Cell c, CellWay parent, int hDist) {
+        int signx;
+        int signy;
+        CellWay(Cell c, CellWay parent, int hDist, int signx, int signy) {
             this.c = c;
             this.parent = parent;
             h=hDist;
             if(parent!=null)
                 way = parent.way + c.getMovindCost();
+            if (signx>=0) this.signx=1;
+                    else this.signx=-1;
+            if (signy>=0) this.signy=1;
+            else this.signy=-1;
         }
         int f(){
             return h+way;
         }
+           
+        public int compareTo(Object obj){
+            CellWay T=(CellWay)obj;
+            if (T.f()!=f()) return f()-T.f();
+            if(T.c.x!=c.x) return signx*T.signx*(c.x-T.c.x);
+            if(T.c.y!=c.y) return signy*T.signy*(c.y-T.c.y);
+            return 0;
+
+        }
+
     }
 
 }

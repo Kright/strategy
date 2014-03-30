@@ -13,8 +13,6 @@ import game.main.gamelogic.world.Action;
  */
 public abstract class TextButton extends Button {
 
-    private Paint p = new Paint();
-
     protected String text;
     private Paint paint;
 
@@ -27,9 +25,7 @@ public abstract class TextButton extends Button {
     }
 
     /**
-     * установить размер шрифта (размер кнопки может измениться)
-     *
-     * @param textSize
+     * @param textSize - размер устанавливаемого шрифта (может изменитсья размер кнопки)
      */
     public void setTextSize(float textSize) {
         paint.setTextSize(textSize);

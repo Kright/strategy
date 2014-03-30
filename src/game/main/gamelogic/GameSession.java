@@ -2,7 +2,6 @@ package game.main.gamelogic;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.util.Log;
 import game.main.GUI.ActiveArea;
 import game.main.GUI.GamePanel;
 import game.main.gamelogic.world.*;
@@ -58,13 +57,13 @@ public class GameSession {
         landscape.add(new LandType(sprites.get("hill"), 4, "Холм"));
         Settlement.init(sprites);
 
-        render = new MapRender(128);
+        render = new MapRender(128, sprites.getRoads());
         world = new World(120, 120, landscape);
 
         Country country = new Country(world, 1);
         Gamer gamer = new Gamer(world, country);
 
-        UnitType crusader = new UnitType(4, 2, 0, sprites.get("crusader"));
+        UnitType crusader = new UnitType(2, 2, 0, sprites.get("crusader"));
         country.createUnit(crusader, 2, 2);
         country.createUnit(crusader, 4, 4);
 
@@ -73,8 +72,6 @@ public class GameSession {
         world.addPlayer(gamer);
 
         currentPlayer = world.getNextPlayer();
-
-
 
         panel = GamePanel.getGamePanel2(gamer, sprites);
         gui.add(panel);
@@ -112,7 +109,7 @@ public class GameSession {
     }
 
     public void render(Canvas canv) {
-        render.render(this, currentPlayer.getCountry().map, canv, panel);
+        render.render(this, world.map, canv, panel);
         for (ActiveArea area : gui) {
             area.render(render, canv);
         }

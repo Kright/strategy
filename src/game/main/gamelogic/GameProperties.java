@@ -1,6 +1,7 @@
 package game.main.gamelogic;
 
 /**
+ * игровые настройки
  * Created by lgor on 25.01.14.
  */
 public class GameProperties {

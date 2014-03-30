@@ -42,7 +42,7 @@ public abstract class Action {
         return cancel;
     }
 
-    private static Action cancel = new Action() {
+    private static final Action cancel = new Action() {
         @Override
         protected boolean doAction() {
             world.cancelPreviousAction();
@@ -61,7 +61,7 @@ public abstract class Action {
         return nullAction;
     }
 
-    private static Action nullAction = new Action() {
+    private static final Action nullAction = new Action() {
         @Override
         protected boolean doAction() {
             // всё время возвращается false, действие не считается применённым и не отмечается как "последнее"

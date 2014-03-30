@@ -72,7 +72,7 @@ public class Gamer extends Player {
     @Override
     public void startNextTurn() {
         super.startNextTurn();      //обязательно вызывать, там обновляются города
-        cancelAction();
+        this.cancelAction();
         nextTurnReady = false;
     }
 

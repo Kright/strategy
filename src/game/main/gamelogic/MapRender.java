@@ -2,11 +2,13 @@ package game.main.gamelogic;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import game.main.GUI.GamePanel;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
 import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Settlement;
+import game.main.utils.Sprite;
 
 import java.util.Iterator;
 
@@ -16,14 +18,13 @@ import java.util.Iterator;
  */
 public class MapRender extends MapCamera {
 
-    private Paint p = new Paint();
+    private final Paint p = new Paint();
+    private final Sprite[] roads;
 
-    {
-        p.setTextSize(p.getTextSize() * 2);
-    }
-
-    public MapRender(int spriteHeight) {
+    public MapRender(int spriteHeight, Sprite[] roads) {
         super(spriteHeight / 2 * 3, spriteHeight);
+        p.setTextSize(p.getTextSize() * 2);
+        this.roads=roads;
     }
 
     public void render(GameSession session, Map map, Canvas canv, GamePanel panel) {
@@ -31,11 +32,11 @@ public class MapRender extends MapCamera {
         checkPosition(screenW, screenH, map.width * w, map.height * dy + h - dy);
 
         canv.drawColor(0xFF444444); //фон
-        drawLandscape(map, canv, null);
+        drawLandscapeAndRoads(map, canv, null);
         if (session.properties.renderBorders) {
             drawBorders(canv);
         }
-        drawLandscape2(map, canv, null);
+        drawFlora(map, canv, null);
         drawShadows(map, canv, null);
         for (iRenderFeature rf : session.currentPlayer.getRenderFeatures()) {
             rf.render(this, canv);
@@ -45,15 +46,31 @@ public class MapRender extends MapCamera {
             canv.drawText("fps=" + fps.get(), 20, 20, p);
     }
 
-    private void drawLandscape(Map map, Canvas canv, Paint paint) {
+    private void drawLandscapeAndRoads(Map map, Canvas canv, Paint paint) {
+        Rect road4 = new Rect();
+        int w=(int)(this.getCellWidth()*312/192);
+        int h=(int)(this.getCellHeight()*120/128);
+        int dx = -(int)(this.getCellWidth()*12/192);
+        int dy = -(int)(this.getCellHeight()*44/128);
+
         Iterator<RenderObject> iter = getIterator(map);
         while (iter.hasNext()) {
             RenderObject ro = iter.next();
+            int left = ro.rect.left+dx;
+            int top= ro.rect.top+dy;
             ro.cell.render(canv, ro.rect, paint);
+            if (ro.cell.hasRoad()){
+                int number = map.getRoads(ro.cell)-1;
+                if (number>=0){
+                    road4.set(left,top,left+w, top+h);
+                    canv.drawBitmap(roads[number].bmp, roads[number].rect, road4, paint);
+                    //canv.drawBitmap(roads[number].bmp, roads[number].rect, roads[number].rect, paint);
+                }
+            }
         }
     }
 
-    private void drawLandscape2(Map map, Canvas canv, Paint paint) {
+    private void drawFlora(Map map, Canvas canv, Paint paint) {
         Iterator<RenderObject> iter = getIterator(map);
         while (iter.hasNext()) {
             RenderObject ro = iter.next();

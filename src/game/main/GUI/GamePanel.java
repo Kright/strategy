@@ -26,6 +26,7 @@ public class GamePanel extends ActiveArea {
     private boolean rightSide;
     protected Button activeButton = null;
     protected Paint paint = new Paint();
+
     {
         paint.setColor(0xFFAAAAAA);
     }
@@ -74,7 +75,7 @@ public class GamePanel extends ActiveArea {
     }
 
     /*
-     * для того, чтобы карта рисовалась не навсё экране, т.к., поверх будут рисоваться кнопочки
+     * для того, чтобы карта рисовалась не на всём экране, т.к., поверх будут рисоваться кнопочки
      */
     public int getFreeLeft() {
         return rightSide ? 0 : width;
@@ -164,6 +165,4 @@ public class GamePanel extends ActiveArea {
             }
         };
     }
-
-    ;
 }

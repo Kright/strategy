@@ -35,4 +35,13 @@ public class Sprite {
         }
         return sp;
     }
+
+    public static Sprite[] fromBmpVert(Bitmap bmp, int height){
+        int count = bmp.getHeight()/height;
+        Sprite[] sp = new Sprite[count];
+        for (int i = 0; i < count; i++) {
+            sp[i] = new Sprite(bmp, 0, height*i, bmp.getWidth(), height);
+        }
+        return sp;
+    }
 }

@@ -181,6 +181,17 @@ public class Map implements Iterable<Cell> {
     }
 
     /**
+     * спецефическая функция, необходимая для рисования дорог
+     */
+    public final int getRoads(Cell c){
+        int result=0;
+        if (getCell(c.x-1, c.y-1).hasRoad()) result += 1;
+        if (getCell(c.x,c.y-1).hasRoad()) result +=2;
+        if (getCell(c.x+1, c.y).hasRoad()) result +=4;
+        return result;
+    }
+
+    /**
      * итератор по всем непустым клеткам карты
      * @return итератор
      */
@@ -226,7 +237,9 @@ public class Map implements Iterable<Cell> {
             @Override
             public Cell getCell(int x, int y) {
                 LandType type = types.get(rnd.get(types.size()));
-                return new Cell(x, y, type, type.nextLayer());
+                Cell cell = new Cell(x, y, type, type.nextLayer());
+                cell.setRoad(rnd.get(2)==0);
+                return cell;
             }
         };
     }

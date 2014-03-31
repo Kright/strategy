@@ -165,6 +165,13 @@ public class Map implements Iterable<Cell> {
     }
 
     /**
+     * @return правильную карту, где открыты все клетки
+     */
+    public Map getTrueMap(){
+        return this;
+    }
+
+    /**
      * расстояние между двумя клетками c разницей в dx, dy по обычным координатам. Метрика хитрая
      * sign(x)==sign(y) -> max(|x|,|y|)
      * else             -> |x|+|y|
@@ -263,6 +270,11 @@ public class Map implements Iterable<Cell> {
             @Override
             public void listsUnitsSettlements(int id, List<Unit> units, List<Settlement> settlements) {
                 Map.this.listsUnitsSettlements(id, units, settlements);
+            }
+
+            @Override
+            public Map getTrueMap() {
+                return Map.this;
             }
 
             /**

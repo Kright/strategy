@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import game.main.utils.Sprite;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -27,6 +28,12 @@ public class Castle extends Settlement {
         }
         region = new Region(near);
         this.country.map.addCellsNear(region.cells, cell.x, cell.y);
+        Iterator<Cell> iterator = region.iterator();
+        while(iterator.hasNext()){      //замок может захватить только ничью территорию
+            if (iterator.next().controlledByCastle()!=null){
+                iterator.remove();
+            }
+        }
         region.updateAfrerChange();
         country.map.setCastleControll(this);
     }

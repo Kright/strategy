@@ -1,5 +1,8 @@
 package game.main.gamelogic.world;
 
+import game.main.utils.CustomRandom;
+import game.main.utils.LinearCongruentialGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +18,19 @@ public class World {
      */
     public final Country international;
 
+    private CustomRandom rnd;
     private ArrayList<Player> players = new ArrayList<Player>();
     private int currentPlayer = -1;
 
-    public World(int width, int height, List<LandType> types) {
-        map = new Map(Map.getTestConstructor(width, height, types));
+    public World(int width, int height, List<LandType> types, CustomRandom random) {
+        map = new Map(Map.getTestConstructor(width, height, types, random));
         Action.init(this);
         international = new Country(this, 0);
+        rnd = random;
+    }
+
+    public CustomRandom getRandom(){
+        return rnd;
     }
 
     public Player getNextPlayer() {

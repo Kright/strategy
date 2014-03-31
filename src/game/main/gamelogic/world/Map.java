@@ -220,10 +220,8 @@ public class Map implements Iterable<Cell> {
         };
     }
 
-    public static MapConstructor getTestConstructor(final int width, final int height, final List<LandType> types) {
+    public static MapConstructor getTestConstructor(final int width, final int height, final List<LandType> types, final CustomRandom rnd) {
         return new MapConstructor() {
-            CustomRandom rnd = GameSession.now.rnd;
-
             @Override
             public int getWidth() {
                 return width;

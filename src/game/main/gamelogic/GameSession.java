@@ -24,7 +24,6 @@ public class GameSession {
     public static GameSession now;
 
     public boolean notFinished = true;
-    public CustomRandom rnd;         //потом тут будет свой, особый генератор случайных чисел
     World world;
     MapRender render;
     GameProperties properties;
@@ -47,7 +46,6 @@ public class GameSession {
 
     public void init(Resources resources) {
         properties = new GameProperties();
-        rnd = LinearCongruentialGenerator.getLikeNativeRandom();
 
         ArrayList<LandType> landscape = new ArrayList<LandType>();
 
@@ -58,7 +56,7 @@ public class GameSession {
         Settlement.init(sprites);
 
         render = new MapRender(128, sprites.getSpritesArray("roads"));
-        world = new World(120, 120, landscape);
+        world = new World(120, 120, landscape, LinearCongruentialGenerator.getLikeNativeRandom());
 
         Country country = new Country(world, 1);
         Gamer gamer = new Gamer(world, country);

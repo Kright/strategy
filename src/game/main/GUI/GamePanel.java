@@ -145,7 +145,7 @@ public class GamePanel extends ActiveArea {
 
         return new GamePanel(buttons, true) {
             private Rect result = new Rect();
-            Sprite panel = sprites.get("game panel");
+            Sprite panel = sprites.getSprite("game panel");
 
             @Override
             public void render(MapCamera camera, Canvas canvas) {

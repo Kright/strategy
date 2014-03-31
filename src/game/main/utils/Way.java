@@ -139,11 +139,11 @@ public class Way implements iRenderFeature { // Тру путь
         /*int m=path.size();
 
         for (int i=0; i<m/2;i++){
-            cc=path.get(i);
-            path.set(i,path.get(m-1-i));
+            cc=path.getSprite(i);
+            path.set(i,path.getSprite(m-1-i));
             path.set(m-1-i,cc);
         }*/
-       // path.add(cells.get(0));
+       // path.add(cells.getSprite(0));
         //path.add(c);
         return new MoveUnit(cells.get(0).getUnit(), path);
     }

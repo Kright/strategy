@@ -3,9 +3,11 @@ package game.main.gamelogic;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import game.main.GUI.GamePanel;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
+import game.main.MapActivity;
 import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Settlement;
 import game.main.utils.Sprite;
@@ -23,7 +25,9 @@ public class MapRender extends MapCamera {
 
     public MapRender(int spriteHeight, Sprite[] roads) {
         super(spriteHeight / 2 * 3, spriteHeight);
-        p.setTextSize(p.getTextSize() * 2);
+        p.setTypeface(MapActivity.font);
+        p.setTextSize(36);
+        p.setColor(0xFF000055);
         this.roads=roads;
     }
 
@@ -43,7 +47,7 @@ public class MapRender extends MapCamera {
         }
         drawUnits(map, canv, null);
         if (session.properties.showFPS)
-            canv.drawText("fps=" + fps.get(), 20, 20, p);
+            canv.drawText("fps=" + fps.get(), 20, 30, p);
     }
 
     private void drawLandscapeAndRoads(Map map, Canvas canv, Paint paint) {
@@ -64,7 +68,6 @@ public class MapRender extends MapCamera {
                 if (number>=0){
                     road4.set(left,top,left+w, top+h);
                     canv.drawBitmap(roads[number].bmp, roads[number].rect, road4, paint);
-                    //canv.drawBitmap(roads[number].bmp, roads[number].rect, roads[number].rect, paint);
                 }
             }
         }

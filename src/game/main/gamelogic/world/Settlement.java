@@ -45,12 +45,15 @@ public abstract class Settlement implements iRender {
     public abstract void render(Canvas canv, Rect r, Paint paint);
 
     public static void init(SpriteBank sprites) {
-        Village.sprite = sprites.get("village");
-        Castle.sprite = sprites.get("castle");
-        shadow = sprites.get("shadow");
+        Village.sprite = sprites.getSprite("village");
+        Castle.sprite = sprites.getSprite("castle");
+        shadow = sprites.getSprite("shadow");
     }
 
     //доступные улучшения поселения
     public abstract class Upgrade extends Action{
+        public abstract Sprite getPicture();
+
+        public abstract String getDefinition();
     }
 }

@@ -1,6 +1,7 @@
 package game.main.gamelogic.world;
 
 import android.util.Log;
+import game.main.gamelogic.GameSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +38,8 @@ public class Country {
     public void startNextTurn() {
         map.listsUnitsSettlements(this.id, units, settlements);
         for (Settlement settlement : settlements) {
-            settlement.nextTurn();
             if (settlement.country==this) {
+                settlement.nextTurn();
                 gold += settlement.getTaxes();
             }
         }

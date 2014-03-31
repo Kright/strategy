@@ -52,18 +52,18 @@ public class GameSession {
         ArrayList<LandType> landscape = new ArrayList<LandType>();
 
         SpriteBank sprites = new SpriteBank(resources);
-        landscape.add(new LandType(sprites.get("grass"), 2, "Поле"));
-        landscape.add(new LandType(sprites.get("grass"), 4, "Лес", sprites.get("forest"), 0.25f, -0.25f));
-        landscape.add(new LandType(sprites.get("hill"), 4, "Холм"));
+        landscape.add(new LandType(sprites.getSprite("grass"), 2, "Поле"));
+        landscape.add(new LandType(sprites.getSprite("grass"), 4, "Лес", sprites.getSprite("forest"), 0.25f, -0.25f));
+        landscape.add(new LandType(sprites.getSprite("hill"), 4, "Холм"));
         Settlement.init(sprites);
 
-        render = new MapRender(128, sprites.getRoads());
+        render = new MapRender(128, sprites.getSpritesArray("roads"));
         world = new World(120, 120, landscape);
 
         Country country = new Country(world, 1);
         Gamer gamer = new Gamer(world, country);
 
-        UnitType crusader = new UnitType(2, 2, 0, sprites.get("crusader"));
+        UnitType crusader = new UnitType(2, 2, 0, sprites.getSprite("crusader"));
         country.createUnit(crusader, 2, 2);
         country.createUnit(crusader, 4, 4);
 

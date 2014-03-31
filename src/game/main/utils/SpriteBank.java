@@ -16,14 +16,21 @@ import java.util.TreeMap;
  */
 public class SpriteBank {
 
-    private Map<String, Sprite> sprites;
-    private Sprite[] roads;
+    private Map<String, Sprite> sprites = new TreeMap<String, Sprite>();
+    private Map<String, Sprite[]> arrays = new TreeMap<String, Sprite[]>();
+    private final Resources resources;
 
     public SpriteBank(Resources resources) {
+        this.resources=resources;
+        load();
+    }
+
+    /**
+     * загрузка текстур.
+     * После сворачивания и разворачивания приложения текстуры могут накрыться, лучше загрузить заново.
+     */
+    public void load(){
         Bitmap landS, landL, units;
-
-        sprites = new TreeMap<String, Sprite>();
-
         landS = Sprite.loadBmp(resources, R.drawable.lands);
         landL = Sprite.loadBmp(resources, R.drawable.landl);
         units = Sprite.loadBmp(resources, R.drawable.xz2);
@@ -44,22 +51,18 @@ public class SpriteBank {
         sprites.put("game panel" ,Sprite.fromBmp(Sprite.loadBmp(resources, R.drawable.menu),1,320, 1080, 0)[0]);
 
         arr = Sprite.fromBmpVert(Sprite.loadBmp(resources, R.drawable.roads), 120);
-        roads = new Sprite[7];
-        roads[0] = arr[0];
-        roads[1] = arr[1];
-        roads[3] = arr[2];
-        roads[2] = arr[3];
-        roads[4] = arr[4];
-        roads[5] = arr[5];
-        roads[6] = arr[6];
+        Sprite xz = arr[2];
+        arr[2]=arr[3];
+        arr[3]=xz;
+        arrays.put("roads", arr);
     }
 
-    public Sprite get(String name) {
+    public Sprite getSprite(String name) {
         return sprites.get(name);
     }
 
-    public Sprite[] getRoads(){
-        return roads;
+    public Sprite[] getSpritesArray(String name){
+        return arrays.get(name);
     }
 
     public Bitmap getWithEffects(Bitmap sample, Paint paint) {

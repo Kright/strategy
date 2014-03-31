@@ -10,6 +10,10 @@ import java.util.List;
 public class World {
 
     public final Map map;
+    /**
+     * мирные поселения, которые могут существовать без игрока, "принадлежат" этой "стране"
+     */
+    public final Country international;
 
     private ArrayList<Player> players = new ArrayList<Player>();
     private int currentPlayer = -1;
@@ -17,6 +21,7 @@ public class World {
     public World(int width, int height, List<LandType> types) {
         map = new Map(Map.getTestConstructor(width, height, types));
         Action.init(this);
+        international = new Country(this, 0);
     }
 
     public Player getNextPlayer() {

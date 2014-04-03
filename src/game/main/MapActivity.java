@@ -4,10 +4,11 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceView;
+import game.main.gamelogic.GameSession;
 
 /**
+ * активити самой игры
  * Created by lgor on 13.01.14.
  */
 public class MapActivity extends Activity {
@@ -34,7 +35,7 @@ public class MapActivity extends Activity {
 
         synchronized (monitor) {
             if (session == null) {
-                session = new GameSession2(monitor);
+                session = new GameSession(monitor, getResources());
             }
         }
     }

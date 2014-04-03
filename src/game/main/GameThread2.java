@@ -2,13 +2,19 @@ package game.main;
 
 import android.graphics.Canvas;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.view.View;
+import game.main.utils.Touch;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * поток с игрой. Запускается один раз, если приложение сворачивают - приостанавливается.
  * Created by lgor on 02.04.14.
  */
-public abstract class GameThread2 extends Thread {
+public abstract class GameThread2 extends Thread implements View.OnTouchListener{
 
     private volatile Object monitor;
     private volatile boolean reallyWait=false;
@@ -32,10 +38,8 @@ public abstract class GameThread2 extends Thread {
     public abstract void paint(Canvas canvas);
 
     @Override
-    public void run() {
-        Log.d("mylog", "run started");
+    public final void run() {
         checkPause();
-        Log.d("mylog", "after checkPause");
         main();
     }
 
@@ -86,7 +90,32 @@ public abstract class GameThread2 extends Thread {
         }
     }
 
-    public boolean isWaiting(){
+    public final boolean isWaiting(){
         return reallyWait;
+    }
+
+    /*
+     * обработка нажатий на экран
+     */
+
+    private final List<Touch> touches = new ArrayList<Touch>();
+    private Touch prev;
+
+    public final List<Touch> getTouches() {
+        List<Touch> copy;
+        synchronized (touches) {
+            copy = new ArrayList<Touch>(touches);
+            touches.clear();
+        }
+        return copy;
+    }
+
+    @Override
+    public final boolean onTouch(View v, MotionEvent event) {
+        prev = Touch.getTouches(event, prev);
+        synchronized (touches) {
+            touches.add(prev);
+        }
+        return true;
     }
 }

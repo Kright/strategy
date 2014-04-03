@@ -2,10 +2,10 @@ package game.main;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 import game.main.utils.FPS;
 
 /**
+ * main() - главная часть программы, repaint() - вызов, после которого, если возможно, будет вызван paint()
  * Created by lgor on 02.04.14.
  */
 public class GameSession2 extends GameThread2{
@@ -24,11 +24,6 @@ public class GameSession2 extends GameThread2{
 
     @Override
     public void main() {
-        Log.d("mylog", "main start");
-        repaint();
-        Log.d("mylog", "first repaint");
-        checkPause();
-        Log.d("mylog", "first check");
         while(true){
             repaint();
             checkPause();
@@ -37,7 +32,6 @@ public class GameSession2 extends GameThread2{
 
     @Override
     public void paint(Canvas canvas) {
-        counter++;
         canvas.drawColor(0xFFAAAAAA);
         canvas.drawText((counter++)+",  fps = "+fps.get(), 100,100, p);
     }

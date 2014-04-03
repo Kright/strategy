@@ -15,6 +15,7 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
     public MapView(Context context) {
         super(context);
         getHolder().addCallback(this);
+
     }
 
     @Override

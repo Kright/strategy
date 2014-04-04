@@ -4,7 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import game.main.GUI.ActiveArea;
 import game.main.GUI.GamePanel;
-import game.main.GameThread2;
+import game.main.GameThread;
 import game.main.gamelogic.world.*;
 import game.main.utils.LinearCongruentialGenerator;
 import game.main.utils.Sprite;
@@ -18,44 +18,72 @@ import java.util.List;
  * main() - главная часть программы, repaint() - вызов, после которого, если возможно, будет вызван paint()
  * Created by lgor on 02.04.14.
  */
-public class GameSession extends GameThread2 {
+public class GameSession {
 
-    public boolean notFinished = true;
+    private volatile GameThread thread;
+    private final Resources resources;
+    private SpriteBank sprites;
+
+    private boolean notFinished = true;
+
     World world;
     MapRender render;
     public GameProperties properties;
     public Player currentPlayer;
     GamePanel panel;
+
     List<ActiveArea> gui = new ArrayList<ActiveArea>();
-    private boolean newTouches = true;
+
     private ActiveArea currentActive;
 
-    private final Resources resources;
-    private SpriteBank sprites;
-
-    public GameSession(Object monitor, Resources resources) {
-        super(monitor);
+    public GameSession(Resources resources) {
         this.resources = resources;
     }
 
-    @Override
-    public void main() {
-        createNewWorld(120, 120);
-        repaint();
+    public void setCallback(GameThread thread){
+        this.thread = thread;
+    }
+
+    public void run() {
         while (notFinished) {
             doLogic();
-            if (newTouches) {
-                repaint();
-            }
-            checkPause();
+            repaint();
         }
     }
 
-    @Override
     public void paint(Canvas canvas) {
         render.render(this, world.map, canvas, panel);
         for (ActiveArea area : gui) {
             area.render(render, canvas);
+        }
+    }
+
+    /**
+     * приложение было свёрнуто и снова открыто.
+     * обновляем картинку на экране
+     */
+    public void resume(){
+        repaint();
+    }
+
+    /**
+     * @param need - нуждается ли, по мнению вызывающего, экран приложения в перерисовке
+     */
+    public void needUpdate(boolean need){
+        if (need){
+            screenUpdated = false;
+        }
+    }
+
+    private boolean screenUpdated = false;
+
+    /**
+     * если ничего не изменилось - пропускаем обновление экрана
+     */
+    public void repaint(){
+        thread.checkPause();
+        if (!screenUpdated || !properties.powerSaving){
+            screenUpdated = thread.repaint();
         }
     }
 
@@ -66,8 +94,8 @@ public class GameSession extends GameThread2 {
     }
 
     public void doLogic() {
-        List<Touch> touches = getTouches();
-        newTouches = (!touches.isEmpty());
+        List<Touch> touches = thread.getTouches();
+        needUpdate(!touches.isEmpty());
         List<Touch> tt = new ArrayList<Touch>();
         while (!touches.isEmpty()) {
             Touch t = touches.remove(0);
@@ -91,7 +119,7 @@ public class GameSession extends GameThread2 {
         }
     }
 
-    protected void createNewWorld(int width, int height) {
+    public void createNewWorld(int width, int height) {
         properties = new GameProperties();
 
         sprites = new SpriteBank(resources);

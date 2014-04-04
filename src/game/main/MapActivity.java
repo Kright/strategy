@@ -15,7 +15,7 @@ public class MapActivity extends Activity {
 
     public static volatile Typeface font;
 
-    private static volatile GameThread2 session = null;
+    private static volatile GameThread thread = null;
     private static final Object monitor = new Object();
 
     private SurfaceView view;
@@ -34,8 +34,10 @@ public class MapActivity extends Activity {
         setContentView(view);
 
         synchronized (monitor) {
-            if (session == null) {
-                session = new GameSession(monitor, getResources());
+            if (thread == null) {
+                GameSession session = new GameSession(getResources());
+                session.createNewWorld(120, 120);
+                thread = new GameThread(monitor, session);
             }
         }
     }
@@ -44,16 +46,16 @@ public class MapActivity extends Activity {
     protected void onResume() {
         super.onResume();
         synchronized (monitor) {
-            session.resume(view.getHolder());
-            view.setOnTouchListener(session);
+            thread.resume(view.getHolder());
+            view.setOnTouchListener(thread);
             monitor.notifyAll();
         }
     }
 
     @Override
     protected void onPause() {
-        session.setWaiting();
-        while (!session.isWaiting()){
+        thread.setWaiting();
+        while (!thread.isWaiting()) {
             Thread.yield();
         }
         super.onPause();

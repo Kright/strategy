@@ -1,7 +1,6 @@
 package game.main.gamelogic.world;
 
 import android.util.Log;
-import game.main.gamelogic.GameSession;
 
 import java.util.ArrayList;
 import java.util.List;

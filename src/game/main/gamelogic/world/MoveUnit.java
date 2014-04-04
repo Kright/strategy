@@ -4,16 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
-
-import android.util.Log;
-import game.main.gamelogic.world.Action;
-import game.main.gamelogic.world.Cell;
-import game.main.gamelogic.world.Unit;
-import game.main.utils.LongWay;
-
-import java.util.List;
-
 /**
  * перемещение юнита по пути из клеток за один ход
  * Created by lgor on 26.02.14.
@@ -26,11 +16,6 @@ public class MoveUnit extends Action {
     private Set<Cell> nearest = new HashSet<Cell>();
 
     public MoveUnit(Unit unit, List<Cell> way) {
-        long time = System.currentTimeMillis();
-        LongWay way2 = new LongWay(world.map, world.map.getCell(2,2), world.map.getCell(11,11));
-        List<Cell> path = way2.getPath();
-        time = System.currentTimeMillis()-time;
-        Log.d("mylog", "Time is " + time + ", path size " + path);
         this.way = way;
         this.unit = unit;
         this.savedUnit = unit.getClone();
@@ -51,7 +36,16 @@ public class MoveUnit extends Action {
                 unit.decreaseMovementPoints(c.getMovindCost());
                 unit.country.map.openСellsNear(c.x, c.y);
                 unit.country.map.addCellsNear(nearest, c.x, c.y);
-            } else {    //если у юнита нет очков движения, нам подсунули какое-то левое действие, и мы его не произведём
+            } else {
+                /* если у юнита нет очков движения, нам подсунули какое-то левое действие, и мы его не произведём
+                 *
+                 * но, в принципе, такая ситуация возможна - например, мы идём на "затенённую" клетку, а потом
+                 * оказывается, что что-то изменилось - например, пропала дорога или стоит мешающий юнит другой страны.
+                 * в идеале надо будет делать действие до того момента, как мы обнаружим подвох, а потом остановиться
+                 * и пусть игрок делает новое действие, исходя из новой информации.
+                 *
+                 * В будущем надо будет переделать реализацию и не кидаться исключениями.
+                 */
                 cancel();
                 throw new RuntimeException("way is wrong, " + getSequence());
             }

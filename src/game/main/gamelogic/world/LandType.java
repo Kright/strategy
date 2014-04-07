@@ -1,10 +1,8 @@
 package game.main.gamelogic.world;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import game.main.GUI.iRender;
-import game.main.utils.Sprite;
+import game.main.utils.sprites.RenderParams;
+import game.main.utils.sprites.iRender;
+import game.main.utils.sprites.Sprite;
 
 /**
  * тип ландшафта
@@ -30,22 +28,19 @@ public class LandType implements iRender {
         this.nextLayer = iRender.NullRender.get();
     }
 
-    public LandType(Sprite sprite, int movingCost, String name, final Sprite second, final float xC, final float yC){
+    public LandType(Sprite sprite, int movingCost, String name, final Sprite second){
         this(sprite, movingCost, name);
         this.nextLayer = new iRender() {
-            private Rect rect=new Rect();
-
             @Override
-            public void render(Canvas canv, Rect cell, Paint p) {
-                rect.set(cell.left, cell.top + (int) (yC * cell.height()), cell.right + (int) (xC * cell.width()), cell.bottom);
-                canv.drawBitmap(second.bmp, second.rect, rect, p);
+            public void render(RenderParams params) {
+                second.render(params);
             }
         };
     }
 
     @Override
-    public void render(Canvas canv, Rect cell, Paint p) {
-        canv.drawBitmap(sprite.bmp, sprite.rect, cell, p);
+    public void render(RenderParams params) {
+        sprite.render(params);
     }
 
     public iRender nextLayer(){

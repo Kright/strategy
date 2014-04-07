@@ -1,9 +1,7 @@
 package game.main.gamelogic.world;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import game.main.GUI.iRender;
+import game.main.utils.sprites.RenderParams;
+import game.main.utils.sprites.iRender;
 
 /**
  * Created by lgor on 08.01.14.
@@ -115,8 +113,8 @@ public class Unit implements iRender {
     }
 
     @Override
-    public void render(Canvas canv, Rect cell, Paint paint) {
-        canv.drawBitmap(type.sprite.bmp, type.sprite.rect, cell, paint);
+    public void render(RenderParams params) {
+        type.sprite.render(params);
     }
 
     /**

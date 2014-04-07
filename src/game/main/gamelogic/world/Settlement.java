@@ -1,11 +1,9 @@
 package game.main.gamelogic.world;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import game.main.GUI.iRender;
-import game.main.utils.Sprite;
-import game.main.utils.SpriteBank;
+import game.main.utils.sprites.RenderParams;
+import game.main.utils.sprites.iRender;
+import game.main.utils.sprites.Sprite;
+import game.main.utils.sprites.SpriteBank;
 
 import java.util.List;
 
@@ -42,7 +40,7 @@ public abstract class Settlement implements iRender {
      */
     public abstract void nextTurn();
 
-    public abstract void render(Canvas canv, Rect r, Paint paint);
+    public abstract void render(RenderParams params);
 
     public static void init(SpriteBank sprites) {
         Village.sprite = sprites.getSprite("village");

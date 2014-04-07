@@ -7,8 +7,8 @@ import game.main.GUI.GamePanel;
 import game.main.GameThread;
 import game.main.gamelogic.world.*;
 import game.main.utils.LinearCongruentialGenerator;
-import game.main.utils.Sprite;
-import game.main.utils.SpriteBank;
+import game.main.utils.sprites.Sprite;
+import game.main.utils.sprites.SpriteBank;
 import game.main.utils.Touch;
 
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public class GameSession {
      * обновляем картинку на экране
      */
     public void resume(){
-        repaint();
+        needUpdate(true);
     }
 
     /**
@@ -78,7 +78,7 @@ public class GameSession {
     private boolean screenUpdated = false;
 
     /**
-     * если ничего не изменилось - пропускаем обновление экрана
+     * если ничего не изменилось и режим энергосбережения - пропускаем обновление экрана
      */
     public void repaint(){
         thread.checkPause();
@@ -126,7 +126,7 @@ public class GameSession {
 
         ArrayList<LandType> landscape = new ArrayList<LandType>();
         landscape.add(new LandType(sprites.getSprite("grass"), 2, "Поле"));
-        landscape.add(new LandType(sprites.getSprite("grass"), 4, "Лес", sprites.getSprite("forest"), 0.25f, -0.25f));
+        landscape.add(new LandType(sprites.getSprite("grass"), 4, "Лес", sprites.getSprite("forest")));
         landscape.add(new LandType(sprites.getSprite("hill"), 4, "Холм"));
         Settlement.init(sprites);
 

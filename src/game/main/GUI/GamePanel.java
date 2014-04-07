@@ -6,8 +6,8 @@ import android.graphics.Rect;
 import android.util.Log;
 import game.main.gamelogic.Gamer;
 import game.main.gamelogic.world.Action;
-import game.main.utils.Sprite;
-import game.main.utils.SpriteBank;
+import game.main.utils.sprites.Sprite;
+import game.main.utils.sprites.SpriteBank;
 import game.main.utils.Touch;
 
 import java.util.ArrayList;

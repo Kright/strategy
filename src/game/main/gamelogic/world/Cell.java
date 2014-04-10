@@ -9,7 +9,7 @@ import game.main.utils.sprites.iRender;
  * Клетка карты.
  * Находящиеся на ней юнит и поселение должны иметь ссылку на неё - потому что только клетка знает свои координаты.
  */
-public class Cell implements iRender, Comparable<Cell> {
+public class Cell implements iRender, Comparable<Cell>, ResourcesCounter.ResourcesProducer {
     /*
     клетка карты, содержит всякую информацию - тип ландшафта, юнита, если он есть, улучшения и т.п.
     */
@@ -21,6 +21,7 @@ public class Cell implements iRender, Comparable<Cell> {
     private Unit unit = null;
     private boolean road = false;
     private Castle controlledByCastle = null;
+    private LandUpgrade landUpgrade;
 
     /**
      * почему-то вариант с со строчкой nextRender = land.nextRender выдаёт ошибку java.lang.ExceptionInInitializerError
@@ -41,6 +42,14 @@ public class Cell implements iRender, Comparable<Cell> {
         this.land = land;
         shadowded = false;
         this.nextRender = iRender.NullRender.get();
+    }
+
+   public void produce(ResourcesCounter counter){
+       landUpgrade.produce(counter);
+   }
+
+    public void setLandUpgrade(LandUpgrade landUpgrade){
+        this.landUpgrade=landUpgrade;
     }
 
     /**

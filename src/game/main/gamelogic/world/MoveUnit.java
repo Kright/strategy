@@ -4,6 +4,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+
+import android.util.Log;
+import game.main.gamelogic.world.Action;
+import game.main.gamelogic.world.Cell;
+import game.main.gamelogic.world.Unit;
+import game.main.utils.LongWay;
+
+import java.util.List;
+
 /**
  * перемещение юнита по пути из клеток за один ход
  * Created by lgor on 26.02.14.
@@ -36,16 +46,7 @@ public class MoveUnit extends Action {
                 unit.decreaseMovementPoints(c.getMovindCost());
                 unit.country.map.openСellsNear(c.x, c.y);
                 unit.country.map.addCellsNear(nearest, c.x, c.y);
-            } else {
-                /* если у юнита нет очков движения, нам подсунули какое-то левое действие, и мы его не произведём
-                 *
-                 * но, в принципе, такая ситуация возможна - например, мы идём на "затенённую" клетку, а потом
-                 * оказывается, что что-то изменилось - например, пропала дорога или стоит мешающий юнит другой страны.
-                 * в идеале надо будет делать действие до того момента, как мы обнаружим подвох, а потом остановиться
-                 * и пусть игрок делает новое действие, исходя из новой информации.
-                 *
-                 * В будущем надо будет переделать реализацию и не кидаться исключениями.
-                 */
+            } else {    //если у юнита нет очков движения, нам подсунули какое-то левое действие, и мы его не произведём
                 cancel();
                 throw new RuntimeException("way is wrong, " + getSequence());
             }

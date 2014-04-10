@@ -25,6 +25,17 @@ public abstract class Settlement implements iRender {
     }
 
     /**
+     * удаление поселения
+     */
+
+
+    public void deleteSettlement(){
+        cell.setSettlement(null);
+        country.settlements.remove(this);
+    }
+
+
+    /**
      * called once per turn
      * @return taxes from this settlement, may be positive or 0 or negative (if unprofitable)
      */

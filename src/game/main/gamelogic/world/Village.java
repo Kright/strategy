@@ -43,10 +43,10 @@ public class Village extends Settlement {
 
     @Override
     public void nextTurn() {
-
+        int growthOfPopulation=spawn();
         produce();
         changeWellBeing();
-        population+=spawn();
+        population+=growthOfPopulation;
         wealth+=rCounter.gold;
         rCounter.clear();
     }

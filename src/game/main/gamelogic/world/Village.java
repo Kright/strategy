@@ -15,7 +15,7 @@ public class Village extends Settlement {
     protected int population; // население
     protected int wealth; // благосостояние
     protected int wellBeing; // благополучие
-    protected float levelOfTaxes; // уровень налогов, который нужно задавать через Region
+    protected double levelOfTaxes; // уровень налогов, который нужно задавать через Region
     protected ResourcesCounter rCounter;
     //protected int growthOfPopulation;
     //protected int growthOfWealth;
@@ -29,10 +29,17 @@ public class Village extends Settlement {
         wellBeing=1;
     }
 
+
+    public double getLevelOfTaxes(){
+        return 0.5;
+    }
+
     @Override
     public int getTaxes() {
         return (int)(levelOfTaxes*population);
     }
+
+
 
     @Override
     public List<Upgrade> getUpgrades() {

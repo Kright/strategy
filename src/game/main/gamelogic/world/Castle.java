@@ -64,6 +64,11 @@ public class Castle extends Settlement {
         return new ArrayList<Upgrade>();
     }
 
+    @Override
+    public void removeSettlement() {
+
+    }
+
     protected static Sprite sprite;
 
     @Override

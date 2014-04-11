@@ -27,9 +27,6 @@ public class MapActivity extends Activity {
         }
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        /*
-        setContentView(new MapView(this));
-        */
         view = new SurfaceView(this);
         setContentView(view);
 

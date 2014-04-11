@@ -14,7 +14,7 @@ public class GameProperties {
     /**
      * если ничего не произошло, картинка на экране не перерисовывается
      */
-    public boolean powerSaving = false;
+    public boolean powerSaving = true;
 
     /**
      * показывать ли количество кадров в секунду

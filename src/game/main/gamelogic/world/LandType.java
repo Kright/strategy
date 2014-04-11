@@ -11,7 +11,7 @@ import java.util.List;
  * тип ландшафта
  * Created by lgor on 31.12.13.
  */
-public class LandType implements iRender {
+public class LandType implements iRender, ResourcesCounter.ResourcesProducer {
     /*
     тип ландшафта
         его параметры, возможные улучшения, возможно картинка, но хочется несколько для разнообразия
@@ -46,6 +46,12 @@ public class LandType implements iRender {
     @Override
     public void render(RenderParams params) {
         sprite.render(params);
+    }
+
+    @Override
+    public void produce(ResourcesCounter counter) {
+        //TODO производство ресурсов в зависимости от типа поверхности
+        counter.food++;
     }
 
     /**

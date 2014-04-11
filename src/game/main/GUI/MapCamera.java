@@ -12,6 +12,9 @@ import java.util.Iterator;
 /**
  * Камера, которая показывает карту.
  * В будущем она должна показывать карту не всю, а так, как её видит игрок.
+ * TODO - переделать итератор по клеткам - пусть в параметрах передаются границы
+ * Для того, чтобы в будущем одним хитрым способом можно было ускорить рисование - рисовать кусок карты в текстуру, а
+ * потом при перемещении камеры рисовать тот кусок + вручную небольшой карты.
  * Created by lgor on 17.01.14.
  */
 public abstract class MapCamera {
@@ -174,7 +177,7 @@ public abstract class MapCamera {
                 yy = MapToY(y);
                 xx = MapToX(x, y);
                 maxY = Math.min(map.height, (int) YonMap(screenH) + 1);
-                minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
+                minX = Math.max(0, (int) XonMap(-w/2, 1 + y * dy - position.y));
             }
 
 
@@ -183,7 +186,7 @@ public abstract class MapCamera {
                 if (x < minX) {
                     y++;
                     x = (int) XonMap(screenW, y * dy - position.y + 1);
-                    minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
+                    minX = Math.max(0, (int) XonMap(-w/2, 1 + y * dy - position.y));
                     yy = MapToY(y);
                     if (y >= maxY) {
                         hasNext = false;

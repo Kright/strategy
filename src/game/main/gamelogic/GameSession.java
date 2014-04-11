@@ -31,13 +31,15 @@ public class GameSession {
     MapRender render;
     public GameProperties properties;
     public Player currentPlayer;
+
+    //TODO - переделать интерфейс
     GamePanel panel;
 
     List<ActiveArea> gui = new ArrayList<ActiveArea>();
 
     private ActiveArea currentActive;
 
-    public CustomRandom random = LinearCongruentialGenerator.getLikeNativeRandom();
+    public final CustomRandom random = LinearCongruentialGenerator.getLikeNativeRandom();
 
     public GameSession(Resources resources) {
         this.resources = resources;
@@ -96,6 +98,7 @@ public class GameSession {
         currentPlayer.startNextTurn();
     }
 
+    //TODO переписать управление
     public void doLogic() {
         List<Touch> touches = thread.getTouches();
         needUpdate(!touches.isEmpty());

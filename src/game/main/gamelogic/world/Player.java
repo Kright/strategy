@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * абстрактный класс игрока
+ * TODO переделать его. Так как изменился подход - теперь через Callback'и можно рисовать на экране.
  * Created by lgor on 09.02.14.
  */
 public abstract class Player {

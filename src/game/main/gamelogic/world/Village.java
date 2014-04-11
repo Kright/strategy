@@ -22,8 +22,6 @@ public class Village extends Settlement {
 
     protected ArrayList<Cell> fields;
 
-
-
     public Village(Country country, Cell cell) {
         super(country, cell);
         population = 1;// условно
@@ -55,8 +53,6 @@ public class Village extends Settlement {
             return population+wellBeing-getTaxes();
     }
 
-
-
     private void produce(){
         int profitf;
         for(Cell c:fields){
@@ -67,7 +63,6 @@ public class Village extends Settlement {
     private int changeWellBeing(){
         return wellBeing;
     }
-
 
     protected static Sprite sprite;
 

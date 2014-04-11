@@ -70,7 +70,10 @@ public class Cell implements iRender, Comparable<Cell>, ResourcesCounter.Resourc
     }
 
     public void produce(ResourcesCounter counter) {
-        landUpgrade.produce(counter);
+        land.produce(counter);
+        if (landUpgrade != null) {
+            landUpgrade.produce(counter);
+        }
     }
 
     public void setLandUpgrade(LandUpgrade landUpgrade) {
@@ -243,6 +246,11 @@ public class Cell implements iRender, Comparable<Cell>, ResourcesCounter.Resourc
         @Override
         public boolean equals(Object o) {
             return false;                   //пустая клетка не равна другой пустой клетке
+        }
+
+        @Override
+        public void setLandUpgrade(LandUpgrade landUpgrade) {
+            //никаких апгрейдов
         }
     };
 }

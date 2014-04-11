@@ -15,7 +15,7 @@ public class Village extends Settlement {
     protected int population; // население
     protected int wealth; // благосостояние
     protected int wellBeing; // благополучие
-    protected float levelOfTaxes;
+    protected float levelOfTaxes; // уровень налогов, который нужно задавать через Region
     protected ResourcesCounter rCounter;
     //protected int growthOfPopulation;
     //protected int growthOfWealth;
@@ -43,12 +43,12 @@ public class Village extends Settlement {
 
     @Override
     public void nextTurn() {
-        int growthOfPopulation=spawn();
+        rCounter.clear();
         produce();
+        int growthOfPopulation=spawn();
         changeWellBeing();
         population+=growthOfPopulation;
         wealth+=rCounter.gold;
-        rCounter.clear();
     }
 
     private int spawn(){

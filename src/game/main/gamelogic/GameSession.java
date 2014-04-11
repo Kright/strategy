@@ -6,6 +6,7 @@ import game.main.GUI.ActiveArea;
 import game.main.GUI.GamePanel;
 import game.main.GameThread;
 import game.main.gamelogic.world.*;
+import game.main.utils.CustomRandom;
 import game.main.utils.LinearCongruentialGenerator;
 import game.main.utils.sprites.Sprite;
 import game.main.utils.sprites.SpriteBank;
@@ -35,6 +36,8 @@ public class GameSession {
     List<ActiveArea> gui = new ArrayList<ActiveArea>();
 
     private ActiveArea currentActive;
+
+    public CustomRandom random = LinearCongruentialGenerator.getLikeNativeRandom();
 
     public GameSession(Resources resources) {
         this.resources = resources;
@@ -134,7 +137,7 @@ public class GameSession {
                 sprites.getSprite("road110"), sprites.getSprite("road001"), sprites.getSprite("road101"),
                 sprites.getSprite("road011"), sprites.getSprite("road111")});
 
-        world = new World(width, height, landscape, LinearCongruentialGenerator.getLikeNativeRandom());
+        world = new World(width, height, landscape, this);
 
         Country country = new Country(world, 1);
         Gamer gamer = new Gamer(world, country);

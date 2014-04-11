@@ -48,7 +48,8 @@ public class Gamer extends Player {
                 features.clear();
                 if (c.hasUnit()) {
                     features.add(new UnitSelection(c.getUnit()));
-                    way = new AlternativeWay(world.map, c.getUnit());
+                    //way = new AlternativeWay(world.map, c.getUnit());
+                    way = new AlternativeWay(c.getUnit().country.map, c.getUnit());
                     features.add(way);
                 }
                 moveUnit.apply();

@@ -44,14 +44,6 @@ public class Cell implements iRender, Comparable<Cell>, ResourcesCounter.Resourc
         this.nextRender = iRender.NullRender.get();
     }
 
-   public void produce(ResourcesCounter counter){
-       landUpgrade.produce(counter);
-   }
-
-    public void setLandUpgrade(LandUpgrade landUpgrade){
-        this.landUpgrade=landUpgrade;
-    }
-
     /**
      * затенённая копия клетки
      */
@@ -77,14 +69,23 @@ public class Cell implements iRender, Comparable<Cell>, ResourcesCounter.Resourc
         land.render(params);
     }
 
+    public void produce(ResourcesCounter counter) {
+        landUpgrade.produce(counter);
+    }
+
+    public void setLandUpgrade(LandUpgrade landUpgrade) {
+        this.landUpgrade = landUpgrade;
+        this.nextRender = landUpgrade;
+    }
+
     /**
      * @return крепость, которая контролирует эту клетку
      */
-    public Castle controlledByCastle(){
+    public Castle controlledByCastle() {
         return controlledByCastle;
     }
 
-    public void setCastleControl(Castle castle){
+    public void setCastleControl(Castle castle) {
         controlledByCastle = castle;
     }
 
@@ -147,8 +148,8 @@ public class Cell implements iRender, Comparable<Cell>, ResourcesCounter.Resourc
         return false;
     }
 
-    public String toString(){
-        return ""+x+" "+y;
+    public String toString() {
+        return "" + x + " " + y;
     }
 
 
@@ -184,7 +185,7 @@ public class Cell implements iRender, Comparable<Cell>, ResourcesCounter.Resourc
 
     public void setSettlement(Settlement settlement) {
         this.settlement = settlement;
-        nextRender = settlement==null ? land.nextLayer(): settlement;
+        nextRender = settlement == null ? land.nextLayer() : settlement;
     }
 
     public Settlement getSettlement() {

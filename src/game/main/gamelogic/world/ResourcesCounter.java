@@ -5,6 +5,10 @@ package game.main.gamelogic.world;
  */
 public class ResourcesCounter {
 
+    /**
+     * тот, кто производит ресурсы.
+     * Подразумевается, что он увеличивает счётчик на нужные значения +=
+     */
     interface ResourcesProducer{
         void produce(ResourcesCounter counter);
     }
@@ -16,5 +20,4 @@ public class ResourcesCounter {
         food=0;
         gold=0;
     }
-
 }

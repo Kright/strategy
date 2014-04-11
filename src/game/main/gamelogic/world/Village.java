@@ -64,6 +64,11 @@ public class Village extends Settlement {
         return wellBeing;
     }
 
+    @Override
+    public void removeSettlement() {
+
+    }
+
     protected static Sprite sprite;
 
     @Override

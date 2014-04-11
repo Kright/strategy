@@ -29,10 +29,7 @@ public abstract class Settlement implements iRender {
      */
 
 
-    public void deleteSettlement(){
-        cell.setSettlement(null);
-        country.settlements.remove(this);
-    }
+     abstract public void removeSettlement();
 
 
     /**

@@ -78,7 +78,11 @@ public class Cell implements iRender, Comparable<Cell>, ResourcesCounter.Resourc
 
     public void setLandUpgrade(LandUpgrade landUpgrade) {
         this.landUpgrade = landUpgrade;
-        this.nextRender = landUpgrade;
+        if (landUpgrade!=null){
+            this.nextRender = landUpgrade;
+        } else{
+            nextRender = land.nextLayer();
+        }
     }
 
     /**

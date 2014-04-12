@@ -2,7 +2,6 @@ package game.main.gamelogic.world;
 
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.Sprite;
-
 import java.util.ArrayList;
 
 /**
@@ -90,13 +89,16 @@ public class Village extends Settlement {
     /**
      * @return true if this village can and create new village.
      */
-    public boolean foundNewSettlementNear(){
-        return false;       //TODO поиск новых мест для поселения
+    private boolean foundNewSettlementNear(){
+        return false;    //TODO поиск новых мест для поселения
     }
 
     @Override
     public void removeSettlement() {
-
+        for(Cell c:fields){
+            c.setLandUpgrade(null);
+        }
+        country.map.addSettlement(null, cell.x, cell.y);
     }
 
     protected static Sprite sprite;

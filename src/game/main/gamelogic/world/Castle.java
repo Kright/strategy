@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class Castle extends Settlement {
     private Region region;    //подконтрольная территория
+    protected double levelOfTaxes;
 
     public Castle(Country country, Cell cell) {
         super(country, cell);
@@ -54,6 +55,16 @@ public class Castle extends Settlement {
     public int getTaxes() {
         return 0; //и ещё вычесть стоимость содержания замка, которой пока нет
     }
+
+
+    public void setLevelOfTaxes(double levelOfTaxes){
+           this.levelOfTaxes=levelOfTaxes;
+    }
+
+    public double getLevelOfTaxes(){
+        return levelOfTaxes;
+    }
+
 
     /**
      * пока что заглушка

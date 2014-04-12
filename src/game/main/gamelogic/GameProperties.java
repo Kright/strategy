@@ -20,4 +20,9 @@ public class GameProperties {
      * показывать ли количество кадров в секунду
      */
     public boolean showFPS = true;
+
+    /**
+     * game sleeps this time if nothing was changed instead of screen redrawing;
+     */
+    public long sleepingInsteadRender = 20L;
 }

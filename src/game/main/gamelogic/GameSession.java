@@ -45,7 +45,7 @@ public class GameSession {
         this.resources = resources;
     }
 
-    public void setCallback(GameThread thread){
+    public void setCallback(GameThread thread) {
         this.thread = thread;
     }
 
@@ -67,15 +67,15 @@ public class GameSession {
      * приложение было свёрнуто и снова открыто.
      * обновляем картинку на экране
      */
-    public void resume(){
+    public void resume() {
         needUpdate(true);
     }
 
     /**
      * @param need - нуждается ли, по мнению вызывающего, экран приложения в перерисовке
      */
-    public void needUpdate(boolean need){
-        if (need){
+    public void needUpdate(boolean need) {
+        if (need) {
             screenUpdated = false;
         }
     }
@@ -85,10 +85,17 @@ public class GameSession {
     /**
      * если ничего не изменилось и режим энергосбережения - пропускаем обновление экрана
      */
-    public void repaint(){
+    public void repaint() {
         thread.checkPause();
-        if (!screenUpdated || !properties.powerSaving){
+        if (!screenUpdated || !properties.powerSaving) {
             screenUpdated = thread.repaint();
+        } else {
+            if (properties.sleepingInsteadRender>0){
+                try {
+                    Thread.sleep(properties.sleepingInsteadRender);
+                } catch (InterruptedException ex) {
+                }
+            }
         }
     }
 

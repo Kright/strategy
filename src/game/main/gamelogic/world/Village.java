@@ -15,8 +15,8 @@ public class Village extends Settlement {
     protected int population; // население
     protected int wealth; // благосостояние
     protected int wellBeing; // благополучие
-    protected double levelOfTaxes; // уровень налогов, который нужно задавать через Region
     protected ResourcesCounter rCounter;
+    protected Castle castle;
     //protected int growthOfPopulation;
     //protected int growthOfWealth;
 
@@ -27,16 +27,15 @@ public class Village extends Settlement {
         population = 1;// условно
         wealth = 1;// условно
         wellBeing=1;
+        castle=cell.controlledByCastle();
     }
 
 
-    public double getLevelOfTaxes(){
-        return 0.5;
-    }
+
 
     @Override
     public int getTaxes() {
-        return (int)(levelOfTaxes*population);
+        return (int)(castle.getLevelOfTaxes()*population);
     }
 
 

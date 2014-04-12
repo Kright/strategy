@@ -134,6 +134,7 @@ public class GameSession {
         landscape.add(new LandType(sprites.getSprite("grass"), 2, "Поле"));
         landscape.add(new LandType(sprites.getSprite("grass"), 4, "Лес", sprites.getSprite("forest")));
         landscape.add(new LandType(sprites.getSprite("hill"), 4, "Холм"));
+        landscape.get(2).landUpgrades.add(new LandUpgrade(sprites.getSprite("windmill"), "windmill"));
         Settlement.init(sprites);
 
         render = new MapRender(128, new Sprite[]{sprites.getSprite("road100"), sprites.getSprite("road010"),

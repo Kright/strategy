@@ -43,7 +43,7 @@ public class SpriteBank {
         bmpOptions = new BitmapFactory.Options();
         bmpOptions.inScaled = false;
 
-        addLine(R.drawable.lands, 192, 128, 192, 0, new String[]{"grass", "hill", "village", "castle", "shadow"});
+        addLine(R.drawable.lands, 192, 128, 192, 0, new String[]{"grass", "hill", "village", "castle", "shadow", "windmill"});
         add(R.drawable.landl, 240, 160, "forest", new int[]{0, -32, 192, 128});
         add(R.drawable.xz2, 192, 128, "crusader");
         add(R.drawable.menu, 320, 1080, "game panel");

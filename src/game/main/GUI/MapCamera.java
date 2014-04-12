@@ -6,7 +6,6 @@ import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 import game.main.utils.FPS;
 import game.main.utils.sprites.RenderParams;
-
 import java.util.Iterator;
 
 /**
@@ -17,7 +16,7 @@ import java.util.Iterator;
  * потом при перемещении камеры рисовать тот кусок + вручную небольшой карты.
  * Created by lgor on 17.01.14.
  */
-public abstract class MapCamera {
+public abstract class MapCamera{
 
     protected Point position = new Point(); //левый верхний угол экрана
     protected float dy, h, w;
@@ -103,30 +102,6 @@ public abstract class MapCamera {
 
     public int getScreenWidth() {
         return screenW;
-    }
-
-    private RectF rectangle4return = new RectF();
-
-    /**
-     * прямоугольник, в который вписана клетка (x,y) карты.
-     * на самом деле возвращается один и тот же прямоугольник, чтобы не мучать сборщик мусора
-     */
-    final public RectF getRectF(int x, int y) {
-        float xLeft = MapToX(x, y);
-        float yTop = MapToY(y);
-        rectangle4return.set(xLeft, yTop, xLeft + w, yTop + h);
-        return rectangle4return;
-    }
-
-    /**
-     * прямоугольник, в который вписана клетка карты.
-     * на самом деле возвращается один и тот же прямоугольник, чтобы не мучать сборщик мусора
-     */
-    final public RectF getRectF(Cell c) {
-        float xLeft = MapToX(c.x, c.y);
-        float yTop = MapToY(c.y);
-        rectangle4return.set(xLeft, yTop, xLeft + w, yTop + h);
-        return rectangle4return;
     }
 
     /**

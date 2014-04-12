@@ -13,7 +13,10 @@ import java.util.List;
  */
 public class Castle extends Settlement {
     private Region region;    //подконтрольная территория
+
     protected double levelOfTaxes;
+    protected double cultureLevel;
+    protected double efficiency;
 
     public Castle(Country country, Cell cell) {
         super(country, cell);
@@ -28,8 +31,8 @@ public class Castle extends Settlement {
         region = new Region(near);
         this.country.map.addCellsNear(region.cells, cell.x, cell.y);
         Iterator<Cell> iterator = region.iterator();
-        while(iterator.hasNext()){      //замок может захватить только ничью территорию
-            if (iterator.next().controlledByCastle()!=null){
+        while (iterator.hasNext()) {      //замок может захватить только ничью территорию
+            if (iterator.next().controlledByCastle() != null) {
                 iterator.remove();
             }
         }
@@ -56,23 +59,30 @@ public class Castle extends Settlement {
         return 0; //и ещё вычесть стоимость содержания замка, которой пока нет
     }
 
-
-    public void setLevelOfTaxes(double levelOfTaxes){
-           this.levelOfTaxes=levelOfTaxes;
+    public void setLevelOfTaxes(double levelOfTaxes) {
+        this.levelOfTaxes = levelOfTaxes;
     }
 
-    public double getLevelOfTaxes(){
+    /**
+     * @return доля налогов от доходов поселений феода, от 0 до 1, 0.1 - десятина.
+     */
+    public double getLevelOfTaxes() {
         return levelOfTaxes;
     }
 
+    /**
+     * @return уровень культуры провинции
+     * от него зависит максимальный размер городов
+     */
+    public double getCultureLevel(){
+        return cultureLevel;
+    }
 
     /**
-     * пока что заглушка
-     * @return пустой список улучшений
+     * @return эффективность сбора налогов - не все налоги доходят до казны.
      */
-    @Override
-    public List<Upgrade> getUpgrades() {
-        return new ArrayList<Upgrade>();
+    public double getEfficiency(){
+        return efficiency;
     }
 
     @Override

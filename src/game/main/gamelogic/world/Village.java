@@ -4,7 +4,6 @@ import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.Sprite;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Деревушка
@@ -12,62 +11,87 @@ import java.util.List;
  */
 public class Village extends Settlement {
 
-    protected int population; // население
+    public static final int[] maxWealth = new int[]{10, 20, 30, 40};
+    private static final int productivity = 10;     //доход на жителя
+
+    protected int population; // may be {1,2,3,4}
     protected int wealth; // благосостояние
-    protected int wellBeing; // благополучие
-    protected ResourcesCounter rCounter;
-    protected Castle castle;
-    //protected int growthOfPopulation;
-    //protected int growthOfWealth;
 
     protected ArrayList<Cell> fields;
 
     public Village(Country country, Cell cell) {
         super(country, cell);
-        population = 1;// условно
-        wealth = 1;// условно
-        wellBeing=1;
-        castle=cell.controlledByCastle();
-    }
-
-
-
-
-    @Override
-    public int getTaxes() {
-        return (int)(castle.getLevelOfTaxes()*population);
-    }
-
-
-
-    @Override
-    public List<Upgrade> getUpgrades() {
-        return new ArrayList<Upgrade>();                    //заглушка
+        population = 1;
+        wealth = 1; // условно
     }
 
     @Override
     public void nextTurn() {
-        rCounter.clear();
-        produce();
-        int growthOfPopulation=spawn();
-        changeWellBeing();
-        population+=growthOfPopulation;
-        wealth+=rCounter.gold;
-    }
-
-    private int spawn(){
-            return population+wellBeing-getTaxes();
-    }
-
-    private void produce(){
-        int profitf;
-        for(Cell c:fields){
-            c.produce(rCounter);
+        wealth += getProfit();
+        if (wealth < 0) {
+            decreasePopulation();
+        }
+        if (wealth > maxWealth[population + 1]) {
+            increasePopulation();
         }
     }
 
-    private int changeWellBeing(){
-        return wellBeing;
+    /**
+     * @return прибыль с учётом налогов
+     */
+    private int getProfit(){
+        Castle c=cell.controlledByCastle();
+        double k=1;
+        if (c!=null){
+            k-=c.getLevelOfTaxes();
+        }
+        return (int)(k*getYield());
+    }
+
+    /**
+     * @return поступления в казну (они меньше собираемых налогов)
+     */
+    @Override
+    public int getTaxes() {
+        Castle castle = cell.controlledByCastle();
+        if (castle == null) return 0;
+        return (int) (castle.getLevelOfTaxes() * castle.getEfficiency() * population);
+    }
+
+    /**
+     * @return чистый доход
+     */
+    private int getYield() {
+        return population*productivity;
+    }
+
+    private void decreasePopulation() {
+        if (population == 1) {
+            removeSettlement();
+        } else {
+            population--;
+            wealth = maxWealth[population + 1];
+        }
+    }
+
+    private void increasePopulation() {
+        wealth = 0;
+        if (foundNewSettlementNear()){
+            return;
+        }
+        if (population<4){
+            population++;
+            wealth = 0;
+            return;
+        }
+        //TODO превращение в город
+    }
+
+    /**
+     * @return true if this village can and create new village.
+     */
+    public boolean foundNewSettlementNear(){
+        return false;       //TODO поиск новых мест для поселения
     }
 
     @Override

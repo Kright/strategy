@@ -117,7 +117,7 @@ public class Cell implements iRender, Comparable<Cell>, ResourcesCounter.Resourc
     }
 
     public boolean hasRoad() {
-        return road;
+        return road || hasSettlement();
     }
 
     public void setRoad(boolean hasRoad) {

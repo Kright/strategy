@@ -36,6 +36,12 @@ public class Castle extends Settlement {
                 iterator.remove();
             }
         }
+        // only for test!!
+        for(Cell c: region){
+            if (!c.land.landUpgrades.isEmpty()){
+                c.setLandUpgrade(c.land.landUpgrades.get(0));
+            }
+        }
         region.updateAfrerChange();
         country.map.setCastleControll(this);
     }

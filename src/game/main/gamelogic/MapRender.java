@@ -2,15 +2,15 @@ package game.main.gamelogic;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.Typeface;
 import game.main.GUI.GamePanel;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
 import game.main.MapActivity;
+import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Settlement;
-import game.main.utils.Sprite;
+import game.main.utils.sprites.RenderParams;
+import game.main.utils.sprites.Sprite;
 
 import java.util.Iterator;
 
@@ -20,14 +20,15 @@ import java.util.Iterator;
  */
 public class MapRender extends MapCamera {
 
-    private final Paint p = new Paint();
+    private final RenderParams renderParams;
     private final Sprite[] roads;
 
     public MapRender(int spriteHeight, Sprite[] roads) {
         super(spriteHeight / 2 * 3, spriteHeight);
-        p.setTypeface(MapActivity.font);
-        p.setTextSize(36);
-        p.setColor(0xFF000055);
+        renderParams = new RenderParams(new Paint());
+        renderParams.paint.setTypeface(MapActivity.font);
+        renderParams.paint.setTextSize(36);
+        renderParams.paint.setColor(0xFF000055);
         this.roads=roads;
     }
 
@@ -35,68 +36,54 @@ public class MapRender extends MapCamera {
         setScreenSize(panel.getFreeRight(canv.getWidth()), canv.getHeight());
         checkPosition(screenW, screenH, map.width * w, map.height * dy + h - dy);
 
+        renderParams.setCellSize((int)getCellWidth()+1,(int)getCellHeight()+1 );
+        renderParams.canvas = canv;
+
         canv.drawColor(0xFF444444); //фон
-        drawLandscapeAndRoads(map, canv, null);
+        drawLandscapeAndRoads(map, renderParams);
         if (session.properties.renderBorders) {
             drawBorders(canv);
         }
-        drawFlora(map, canv, null);
-        drawShadows(map, canv, null);
+        drawFlora(map, renderParams);
         for (iRenderFeature rf : session.currentPlayer.getRenderFeatures()) {
             rf.render(this, canv);
         }
-        drawUnits(map, canv, null);
+        drawUnitsAndShadows(map, renderParams);
         if (session.properties.showFPS)
-            canv.drawText("fps=" + fps.get(), 20, 30, p);
+            canv.drawText("fps=" + fps.get(), 20, 30, renderParams.paint);
     }
 
-    private void drawLandscapeAndRoads(Map map, Canvas canv, Paint paint) {
-        Rect road4 = new Rect();
-        int w=(int)(this.getCellWidth()*312/192);
-        int h=(int)(this.getCellHeight()*120/128);
-        int dx = -(int)(this.getCellWidth()*12/192);
-        int dy = -(int)(this.getCellHeight()*44/128);
-
-        Iterator<RenderObject> iter = getIterator(map);
+    private void drawLandscapeAndRoads(Map map, RenderParams renderParams) {
+        Iterator<Cell> iter = getIterator(map, renderParams);
         while (iter.hasNext()) {
-            RenderObject ro = iter.next();
-            int left = ro.rect.left+dx;
-            int top= ro.rect.top+dy;
-            ro.cell.render(canv, ro.rect, paint);
-            if (ro.cell.hasRoad()){
-                int number = map.getRoads(ro.cell)-1;
+            Cell cell = iter.next();
+            cell.render(renderParams);
+            if (cell.hasRoad()){
+                int number = map.getRoads(cell)-1;
                 if (number>=0){
-                    road4.set(left,top,left+w, top+h);
-                    canv.drawBitmap(roads[number].bmp, roads[number].rect, road4, paint);
+                    roads[number].render(renderParams);
                 }
             }
         }
     }
 
-    private void drawFlora(Map map, Canvas canv, Paint paint) {
-        Iterator<RenderObject> iter = getIterator(map);
+    private void drawFlora(Map map, RenderParams renderParams) {
+        Iterator<Cell> iter = getIterator(map, renderParams);
         while (iter.hasNext()) {
-            RenderObject ro = iter.next();
-            ro.cell.nextRender.render(canv, ro.rect, paint);
+            iter.next().nextRender.render(renderParams);
         }
     }
 
-    private void drawShadows(Map map, Canvas canv, Paint paint) {
-        Iterator<RenderObject> iter = getIterator(map);
+    private void drawUnitsAndShadows(Map map, RenderParams renderParams) {
+        Iterator<Cell> iter = getIterator(map, renderParams);
         while (iter.hasNext()) {
-            RenderObject ro = iter.next();
-            if (ro.cell.shadowded) {
-                canv.drawBitmap(Settlement.shadow.bmp, Settlement.shadow.rect, ro.rect, paint);
-            }
-        }
-    }
-
-    private void drawUnits(Map map, Canvas canvas, Paint paint) {
-        Iterator<RenderObject> iter = getIterator(map);
-        while (iter.hasNext()) {
-            RenderObject ro = iter.next();
-            if (ro.cell.hasUnit()) {
-                ro.cell.getUnit().render(canvas, ro.rect, paint);
+            Cell cell = iter.next();
+            if (cell.shadowded) {
+                Settlement.shadow.render(renderParams);
+            } else{
+                if (cell.hasUnit()){
+                    cell.getUnit().render(renderParams);
+                }
             }
         }
     }
@@ -110,9 +97,9 @@ public class MapRender extends MapCamera {
             float yy = y * dy - position.y;
             for (int x = minX; x < maxX; x++) {
                 float xx = x * w - y * w * 0.5f - position.x;
-                canv.drawLine(xx, yy + h / 4, xx + w / 2, yy, p);
-                canv.drawLine(xx + w / 2, yy, xx + w, yy + h / 4, p);
-                canv.drawLine(xx, yy + h / 4, xx, yy + dy, p);
+                canv.drawLine(xx, yy + h / 4, xx + w / 2, yy, renderParams.paint);
+                canv.drawLine(xx + w / 2, yy, xx + w, yy + h / 4, renderParams.paint);
+                canv.drawLine(xx, yy + h / 4, xx, yy + dy, renderParams.paint);
             }
         }
     }

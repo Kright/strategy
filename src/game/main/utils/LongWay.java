@@ -1,8 +1,5 @@
 package game.main.utils;
 
-
-import android.util.Log;
-
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 
@@ -13,7 +10,6 @@ import java.util.*;
  */
 public class LongWay {
     protected final Map map;
-    //protected java.util.List<CellWay> closed = new ArrayList<CellWay>();
     protected TreeSet<CellWay> open = new TreeSet<CellWay>();
     protected HashSet<Cell> openCell = new HashSet<Cell>();
     protected HashSet<Cell> closeCell = new HashSet<Cell>();
@@ -27,9 +23,9 @@ public class LongWay {
         target = B;
         open.add(new CellWay(A, null, hDistance(A, target), B.x - A.x, B.y - B.y));
         openCell.add(A);
-        CellWay parent = null;
         targetContained = false;
 
+        CellWay parent;
         while (!open.isEmpty() && !targetContained) {
             parent = getMinOpen();
             addOpen(parent, 0, 1);

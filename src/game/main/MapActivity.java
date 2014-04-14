@@ -4,17 +4,18 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceView;
+import game.main.gamelogic.GameSession;
 
 /**
+ * активити самой игры
  * Created by lgor on 13.01.14.
  */
 public class MapActivity extends Activity {
 
     public static volatile Typeface font;
 
-    private static volatile GameThread2 session = null;
+    private static volatile GameThread thread = null;
     private static final Object monitor = new Object();
 
     private SurfaceView view;
@@ -33,33 +34,30 @@ public class MapActivity extends Activity {
         setContentView(view);
 
         synchronized (monitor) {
-            if (session == null) {
-                session = new GameSession2(monitor);
+            if (thread == null) {
+                GameSession session = new GameSession(getResources());
+                session.createNewWorld(120, 120);
+                thread = new GameThread(monitor, session);
             }
         }
-        Log.d("mylog","********************************************************");
-        Log.d("mylog","session created");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("mylog","onResume");
         synchronized (monitor) {
-            Log.d("mylog","into monitor");
-            session.resume(view.getHolder());
-            Log.d("mylog","after resume");
+            thread.resume(view.getHolder());
+            view.setOnTouchListener(thread);
             monitor.notifyAll();
-            Log.d("mylog","after notify all");
         }
     }
 
     @Override
     protected void onPause() {
-        super.onPause();
-        session.setWaiting();
-        while (!session.isWaiting()){
+        thread.setWaiting();
+        while (!thread.isWaiting()) {
             Thread.yield();
         }
+        super.onPause();
     }
 }

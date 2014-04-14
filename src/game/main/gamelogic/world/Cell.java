@@ -1,10 +1,8 @@
 package game.main.gamelogic.world;
 
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import game.main.GUI.iRender;
+import game.main.utils.sprites.RenderParams;
+import game.main.utils.sprites.iRender;
 
 /*
  * Created by lgor on 31.12.13.
@@ -66,9 +64,8 @@ public class Cell implements iRender, Comparable<Cell> {
     }
 
     @Override
-    public void render(Canvas canv, Rect cell, Paint paint) {
-        land.render(canv, cell, paint);
-        //nextRender.render(canv, cell, paint);
+    public void render(RenderParams params) {
+        land.render(params);
     }
 
     /**
@@ -191,7 +188,7 @@ public class Cell implements iRender, Comparable<Cell> {
 
     static private Cell empty = new Cell(-1, -1, null) {
         @Override
-        public void render(Canvas canv, Rect cell, Paint paint) {
+        public void render(RenderParams params) {
             /*
             ничего. Это же пустая клетка.
             Хотя, возможно, лучше рисовать что-нибудь чёрное

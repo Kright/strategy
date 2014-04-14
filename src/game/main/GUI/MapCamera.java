@@ -1,11 +1,11 @@
 package game.main.GUI;
 
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 import game.main.utils.FPS;
+import game.main.utils.sprites.RenderParams;
 
 import java.util.Iterator;
 
@@ -162,67 +162,54 @@ public abstract class MapCamera {
         }
     }
 
-    public Iterator<RenderObject> getIterator(Map map) {
-        return new Frame(map);
-    }
+    public Iterator<Cell> getIterator(final Map map, final RenderParams params) {
+        return new Iterator<Cell>() {
 
-    public class RenderObject {
-        public Cell cell;
-        public Rect rect;
+            private int x, y, minX, maxY, xx, yy;
+            private boolean hasNext = true;
 
-        protected RenderObject() {
-            rect = new Rect();
-        }
-    }
-
-    private class Frame implements Iterator<RenderObject> {
-
-        private final RenderObject pair;
-        private final Map map;
-        private int x, y, minX, maxY, xx, yy;
-        private boolean hasNext = true;
-
-        Frame(Map map) {
-            this.map = map;
-            pair = new RenderObject();
-            y = Math.max(0, (int) YonMap(0) - 1);
-            x = (int) XonMap(screenW, y * dy - position.y + 1);
-            yy = MapToY(y);
-            xx = MapToX(x, y);
-            maxY = Math.min(map.height, (int) YonMap(screenH) + 1);
-            minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
-        }
-
-        private void incXY() {
-            x--;
-            if (x < minX) {
-                y++;
+            {
+                y = Math.max(0, (int) YonMap(0) - 1);
                 x = (int) XonMap(screenW, y * dy - position.y + 1);
-                minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
                 yy = MapToY(y);
-                if (y >= maxY) {
-                    hasNext = false;
-                }
+                xx = MapToX(x, y);
+                maxY = Math.min(map.height, (int) YonMap(screenH) + 1);
+                minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
             }
-            xx = MapToX(x, y);
-        }
 
-        @Override
-        public boolean hasNext() {
-            return hasNext;
-        }
 
-        @Override
-        public RenderObject next() {
-            pair.cell = map.getCell(x, y);
-            pair.rect.set(xx - 1, yy - 1, xx + (int) (w + 1), yy + (int) (h + 1));
-            incXY();
-            return pair;
-        }
+            private void incXY() {
+                x--;
+                if (x < minX) {
+                    y++;
+                    x = (int) XonMap(screenW, y * dy - position.y + 1);
+                    minX = Math.max(0, (int) XonMap(0, 1 + y * dy - position.y));
+                    yy = MapToY(y);
+                    if (y >= maxY) {
+                        hasNext = false;
+                    }
+                }
+                xx = MapToX(x, y);
+            }
 
-        @Override
-        public void remove() {
-        }
+            @Override
+            public boolean hasNext() {
+                return hasNext;
+            }
+
+            @Override
+            public Cell next() {
+                params.x = xx - 1;
+                params.y = yy - 1;
+                Cell c = map.getCell(x, y);
+                incXY();
+                return c;
+            }
+
+            @Override
+            public void remove() {
+            }
+        };
     }
-}
 
+}

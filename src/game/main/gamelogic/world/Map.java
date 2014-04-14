@@ -1,6 +1,5 @@
 package game.main.gamelogic.world;
 
-import game.main.gamelogic.GameSession;
 import game.main.utils.CustomRandom;
 
 import java.util.Collection;

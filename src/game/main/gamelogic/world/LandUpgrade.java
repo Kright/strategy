@@ -12,17 +12,16 @@ public class LandUpgrade implements iRender, ResourcesCounter.ResourcesProducer 
     public final String name;
 
     protected final Sprite sprite;
-    private final int[] resources;
+    //private final int[] resources;
 
-    public LandUpgrade(Sprite sprite, String name, int[] resources) {
+    public LandUpgrade(Sprite sprite, String name) {
         this.sprite = sprite;
         this.name = name;
-        this.resources = resources;
     }
 
     public void produce(ResourcesCounter counter) {
-        counter.food += resources[0];
-        counter.gold += resources[1];
+        //counter.food += resources[0];
+        //counter.gold += resources[1];
     }
 
     public void render(RenderParams params) {

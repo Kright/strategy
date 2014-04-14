@@ -57,7 +57,8 @@ public class GameSession {
     }
 
     public void paint(Canvas canvas) {
-        render.render(this, world.map, canvas, panel);
+        //render.render(this, world.map, canvas, panel);
+        render.render(this, currentPlayer.getCountry().map, canvas, panel);
         for (ActiveArea area : gui) {
             area.render(render, canvas);
         }
@@ -134,6 +135,8 @@ public class GameSession {
         landscape.add(new LandType(sprites.getSprite("grass"), 2, "Поле"));
         landscape.add(new LandType(sprites.getSprite("grass"), 4, "Лес", sprites.getSprite("forest")));
         landscape.add(new LandType(sprites.getSprite("hill"), 4, "Холм"));
+        landscape.get(2).landUpgrades.add(new LandUpgrade(sprites.getSprite("windmill"), "windmill"));
+        landscape.get(0).landUpgrades.add(new LandUpgrade(sprites.getSprite("field"), "field"));
         Settlement.init(sprites);
 
         render = new MapRender(128, new Sprite[]{sprites.getSprite("road100"), sprites.getSprite("road010"),

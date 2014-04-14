@@ -143,6 +143,9 @@ public class GameSession {
                 sprites.getSprite("road110"), sprites.getSprite("road001"), sprites.getSprite("road101"),
                 sprites.getSprite("road011"), sprites.getSprite("road111")});
 
+        PathPaint.arrows=new Sprite[]{sprites.getSprite("arrow NE"), sprites.getSprite("arrow E"), sprites.getSprite("arrow SE"), sprites.getSprite("arrow SW"),
+                sprites.getSprite("arrow W"), sprites.getSprite("arrow NW")};
+
         world = new World(width, height, landscape, this);
 
         Country country = new Country(world, 1);

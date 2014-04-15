@@ -57,4 +57,9 @@ public class MapActivity extends Activity {
         }
         super.onPause();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

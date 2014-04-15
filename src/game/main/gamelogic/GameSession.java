@@ -69,7 +69,22 @@ public class GameSession {
      * обновляем картинку на экране
      */
     public void resume(){
+        sprites.load();
         needUpdate(true);
+    }
+
+    /**
+     * вызывается перед тем, как приложение будет поставлено на паузу
+     */
+    public void pause(){
+        save();
+    }
+
+    /**
+     * сохранение gameSession в долговременную память
+     */
+    public void save(){
+
     }
 
     /**

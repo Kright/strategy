@@ -64,6 +64,9 @@ public class GameThread extends Thread implements View.OnTouchListener{
         boolean paused=false;
         synchronized (monitor){
             reallyWait = mustWait;
+            if (mustWait){
+                session.pause();
+            }
             while (mustWait){
                 try {
                     paused = true;

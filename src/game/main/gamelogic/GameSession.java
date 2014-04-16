@@ -45,7 +45,7 @@ public class GameSession {
         this.resources = resources;
     }
 
-    public void setCallback(GameThread thread) {
+    public void setCallback(GameThread thread){
         this.thread = thread;
     }
 
@@ -57,7 +57,8 @@ public class GameSession {
     }
 
     public void paint(Canvas canvas) {
-        render.render(this, world.map, canvas, panel);
+        //render.render(this, world.map, canvas, panel);
+        render.render(this, currentPlayer.getCountry().map, canvas, panel);
         for (ActiveArea area : gui) {
             area.render(render, canvas);
         }
@@ -67,15 +68,30 @@ public class GameSession {
      * приложение было свёрнуто и снова открыто.
      * обновляем картинку на экране
      */
-    public void resume() {
+    public void resume(){
+        sprites.load();
         needUpdate(true);
+    }
+
+    /**
+     * вызывается перед тем, как приложение будет поставлено на паузу
+     */
+    public void pause(){
+        save();
+    }
+
+    /**
+     * сохранение gameSession в долговременную память
+     */
+    public void save(){
+
     }
 
     /**
      * @param need - нуждается ли, по мнению вызывающего, экран приложения в перерисовке
      */
-    public void needUpdate(boolean need) {
-        if (need) {
+    public void needUpdate(boolean need){
+        if (need){
             screenUpdated = false;
         }
     }
@@ -85,7 +101,7 @@ public class GameSession {
     /**
      * если ничего не изменилось и режим энергосбережения - пропускаем обновление экрана
      */
-    public void repaint() {
+    public void repaint(){
         thread.checkPause();
         if (!screenUpdated || !properties.powerSaving) {
             screenUpdated = thread.repaint();
@@ -141,11 +157,16 @@ public class GameSession {
         landscape.add(new LandType(sprites.getSprite("grass"), 2, "Поле"));
         landscape.add(new LandType(sprites.getSprite("grass"), 4, "Лес", sprites.getSprite("forest")));
         landscape.add(new LandType(sprites.getSprite("hill"), 4, "Холм"));
+        landscape.get(2).landUpgrades.add(new LandUpgrade(sprites.getSprite("windmill"), "windmill"));
+        landscape.get(0).landUpgrades.add(new LandUpgrade(sprites.getSprite("field"), "field"));
         Settlement.init(sprites);
 
         render = new MapRender(128, new Sprite[]{sprites.getSprite("road100"), sprites.getSprite("road010"),
                 sprites.getSprite("road110"), sprites.getSprite("road001"), sprites.getSprite("road101"),
                 sprites.getSprite("road011"), sprites.getSprite("road111")});
+
+        PathPaint.arrows=new Sprite[]{sprites.getSprite("arrow NE"), sprites.getSprite("arrow E"), sprites.getSprite("arrow SE"), sprites.getSprite("arrow SW"),
+                sprites.getSprite("arrow W"), sprites.getSprite("arrow NW")};
 
         world = new World(width, height, landscape, this);
 

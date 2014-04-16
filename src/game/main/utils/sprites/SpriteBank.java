@@ -3,6 +3,7 @@ package game.main.utils.sprites;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.RotateDrawable;
 import game.main.R;
 
 import java.util.ArrayList;
@@ -43,12 +44,15 @@ public class SpriteBank {
         bmpOptions = new BitmapFactory.Options();
         bmpOptions.inScaled = false;
 
-        addLine(R.drawable.lands, 192, 128, 192, 0, new String[]{"grass", "hill", "village", "castle", "shadow"});
+        addLine(R.drawable.lands, 192, 128, 192, 0, new String[]{"grass", "hill", "village", "castle", "shadow", "windmill", "field"});
         add(R.drawable.landl, 240, 160, "forest", new int[]{0, -32, 192, 128});
         add(R.drawable.xz2, 192, 128, "crusader");
         add(R.drawable.menu, 320, 1080, "game panel");
         addLine(R.drawable.roads, 312, 120, 0, 120, new String[]{
                 "road100", "road010", "road001", "road110", "road101", "road011", "road111"},
+                new int[]{ -12, -44, 192, 128});
+        addLine(R.drawable.arrows, 160, 160, 0 , 160, new String[]{
+                "arrow NE", "arrow E", "arrow SE", "arrow SW", "arrow W", "arrow NW"},
                 new int[]{ -12, -44, 192, 128});
         load();
     }

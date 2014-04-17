@@ -34,6 +34,7 @@ public class MapRender extends MapCamera {
 
     public void render(GameSession session, Map map, Canvas canv, GamePanel panel) {
         setScreenSize(panel.getFreeRight(canv.getWidth()), canv.getHeight());
+
         checkPosition(screenW, screenH, map.width * w, map.height * dy + h - dy);
 
         renderParams.setCellSize((int)getCellWidth()+1,(int)getCellHeight()+1 );

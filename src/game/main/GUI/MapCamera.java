@@ -140,28 +140,35 @@ public abstract class MapCamera{
         }
     }
 
-    public Iterator<Cell> getIterator(final Map map, final RenderParams params) {
-        return new Iterator<Cell>() {
+    public CellIterator getIterator(final Map map, final RenderParams params) {
+        return getIterator(map, params, 0, 0, screenW, screenH);
+    }
+
+    public CellIterator getIterator(final Map map, final RenderParams params, final int xLeft, final int yTop, final int xRight, final int yBottom) {
+        return new CellIterator() {
 
             private int x, y, minX, maxY, xx, yy;
             private boolean hasNext = true;
 
-            {
-                y = Math.max(0, (int) YonMap(0) - 1);
-                x = (int) XonMap(screenW, y * dy - position.y + 1);
-                yy = MapToY(y);
-                xx = MapToX(x, y);
-                maxY = Math.min(map.height, (int) YonMap(screenH) + 1);
-                minX = Math.max(0, (int) XonMap(-w/2, 1 + y * dy - position.y));
+            {   //вместо конструктора
+                clearState();
             }
 
+            public void clearState(){
+                y = Math.max(0, (int) YonMap(yTop) - 1);
+                x = (int) XonMap(xRight, y * dy - position.y + 1);
+                yy = MapToY(y);
+                xx = MapToX(x, y);
+                maxY = Math.min(map.height, (int) YonMap(yBottom) + 1);
+                minX = Math.max(0, (int) XonMap(-w/2+xLeft, 1 + y * dy - position.y));
+            }
 
             private void incXY() {
                 x--;
                 if (x < minX) {
                     y++;
-                    x = (int) XonMap(screenW, y * dy - position.y + 1);
-                    minX = Math.max(0, (int) XonMap(-w/2, 1 + y * dy - position.y));
+                    x = (int) XonMap(xRight, y * dy - position.y + 1);
+                    minX = Math.max(0, (int) XonMap(-w/2+xLeft, 1 + y * dy - position.y));
                     yy = MapToY(y);
                     if (y >= maxY) {
                         hasNext = false;
@@ -190,4 +197,11 @@ public abstract class MapCamera{
         };
     }
 
+    public interface CellIterator extends Iterator<Cell>{
+
+        /**
+         * после вызова этого метода итератор начинает обход сначала
+         */
+        public void clearState();
+    }
 }

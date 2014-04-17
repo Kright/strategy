@@ -1,7 +1,7 @@
 package game.main.gamelogic;
 
 import android.content.res.Resources;
-import android.graphics.Canvas;
+import android.graphics.*;
 import game.main.GUI.ActiveArea;
 import game.main.GUI.GamePanel;
 import game.main.GameThread;
@@ -58,8 +58,8 @@ public class GameSession {
     }
 
     public void paint(Canvas canvas) {
-        //render.render(this, world.map, canvas, panel);
-        render.render(this, currentPlayer.getCountry().map, canvas, panel);
+        render.render(this, world.map, canvas, panel);
+        //render.render(this, currentPlayer.getCountry().map, canvas, panel);
         for (ActiveArea area : gui) {
             area.render(render, canvas);
         }

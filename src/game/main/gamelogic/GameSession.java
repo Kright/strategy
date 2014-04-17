@@ -153,7 +153,8 @@ public class GameSession {
 
 
 
-        PathPaint.arrows=new AdvancedSprite[]{(AdvancedSprite)sprites.getSprite("arrow NE"), (AdvancedSprite)sprites.getSprite("arrow E"), (AdvancedSprite)sprites.getSprite("arrow SE"),(AdvancedSprite) sprites.getSprite("arrow SW"),
+        PathPaint.arrows=new AdvancedSprite[]{(AdvancedSprite)sprites.getSprite("arrow NE"), (AdvancedSprite)sprites.getSprite("arrow E"),
+                (AdvancedSprite)sprites.getSprite("arrow SE"),(AdvancedSprite) sprites.getSprite("arrow SW"),
                 (AdvancedSprite)sprites.getSprite("arrow W"), (AdvancedSprite) sprites.getSprite("arrow NW")};
 
         world = new World(width, height, landscape, this);

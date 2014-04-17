@@ -31,10 +31,11 @@ public class PathPaint implements iRenderFeature {
 
     public void render(MapCamera camera, Canvas canvas) {
         int i;
-        for (i = 0; i <= path.size(); i++) {
-            RenderParams renderParams = new RenderParams(p);
-            renderParams.setCellSize((int) camera.getCellWidth() + 1, (int) camera.getCellHeight() + 1);
-            renderParams.canvas = canvas;
+        RenderParams renderParams = new RenderParams(p);
+        renderParams.setCellSize((int) camera.getCellWidth() + 1, (int) camera.getCellHeight() + 1);
+        renderParams.canvas = canvas;
+
+        for (i = 0; i < path.size(); i++) {
 
             if ((path.get(i + 1).x - path.get(i).x == 0) && (path.get(i + 1).y - path.get(i).y == -1)) {    // NE
                 arrows[0].render(renderParams);

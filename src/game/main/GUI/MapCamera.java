@@ -1,11 +1,11 @@
 package game.main.GUI;
 
 import android.graphics.Point;
-import android.graphics.RectF;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 import game.main.utils.FPS;
 import game.main.utils.sprites.RenderParams;
+
 import java.util.Iterator;
 
 /**
@@ -16,7 +16,7 @@ import java.util.Iterator;
  * потом при перемещении камеры рисовать тот кусок + вручную небольшой карты.
  * Created by lgor on 17.01.14.
  */
-public abstract class MapCamera{
+public abstract class MapCamera {
 
     protected Point position = new Point(); //левый верхний угол экрана
     protected float dy, h, w;
@@ -70,7 +70,9 @@ public abstract class MapCamera{
         return (int) (x * w - y * w * 0.5f - position.x);
     }
 
-    //возвращает клетку, в которую нажали на экране
+    /**
+     * возвращает клетку, в которую нажали на экране
+     */
     final public Cell getCell(Map map, float x, float y) {
         int cellY = (int) YonMap(y); //целая часть числа
         int cellX = (int) ((x + position.x) / w + cellY * 0.5f);
@@ -154,13 +156,13 @@ public abstract class MapCamera{
                 clearState();
             }
 
-            public void clearState(){
+            public void clearState() {
                 y = Math.max(0, (int) YonMap(yTop) - 1);
                 x = (int) XonMap(xRight, y * dy - position.y + 1);
                 yy = MapToY(y);
                 xx = MapToX(x, y);
                 maxY = Math.min(map.height, (int) YonMap(yBottom) + 1);
-                minX = Math.max(0, (int) XonMap(-w/2+xLeft, 1 + y * dy - position.y));
+                minX = Math.max(0, (int) XonMap(-w / 2 + xLeft, 1 + y * dy - position.y));
             }
 
             private void incXY() {
@@ -168,7 +170,7 @@ public abstract class MapCamera{
                 if (x < minX) {
                     y++;
                     x = (int) XonMap(xRight, y * dy - position.y + 1);
-                    minX = Math.max(0, (int) XonMap(-w/2+xLeft, 1 + y * dy - position.y));
+                    minX = Math.max(0, (int) XonMap(-w / 2 + xLeft, 1 + y * dy - position.y));
                     yy = MapToY(y);
                     if (y >= maxY) {
                         hasNext = false;
@@ -194,13 +196,19 @@ public abstract class MapCamera{
             @Override
             public void remove() {
             }
+
+            @Override
+            public Iterator<Cell> iterator() {
+                return this;
+            }
         };
     }
 
-    public interface CellIterator extends Iterator<Cell>{
+    public interface CellIterator extends Iterator<Cell>, Iterable<Cell> {
 
         /**
          * после вызова этого метода итератор начинает обход сначала
+         * Можно использовать вместо того, чтобы создавать новый итератор.
          */
         public void clearState();
     }

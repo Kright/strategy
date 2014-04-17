@@ -39,6 +39,9 @@ public class GameThread extends Thread implements View.OnTouchListener{
     public final boolean repaint(){
         boolean success=false;
         Canvas canvas=null;
+        if (mustWait){      // если потоку советуют остановиться, рисование будет пропущено
+            return false;
+        }
         try {                       // получаем объект Canvas и выполняем отрисовку
             canvas = holder.lockCanvas(null);
             if (canvas != null)
@@ -66,12 +69,12 @@ public class GameThread extends Thread implements View.OnTouchListener{
             reallyWait = mustWait;
             if (mustWait){
                 session.pause();
-            }
-            while (mustWait){
-                try {
-                    paused = true;
-                    monitor.wait();
-                } catch (InterruptedException e) {
+                while (mustWait){
+                    try {
+                        paused = true;
+                        monitor.wait();
+                    } catch (InterruptedException e) {
+                    }
                 }
             }
         }

@@ -2,8 +2,6 @@ package game.main.gamelogic;
 
 import android.content.res.Resources;
 import android.graphics.*;
-import game.main.GUI.ActiveArea;
-import game.main.GUI.GamePanel;
 import game.main.GameThread;
 import game.main.gamelogic.world.*;
 import game.main.utils.CustomRandom;
@@ -22,25 +20,19 @@ import java.util.List;
  */
 public class GameSession {
 
+    public final CustomRandom random = LinearCongruentialGenerator.getLikeNativeRandom();
+
     private volatile GameThread thread;
     private final Resources resources;
     private SpriteBank sprites;
 
     private boolean notFinished = true;
+    public GameProperties properties;
 
     World world;
     MapRender render;
-    public GameProperties properties;
+
     public Player currentPlayer;
-
-    //TODO - переделать интерфейс
-    GamePanel panel;
-
-    List<ActiveArea> gui = new ArrayList<ActiveArea>();
-
-    private ActiveArea currentActive;
-
-    public final CustomRandom random = LinearCongruentialGenerator.getLikeNativeRandom();
 
     public GameSession(Resources resources) {
         this.resources = resources;
@@ -51,18 +43,14 @@ public class GameSession {
     }
 
     public void run() {
-        while (notFinished) {
-            doLogic();
-            repaint();
+        while (notFinished){
+            currentPlayer.run(render);
+            currentPlayer = world.getNextPlayer();
         }
     }
 
     public void paint(Canvas canvas) {
-        render.render(this, world.map, canvas, panel);
-        //render.render(this, currentPlayer.getCountry().map, canvas, panel);
-        for (ActiveArea area : gui) {
-            area.render(render, canvas);
-        }
+        currentPlayer.paint(canvas, render);
     }
 
     /**
@@ -71,7 +59,10 @@ public class GameSession {
      */
     public void resume(){
         sprites.load();
-        needUpdate(true);
+        while(!repaint()){
+            sleep(20);
+            Thread.yield();
+        }
     }
 
     /**
@@ -101,51 +92,45 @@ public class GameSession {
 
     /**
      * если ничего не изменилось и режим энергосбережения - пропускаем обновление экрана
+     * на этом вызове приложение может приостановиться, если его свернули
      */
-    public void repaint(){
-        thread.checkPause();
+    public void safeRepaint(){
+        checkPause();
         if (!screenUpdated || !properties.powerSaving) {
             screenUpdated = thread.repaint();
         } else {
             if (properties.sleepingInsteadRender>0){
-                try {
-                    Thread.sleep(properties.sleepingInsteadRender);
-                } catch (InterruptedException ex) {
-                }
+                sleep(properties.sleepingInsteadRender);
             }
         }
     }
 
-    private void setNextPlayer() {
-        currentPlayer.beforeEndTurn();
-        currentPlayer = world.getNextPlayer();
-        currentPlayer.startNextTurn();
+    /**
+     * особое обновление экрана, нельзя прервать.
+     * Надо вручную использовать проверку на паузу в приложении.
+     * @return success of repaint() call;
+     */
+    public boolean repaint(){
+        return screenUpdated = thread.repaint();
     }
 
-    //TODO переписать управление
-    public void doLogic() {
+    public boolean checkPause(){
+        return thread.checkPause();
+    }
+
+    /**
+     * @return список нажатий на экран, произощедших после последнего вызова этой функции
+     */
+    public List<Touch> getTouches(){
         List<Touch> touches = thread.getTouches();
         needUpdate(!touches.isEmpty());
-        List<Touch> tt = new ArrayList<Touch>();
-        while (!touches.isEmpty()) {
-            Touch t = touches.remove(0);
-            if (t.firstTouch()) {
-                currentActive = null;
-                for (ActiveArea area : gui) {
-                    if (area.interestedInTouch(t)) {
-                        currentActive = area;
-                        break;
-                    }
-                }
-            }
-            if (currentActive != null) {
-                currentActive.update(t);
-            } else {
-                tt.add(t);
-            }
-        }
-        if (!currentPlayer.update(render, tt)) {
-            setNextPlayer();
+        return touches;
+    }
+
+    public final void sleep(long ms){
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ex) {
         }
     }
 
@@ -174,7 +159,6 @@ public class GameSession {
         world = new World(width, height, landscape, this);
 
         Country country = new Country(world, 1);
-        Gamer gamer = new Gamer(world, country);
 
         UnitType crusader = new UnitType(2, 2, 0, sprites.getSprite("crusader"));
         country.createUnit(crusader, 2, 2);
@@ -182,11 +166,10 @@ public class GameSession {
 
         world.map.getCell(2, 2).getUnit().buildCastle().apply();
 
-        world.addPlayer(gamer);
-
+        world.addPlayer(new Gamer(this, country));
         currentPlayer = world.getNextPlayer();
 
-        panel = GamePanel.getGamePanel2(gamer, sprites);
-        gui.add(panel);
+        //panel = GamePanel.getGamePanel2(gamer, sprites);
+        //gui.add(panel);
     }
 }

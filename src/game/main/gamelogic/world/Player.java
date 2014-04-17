@@ -1,41 +1,38 @@
 package game.main.gamelogic.world;
 
-import game.main.GUI.MapCamera;
-import game.main.GUI.iRenderFeature;
-import game.main.utils.Touch;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.graphics.Canvas;
+import game.main.gamelogic.GameSession;
+import game.main.gamelogic.MapRender;
 
 /**
  * абстрактный класс игрока
- * TODO переделать его. Так как изменился подход - теперь через Callback'и можно рисовать на экране.
  * Created by lgor on 09.02.14.
  */
 public abstract class Player {
 
-    protected final World world;
-    protected List<iRenderFeature> features = new ArrayList<iRenderFeature>();
-    protected Country country;
+    protected final Country country;
+    protected final GameSession session;
 
-    public Player(World world, Country country) {
-        this.world = world;
+    public Player(GameSession session, Country country) {
         this.country = country;
+        this.session = session;
     }
 
-    public List<iRenderFeature> getRenderFeatures() {
-        return features;
+    public final void run(MapRender render) {
+        startNextTurn();
+        doTurn(render);
+        beforeEndTurn();
     }
 
-    public Country getCountry(){
-        return country;
-    }
+    protected abstract void doTurn(MapRender render);
+
+    public abstract void paint(Canvas canvas, MapRender render);
 
     /*
     обновить состояние городов, казны и т.п.
     вызывается до того, как будет вызван update
      */
-    public void startNextTurn() {
+    private void startNextTurn() {
         country.startNextTurn();
     }
 
@@ -43,13 +40,7 @@ public abstract class Player {
     вызывается после update==false
     подлечить юнитов, восполнить очки ходов и т.п.
      */
-    public void beforeEndTurn() {
+    private void beforeEndTurn() {
         country.beforeEndTurn();
     }
-
-    /*
-    вызывается до тех пор, пока не вернёт fasle.
-    между вызовами мир рисуется на экран
-     */
-    public abstract boolean update(MapCamera camera, List<Touch> touches);
 }

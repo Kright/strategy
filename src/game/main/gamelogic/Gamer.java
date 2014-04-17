@@ -1,104 +1,148 @@
 package game.main.gamelogic;
 
-import game.main.GUI.MapCamera;
-import game.main.GUI.UnitSelection;
-import game.main.gamelogic.world.*;
-import game.main.gamelogic.world.Action;
-import game.main.gamelogic.world.Cell;
+import android.graphics.Canvas;
+import android.util.FloatMath;
+import game.main.gamelogic.world.Country;
 import game.main.gamelogic.world.Player;
-import game.main.gamelogic.world.World;
-import game.main.gamelogic.world.AlternativeWay;
 import game.main.utils.Touch;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Класс игрока, который сидит и тыкает в экран пальцем.
- * Created by lgor on 09.02.14.
+ * Класс, обрабатывающий действия игрока - нажатия на экран и сворачивание приложения
+ * TODO добавить действия игрока
+ * На данный момент реализовано только перемещение камеры
+ * В будущем - кнопочки, выделение, перемещение юнитов нажатием, переход в меню города.
+ * Created by lgor on 17.04.14.
  */
 public class Gamer extends Player {
 
-    private AlternativeWay way = null;
-    private boolean nextTurnReady = false;
+    /**
+     * состояние интерфейса
+     */
+    private abstract class State {
+        public abstract State getNext();
 
-    public Gamer(World world, Country country) {
-        super(world, country);
+        public void paint(Canvas canvas, MapRender render) {
+            render.render(canvas, country.map.getTrueMap());
+        }
+    }
+
+    private boolean turnFunished;
+    private State state;
+    private MapRender camera;
+    private List<Touch> touches = new ArrayList<Touch>();
+
+    public Gamer(GameSession session, Country country) {
+        super(session, country);
+        state = doNothing;
     }
 
     @Override
-    public boolean update(MapCamera camera, List<Touch> touches) {
-        for (Touch t : touches) {
-            update(camera, t);
+    protected void doTurn(MapRender render) {
+        this.camera = render;
+        turnFunished = false;
+        while (!turnFunished) {
+            state = state.getNext();
         }
-        return !nextTurnReady;
     }
 
-    private void update(MapCamera camera, Touch touch) {
-        if (touch.count() == 1) {
-            camera.move(-touch.dx(), -touch.dy());
-            if (touch.firstTouch()) {
-                Action moveUnit = Action.getNullAction();
-                Cell c = camera.getCell(world.map, touch.x, touch.y);
-                if (way != null) {
-                    if (way.isInto(c)) {
-                        moveUnit = way.getMoveTo(c);
-                    }
-                    way = null;
-                }
-                features.clear();
-                if (c.hasUnit()) {
-                    features.add(new UnitSelection(c.getUnit()));
-                    //way = new AlternativeWay(world.map, c.getUnit());
-                    way = new AlternativeWay(c.getUnit().country.map, c.getUnit());
-                    features.add(way);
+    @Override
+    public void paint(Canvas canvas, MapRender render) {
+        state.paint(canvas, render);
+    }
 
-                }
-                moveUnit.apply();
+    protected void updateTouches() {
+        touches.addAll(session.getTouches());
+    }
+
+    private final State doNothing = new State() {
+        @Override
+        public State getNext() {
+            if (touches.isEmpty()) {
+                waitAndUpdate();
+                return this;
             }
-        } else {
-            camera.move(-(touch.dx() + touch.next.dx()) / 2, -(touch.dy() + touch.next.dy()) / 2);
-            Touch t2 = touch.next;
-            float scale = (float) Math.sqrt(len2(touch.x - t2.x, touch.y - t2.y) / len2(touch.oldX() - t2.oldX(), touch.oldY() - t2.oldY()));
-            camera.scale(scale, (touch.x + t2.x) / 2, (touch.y + t2.y) / 2);
+            return mapMoving;
         }
- /*      ArrayList<Cell> list0= new ArrayList<Cell>();  // для рисования стрелочек
-       list0.add(world.map.getCell(3,3));
-       list0.add(world.map.getCell(3,2));
-       features.add(new PathPaint(list0));
-       */
+    };
 
+    private final State mapMoving = new State() {
+        float vx, vy;       //накопители для перемещений за кадр
+        float vx2, vy2;     //итоговые значения
 
+        @Override
+        public State getNext() {
+            for (; ; ) {
+                assert !touches.isEmpty();
+                Touch t = touches.remove(0);
+                if (t.count() == 1) {
+                    vx -= t.dx();
+                    vy -= t.dy();
+                    camera.move(-t.dx(), -t.dy());
+                    if (t.lastTouch()) {
+                        camInertia.set(vx2, vy2);
+                        return camInertia;
+                    }
+                } else if (t.count() > 1) {
+                    Touch t2 = t.next;
+                    camera.move((-t.dx() - t2.dx()) / 2, (-t.dy() - t2.dy()) / 2);
+                    float scale = FloatMath.sqrt(len2(t.x - t2.x, t.y - t2.y) /
+                            len2(t.oldX() - t2.oldX(), t.oldY() - t2.oldY()));
+                    camera.scale(scale, (t.x + t2.x) / 2, (t.y + t2.y) / 2);
+                }
+                if (touches.isEmpty()) {
+                    vx2 = vx;
+                    vy2 = vy;
+                    vx = 0;
+                    vy = 0;
+                    session.repaint();
+                    while (touches.isEmpty()) {
+                        waitAndUpdate();
+                    }
+                }
+            }
+        }
+    };
+
+    private final CamInertia camInertia = new CamInertia();
+
+    private class CamInertia extends State {
+        float vx, vy, k = 0.9f, minV2;
+
+        public void set(float dx, float dy) {
+            vx = dx;
+            vy = dy;
+            minV2 = 50*FloatMath.sqrt(camera.getScreenWidth()/1920f);
+        }
+
+        @Override
+        public State getNext() {
+            for (; ; ) {
+                if (!touches.isEmpty() || len2(vx, vy) < minV2) {
+                    return doNothing;
+                }
+                vx *= k;
+                vy *= k;
+                camera.move(vx, vy);
+                session.repaint();
+                updateTouches();
+                if (session.checkPause()) {
+                    return doNothing;
+                }
+            }
+        }
     }
 
-    /**
-     * отменили действие, сбрасываем состояние
-     */
-    public void cancelAction() {
-        way = null;
-        features.clear();
+    private void waitAndUpdate() {
+        if (!session.checkPause()) {
+            session.sleep(20);
+        }
+        updateTouches();
     }
 
-    @Override
-    public void startNextTurn() {
-        super.startNextTurn();      //обязательно вызывать, там обновляются города
-        this.cancelAction();
-        nextTurnReady = false;
-    }
-
-    @Override
-    public void beforeEndTurn() {
-        super.beforeEndTurn();     //обязательно вызывать, обновляются очки движения юнитов
-    }
-
-    /**
-     * установить изве, что игроку пора закончить ход
-     */
-    public void setNextTurnReady() {
-        nextTurnReady = true;
-    }
-
-    private float len2(float x, float y) {
+    private static float len2(float x, float y) {
         return (x * x + y * y);
     }
 }

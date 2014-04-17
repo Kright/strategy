@@ -2,21 +2,16 @@ package game.main.GUI;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.Log;
-import game.main.gamelogic.Gamer;
-import game.main.gamelogic.world.Action;
-import game.main.utils.sprites.Sprite;
-import game.main.utils.sprites.SpriteBank;
 import game.main.utils.Touch;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Вертикальная панель слева или справа экрана
  * Содержит кнопочки "next turn", "cancel", "help" и панельку с доп информацией;
  * "меню" вызывается стандартной кнопкой андроида "назад", её тут не будет
+ * TODO переделать панельку, всё будет по-другому
  * Created by lgor on 10.03.14.
  */
 public class GamePanel extends ActiveArea {
@@ -98,6 +93,7 @@ public class GamePanel extends ActiveArea {
         }
     }
 
+    /*
     public static GamePanel getGamePanel(Gamer gamer, float textSize) {
         ArrayList<Button> buttons = new ArrayList<Button>();
         buttons.add(TextButton.getNextTurnButton(textSize, gamer));
@@ -165,4 +161,5 @@ public class GamePanel extends ActiveArea {
             }
         };
     }
+            */
 }

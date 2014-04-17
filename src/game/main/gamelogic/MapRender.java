@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import game.main.GUI.GamePanel;
 import game.main.GUI.MapCamera;
-import game.main.GUI.iRenderFeature;
 import game.main.MapActivity;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
@@ -46,12 +45,31 @@ public class MapRender extends MapCamera {
             drawBorders(canv);
         }
         drawFlora(map, renderParams);
+        /*  TODO рисование до нормального вида
         for (iRenderFeature rf : session.currentPlayer.getRenderFeatures()) {
             rf.render(this, canv);
-        }
+        }*/
         drawUnitsAndShadows(map, renderParams);
         if (session.properties.showFPS)
             canv.drawText("fps=" + fps.get(), 20, 30, renderParams.paint);
+    }
+
+    public void render(Canvas canv, Map map){
+        setScreenSize(canv.getWidth(), canv.getHeight());
+
+        checkPosition(screenW, screenH, map.width * w, map.height * dy + h - dy);
+
+        renderParams.setCellSize((int)getCellWidth()+1,(int)getCellHeight()+1 );
+        renderParams.canvas = canv;
+
+        canv.drawColor(0xFF444444); //фон
+        drawLandscapeAndRoads(map, renderParams);
+        drawFlora(map, renderParams);
+        /*for (iRenderFeature rf : session.currentPlayer.getRenderFeatures()) {
+            rf.render(this, canv);
+        }*/
+        drawUnitsAndShadows(map, renderParams);
+        canv.drawText("fps=" + fps.get(), 20, 30, renderParams.paint);
     }
 
     private void drawLandscapeAndRoads(Map map, RenderParams renderParams) {

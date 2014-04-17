@@ -3,9 +3,6 @@ package game.main.GUI;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
-import game.main.gamelogic.Gamer;
-import game.main.gamelogic.world.Action;
 
 /**
  * кнопочки с текстом внутри, которые можно одноразово нажимать
@@ -51,6 +48,7 @@ public abstract class TextButton extends Button {
         }
     }
 
+    /*
     public static Button getCancelButton(float textSize, final Gamer gamer) {
         return new TextButton("cancel", textSize) {
             @Override
@@ -71,4 +69,5 @@ public abstract class TextButton extends Button {
             }
         };
     }
+    */
 }

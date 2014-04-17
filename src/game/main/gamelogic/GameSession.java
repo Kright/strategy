@@ -8,6 +8,7 @@ import game.main.GameThread;
 import game.main.gamelogic.world.*;
 import game.main.utils.CustomRandom;
 import game.main.utils.LinearCongruentialGenerator;
+import game.main.utils.sprites.AdvancedSprite;
 import game.main.utils.sprites.Sprite;
 import game.main.utils.sprites.SpriteBank;
 import game.main.utils.Touch;
@@ -165,8 +166,10 @@ public class GameSession {
                 sprites.getSprite("road110"), sprites.getSprite("road001"), sprites.getSprite("road101"),
                 sprites.getSprite("road011"), sprites.getSprite("road111")});
 
-        PathPaint.arrows=new Sprite[]{sprites.getSprite("arrow NE"), sprites.getSprite("arrow E"), sprites.getSprite("arrow SE"), sprites.getSprite("arrow SW"),
-                sprites.getSprite("arrow W"), sprites.getSprite("arrow NW")};
+
+
+        PathPaint.arrows=new AdvancedSprite[]{(AdvancedSprite)sprites.getSprite("arrow NE"), (AdvancedSprite)sprites.getSprite("arrow E"), (AdvancedSprite)sprites.getSprite("arrow SE"),(AdvancedSprite) sprites.getSprite("arrow SW"),
+                (AdvancedSprite)sprites.getSprite("arrow W"), (AdvancedSprite) sprites.getSprite("arrow NW")};
 
         world = new World(width, height, landscape, this);
 

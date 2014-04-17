@@ -62,11 +62,11 @@ public class Gamer extends Player {
             float scale = (float) Math.sqrt(len2(touch.x - t2.x, touch.y - t2.y) / len2(touch.oldX() - t2.oldX(), touch.oldY() - t2.oldY()));
             camera.scale(scale, (touch.x + t2.x) / 2, (touch.y + t2.y) / 2);
         }
-  /*     ArrayList<Cell> list0= new ArrayList<Cell>();  // для рисования стрелочек
-       list0.add(world.map.getCell(2,2));
+       ArrayList<Cell> list0= new ArrayList<Cell>();  // для рисования стрелочек
        list0.add(world.map.getCell(3,3));
+       list0.add(world.map.getCell(3,2));
        features.add(new PathPaint(list0));
-       */
+
 
     }
 

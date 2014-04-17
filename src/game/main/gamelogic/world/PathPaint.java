@@ -1,13 +1,10 @@
 package game.main.gamelogic.world;
 
-
 import android.graphics.*;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
+import game.main.utils.sprites.AdvancedSprite;
 import game.main.utils.sprites.RenderParams;
-import game.main.utils.sprites.Sprite;
-import game.main.utils.sprites.SpriteBank;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,9 +18,9 @@ import java.util.List;
  * NW - северо-запад
  */
 
-
 public class PathPaint implements iRenderFeature {
-    public static Sprite[] arrows;
+
+    public static AdvancedSprite[] arrows;
     protected List<Cell> path;
     protected Paint p;
 
@@ -34,79 +31,31 @@ public class PathPaint implements iRenderFeature {
 
     public void render(MapCamera camera, Canvas canvas) {
         int i;
-        RectF r;
-        float w;
-        float h;
-        float cx;
-        float cy;
-
-        for (i = 0; i <= path.size(); i++) {                  // проходим по всему пути
+        for (i = 0; i <= path.size(); i++) {
+            RenderParams renderParams = new RenderParams(p);
+            renderParams.setCellSize((int) camera.getCellWidth() + 1, (int) camera.getCellHeight() + 1);
+            renderParams.canvas = canvas;
 
             if ((path.get(i + 1).x - path.get(i).x == 0) && (path.get(i + 1).y - path.get(i).y == -1)) {    // NE
-                w = camera.getCellWidth();
-                h = camera.getCellHeight();
-                cx = camera.MapToX(path.get(i).x, path.get(i).y)+w/2;                                      // далее вместо w/2 и h/2 нужно будет аккуратно подобрать значения, чтобы стрелочка лежала между клетками
-                cy = camera.MapToY(path.get(i).y) + h/2;
-                float scale = 1.0f;                                                                       // let it be
-                r = new RectF(cx - w * 0.5f*scale, cy - h * 0.433f*scale, cx + w * 0.5f*scale, cy + h * 0.433f*scale);
-
-                canvas.drawBitmap(arrows[0].bmp, arrows[0].rect, r, p);
+                arrows[0].render(renderParams);
             }
-
             if ((path.get(i + 1).x - path.get(i).x == 1) && (path.get(i + 1).y - path.get(i).y == 0)) {    // E
-                w = camera.getCellWidth();
-                h = camera.getCellHeight();
-                cx = camera.MapToX(path.get(i).x, path.get(i).y)+w/2;
-                cy = camera.MapToY(path.get(i).y)+ h/2;
-                float scale = 1.0f;
-                r = new RectF(cx - w * 0.5f* scale, cy - h * 0.433f* scale, cx + w * 0.5f* scale, cy + h * 0.433f* scale);
-
-                canvas.drawBitmap(arrows[1].bmp, arrows[1].rect, r, p);
+                arrows[1].render(renderParams);
             }
-
             if ((path.get(i + 1).x - path.get(i).x == 1) && (path.get(i + 1).y - path.get(i).y == 1)) {    // SE
-                w = camera.getCellWidth();
-                h = camera.getCellHeight();
-                cx = camera.MapToX(path.get(i).x, path.get(i).y)+w/2;
-                cy = camera.MapToY(path.get(i).y)+ h/2;
-                float scale = 1.0f;
-                r = new RectF(cx - w * 0.5f* scale, cy - h * 0.433f* scale, cx + w * 0.5f* scale, cy + h * 0.433f* scale);
-
-                canvas.drawBitmap(arrows[2].bmp, arrows[2].rect, r, p);
+                arrows[2].render(renderParams);
             }
-
             if ((path.get(i + 1).x - path.get(i).x == 0) && (path.get(i + 1).y - path.get(i).y == 1)) {    // SW
-                w = camera.getCellWidth();
-                h = camera.getCellHeight();
-                cx = camera.MapToX(path.get(i).x, path.get(i).y)+w/2;
-                cy = camera.MapToY(path.get(i).y)+ h/2;
-                float scale = 1.0f;
-                r = new RectF(cx - w * 0.5f* scale, cy - h * 0.433f* scale, cx + w * 0.5f* scale, cy + h * 0.433f* scale);
-
-                canvas.drawBitmap(arrows[3].bmp, arrows[3].rect, r, p);
+                arrows[3].render(renderParams);
             }
-
             if ((path.get(i + 1).x - path.get(i).x == -1) && (path.get(i + 1).y - path.get(i).y == 0)) {    // W
-                w = camera.getCellWidth();
-                h = camera.getCellHeight();
-                cx = camera.MapToX(path.get(i).x, path.get(i).y)+w/2;
-                cy = camera.MapToY(path.get(i).y)+ h/2;
-                float scale = 1.0f;
-                r = new RectF(cx - w * 0.5f* scale, cy - h * 0.433f* scale, cx + w * 0.5f* scale, cy + h * 0.433f* scale);
-
-                canvas.drawBitmap(arrows[4].bmp, arrows[4].rect, r, p);
+                arrows[4].render(renderParams);
             }
-
             if ((path.get(i + 1).x - path.get(i).x == -1) && (path.get(i + 1).y - path.get(i).y == -1)) {    // NW
-                w = camera.getCellWidth();
-                h = camera.getCellHeight();
-                cx = camera.MapToX(path.get(i).x, path.get(i).y)+w/2;
-                cy = camera.MapToY(path.get(i).y)+ h/2;
-                float scale = 1.0f;
-                r = new RectF(cx - w * 0.5f* scale, cy - h * 0.433f* scale, cx + w * 0.5f* scale, cy + h * 0.433f* scale);
-
-                canvas.drawBitmap(arrows[5].bmp, arrows[5].rect, r, p);
+                arrows[5].render(renderParams);
             }
+
         }
     }
 }
+

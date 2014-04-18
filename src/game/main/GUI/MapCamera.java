@@ -71,6 +71,14 @@ public abstract class MapCamera {
     }
 
     /**
+     * устанавливает в renderParams коориднаты клетки
+     */
+    final public void setXY(RenderParams params, Cell c) {
+        params.y = (int) (c.y * dy - position.y);
+        params.x = (int) (c.x * w - c.y * w * 0.5f - position.x);
+    }
+
+    /**
      * возвращает клетку, в которую нажали на экране
      */
     final public Cell getCell(Map map, float x, float y) {
@@ -149,8 +157,13 @@ public abstract class MapCamera {
     public CellIterator getIterator(final Map map, final RenderParams params, final int xLeft, final int yTop, final int xRight, final int yBottom) {
         return new CellIterator() {
 
-            private int x, y, minX, maxY, xx, yy;
-            private boolean hasNext = true;
+            private int x;
+            private int y;
+            private int minX;
+            private int maxY;
+            private int xx;
+            private int yy;
+            private boolean hasNext;
 
             {   //вместо конструктора
                 clearState();
@@ -163,6 +176,7 @@ public abstract class MapCamera {
                 xx = MapToX(x, y);
                 maxY = Math.min(map.height, (int) YonMap(yBottom) + 1);
                 minX = Math.max(0, (int) XonMap(-w / 2 + xLeft, 1 + y * dy - position.y));
+                hasNext = true;
             }
 
             private void incXY() {

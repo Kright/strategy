@@ -1,8 +1,8 @@
 package game.main.gamelogic;
 
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
-import game.main.GUI.GamePanel;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
 import game.main.MapActivity;
@@ -11,8 +11,9 @@ import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Settlement;
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.Sprite;
+import game.main.utils.sprites.SpriteBank;
 
-import java.util.Iterator;
+import java.util.List;
 
 /**
  * объект, который рисует карту и эффекты на ней
@@ -21,107 +22,114 @@ import java.util.Iterator;
 public class MapRender extends MapCamera {
 
     private final RenderParams renderParams;
-    private final Sprite[] roads;
+    private final Sprite[] roads, arrows;
     private final GameProperties properties;
+    private final Matrix mirror, identity;
 
-    public MapRender(int spriteHeight, Sprite[] roads, GameProperties properties) {
+    public MapRender(int spriteHeight, SpriteBank sprites, GameProperties properties) {
         super(spriteHeight / 2 * 3, spriteHeight);
         this.properties = properties;
         renderParams = new RenderParams(new Paint());
         renderParams.paint.setTypeface(MapActivity.font);
         renderParams.paint.setTextSize(36);
         renderParams.paint.setColor(0xFF000055);
-        this.roads=roads;
+        roads = new Sprite[]{sprites.getSprite("road100"), sprites.getSprite("road010"),
+                sprites.getSprite("road110"), sprites.getSprite("road001"), sprites.getSprite("road101"),
+                sprites.getSprite("road011"), sprites.getSprite("road111")};
+        arrows = new Sprite[]{sprites.getSprite("↗"), sprites.getSprite("→"), sprites.getSprite("↘")};
+        identity = new Matrix();
+        mirror = new Matrix();
+        mirror.setScale(-1, 1);
     }
 
-    public void render(GameSession session, Map map, Canvas canv, GamePanel panel) {
-        setScreenSize(panel.getFreeRight(canv.getWidth()), canv.getHeight());
-
+    public void render(Canvas canv, Map map) {
+        setScreenSize(canv.getWidth(), canv.getHeight());
         checkPosition(screenW, screenH, map.width * w, map.height * dy + h - dy);
-
-        renderParams.setCellSize((int)getCellWidth()+1,(int)getCellHeight()+1 );
+        renderParams.setCellSize((int) getCellWidth() + 1, (int) getCellHeight() + 1);
         renderParams.canvas = canv;
 
+        CellIterator iterator = getIterator(map, renderParams);
+
         canv.drawColor(0xFF444444); //фон
-        drawLandscapeAndRoads(map, renderParams);
-        if (session.properties.renderBorders) {
-            drawBorders(canv);
-        }
-        drawFlora(map, renderParams);
-        /*  TODO рисование до нормального вида
-        for (iRenderFeature rf : session.currentPlayer.getRenderFeatures()) {
-            rf.render(this, canv);
-        }*/
-        drawUnitsAndShadows(map, renderParams);
-        if (session.properties.showFPS)
+        drawLandscapeAndRoads(map, iterator, renderParams);
+        drawFlora(iterator, renderParams);
+        drawUnitsAndShadows(iterator, renderParams);
+        if (properties.showFPS) {
             canv.drawText("fps=" + fps.get(), 20, 30, renderParams.paint);
+        }
     }
 
-    public void render(Canvas canv, Map map){
+    /**
+     * универсальный вызовд, делает сразу всё
+     */
+    public void render(Canvas canv, Map map, iRenderFeature feature) {
         setScreenSize(canv.getWidth(), canv.getHeight());
-
         checkPosition(screenW, screenH, map.width * w, map.height * dy + h - dy);
-
-        renderParams.setCellSize((int)getCellWidth()+1,(int)getCellHeight()+1 );
+        renderParams.setCellSize((int) getCellWidth() + 1, (int) getCellHeight() + 1);
         renderParams.canvas = canv;
 
+        CellIterator iterator = getIterator(map, renderParams);
         canv.drawColor(0xFF444444); //фон
-        drawLandscapeAndRoads(map, renderParams);
-        drawFlora(map, renderParams);
-        /*for (iRenderFeature rf : session.currentPlayer.getRenderFeatures()) {
-            rf.render(this, canv);
-        }*/
-        drawUnitsAndShadows(map, renderParams);
-        canv.drawText("fps=" + fps.get(), 20, 30, renderParams.paint);
-    }
-
-    public void render(Canvas canv, Map map, iRenderFeature feature){
-        setScreenSize(canv.getWidth(), canv.getHeight());
-
-        checkPosition(screenW, screenH, map.width * w, map.height * dy + h - dy);
-
-        renderParams.setCellSize((int)getCellWidth()+1,(int)getCellHeight()+1 );
-        renderParams.canvas = canv;
-
-        canv.drawColor(0xFF444444); //фон
-        drawLandscapeAndRoads(map, renderParams);
-        drawFlora(map, renderParams);
+        drawLandscapeAndRoads(map, iterator, renderParams);
+        drawFlora(iterator, renderParams);
         feature.render(this, canv);
-        drawUnitsAndShadows(map, renderParams);
-        if (properties.showFPS){
+        drawUnitsAndShadows(iterator, renderParams);
+        if (properties.showFPS) {
             canv.drawText("fps=" + fps.get(), 20, 30, renderParams.paint);
         }
     }
 
-    private void drawLandscapeAndRoads(Map map, RenderParams renderParams) {
-        Iterator<Cell> iter = getIterator(map, renderParams);
-        while (iter.hasNext()) {
-            Cell cell = iter.next();
+    /*
+     * набор самостоятельного рисовальщика - можно рисовать землю, потом пририсовать что-нибудь на Canvas (например,
+     * путь юнита) и потом поверх - юнитов
+     */
+    public CellIterator initRender(Canvas canv, Map map) {
+        setScreenSize(canv.getWidth(), canv.getHeight());
+        checkPosition(screenW, screenH, map.width * w, map.height * dy + h - dy);
+        renderParams.setCellSize((int) getCellWidth() + 1, (int) getCellHeight() + 1);
+        renderParams.canvas = canv;
+        canv.drawColor(0xFF444444); //фон
+        return getIterator(map, renderParams);
+    }
+
+    public void drawLands(Map map, CellIterator iter) {
+        drawLandscapeAndRoads(map, iter, renderParams);
+        drawFlora(iter, renderParams);
+    }
+
+    public void drawUnits(CellIterator iter) {
+        drawUnitsAndShadows(iter, renderParams);
+    }
+
+    private void drawLandscapeAndRoads(Map map, CellIterator iterator, RenderParams renderParams) {
+        iterator.clearState();
+        while (iterator.hasNext()) {
+            Cell cell = iterator.next();
             cell.render(renderParams);
-            if (cell.hasRoad()){
-                int number = map.getRoads(cell)-1;
-                if (number>=0){
+            if (cell.hasRoad()) {
+                int number = map.getRoads(cell) - 1;
+                if (number >= 0) {
                     roads[number].render(renderParams);
                 }
             }
         }
     }
 
-    private void drawFlora(Map map, RenderParams renderParams) {
-        Iterator<Cell> iter = getIterator(map, renderParams);
-        while (iter.hasNext()) {
-            iter.next().nextRender.render(renderParams);
+    private void drawFlora(CellIterator iterator, RenderParams renderParams) {
+        iterator.clearState();
+        while (iterator.hasNext()) {
+            iterator.next().nextRender.render(renderParams);
         }
     }
 
-    private void drawUnitsAndShadows(Map map, RenderParams renderParams) {
-        Iterator<Cell> iter = getIterator(map, renderParams);
-        while (iter.hasNext()) {
-            Cell cell = iter.next();
+    private void drawUnitsAndShadows(CellIterator iterator, RenderParams renderParams) {
+        iterator.clearState();
+        while (iterator.hasNext()) {
+            Cell cell = iterator.next();
             if (cell.shadowded) {
                 Settlement.shadow.render(renderParams);
-            } else{
-                if (cell.hasUnit()){
+            } else {
+                if (cell.hasUnit()) {
                     cell.getUnit().render(renderParams);
                 }
             }
@@ -142,5 +150,36 @@ public class MapRender extends MapCamera {
                 canv.drawLine(xx, yy + h / 4, xx, yy + dy, renderParams.paint);
             }
         }
+    }
+
+    public void renderPath(List<Cell> path) {
+        if (path.isEmpty())
+            return;
+        Cell f = path.get(0);
+        for (int i = 1; i < path.size(); i++) {
+            Cell s = path.get(i);
+            int dx = s.x - f.x;
+            int dy = s.y - f.y;
+            setXY(renderParams, f);
+            if (dx == 0 && dy == -1) arrows[0].render(renderParams);
+            if (dx == 1 && dy == 0) arrows[1].render(renderParams);
+            if (dx == 1 && dy == 1) arrows[2].render(renderParams);
+            f = s;
+        }
+        renderParams.canvas.setMatrix(mirror);
+        f = path.get(0);
+        int w = - (int) getCellWidth();
+        for (int i = 1; i < path.size(); i++) {
+            Cell s = path.get(i);
+            int dx = s.x - f.x;
+            int dy = s.y - f.y;
+            setXY(renderParams, f);
+            renderParams.x = w - renderParams.x;
+            if (dx == -1 && dy == -1) arrows[0].render(renderParams);
+            if (dx == -1 && dy == 0) arrows[1].render(renderParams);
+            if (dx == 0 && dy == 1) arrows[2].render(renderParams);
+            f = s;
+        }
+        renderParams.canvas.setMatrix(identity);
     }
 }

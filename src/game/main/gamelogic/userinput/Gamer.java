@@ -5,6 +5,7 @@ import game.main.gamelogic.GameSession;
 import game.main.gamelogic.MapRender;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Country;
+import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Player;
 import game.main.utils.Touch;
 
@@ -21,7 +22,7 @@ public class Gamer extends Player {
     final Default defaultState = new Default(this);
     final CameraInertia cameraInertia = new CameraInertia(this);
     final MapMoving mapMoving = new MapMoving(this);
-    final UnitActivation unitActivation = new UnitActivation(this);
+    final UnitFirstActivation unitActivation = new UnitFirstActivation(this);
     final UnitSecondActivation unitSecondActivation = new UnitSecondActivation(this);
 
     private State currentState = defaultState;
@@ -37,6 +38,7 @@ public class Gamer extends Player {
     @Override
     protected void doTurn(MapRender render) {
         camera = render;
+        //TODO - сейчас после хода юнита конец хода, добавить сюда бесконечный цикл
         currentState = currentState.getNext();
     }
 
@@ -49,7 +51,7 @@ public class Gamer extends Player {
         public abstract State getNext();
 
         public void paint(Canvas canvas, MapRender render) {
-            render.render(canvas, country.map);
+            render.render(canvas, getMap());
         }
 
         final Cell getTrueCell(Touch t) {
@@ -66,8 +68,8 @@ public class Gamer extends Player {
             return touches.remove(0);
         }
 
-        final boolean noTouches(){
-            if (!touches.isEmpty()){
+        final boolean noTouches() {
+            if (!touches.isEmpty()) {
                 return false;
             }
             touches.addAll(session.getTouches());
@@ -76,7 +78,7 @@ public class Gamer extends Player {
 
         final void waitAndUpdate() {
             if (!session.checkPause()) {
-                if (session.screenNotUpdated()){
+                if (session.screenNotUpdated()) {
                     session.repaint();
                 } else {
                     session.sleep(20);
@@ -89,7 +91,7 @@ public class Gamer extends Player {
             session.repaint();
         }
 
-        final void needRepaint(){
+        final void needRepaint() {
             session.needUpdate(true);
         }
 
@@ -97,20 +99,24 @@ public class Gamer extends Player {
          * update screen if last needRepaint() was called later than last repaint()
          */
         final void mayBeRepaint() {
-            if (session.screenNotUpdated()){
+            if (session.screenNotUpdated()) {
                 session.repaint();
             }
         }
 
-        final MapRender camera(){
+        final MapRender camera() {
             return camera;
         }
 
-        final Gamer gamer(){
+        final Gamer gamer() {
             return Gamer.this;
         }
 
-        final boolean checkPause(){
+        final Map getMap() {
+            return country.map.getTrueMap();
+        }
+
+        final boolean checkPause() {
             return session.checkPause();
         }
     }

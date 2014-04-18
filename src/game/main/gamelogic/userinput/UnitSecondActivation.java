@@ -1,11 +1,11 @@
 package game.main.gamelogic.userinput;
 
-import android.graphics.Canvas;
-import game.main.gamelogic.MapRender;
 import game.main.gamelogic.world.AlternativeWay;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Unit;
 import game.main.utils.Touch;
+
+import java.util.ArrayList;
 
 /**
  * повторное нажатие на активированного юнита.
@@ -13,18 +13,22 @@ import game.main.utils.Touch;
  * иначе снимается выделение с юнита
  * Created by lgor on 18.04.14.
  */
-class UnitSecondActivation extends Gamer.State{
+class UnitSecondActivation extends UnitActivation {
 
-    public UnitSecondActivation(Gamer gamer){
-        gamer.super();
+    public UnitSecondActivation(Gamer gamer) {
+        super(gamer);
     }
 
-    private Unit unit;
-    private AlternativeWay way;
-
-    public UnitSecondActivation set(Unit unit, AlternativeWay way){
+    public UnitSecondActivation set(Unit unit, AlternativeWay way) {
         this.unit = unit;
         this.way = way;
+        path = new ArrayList<Cell>();
+        return this;
+    }
+
+    public UnitSecondActivation set(Unit unit) {
+        this.unit = unit;
+        this.way = new AlternativeWay(unit.country.map.getTrueMap(), unit);
         return this;
     }
 
@@ -33,17 +37,17 @@ class UnitSecondActivation extends Gamer.State{
         Touch t;
         while (!(t = waitTouch()).firstTouch()) ;       //waiting first touch
         Cell c = getTrueCell(t);
-        if (!way.isInto(c) && unit.getCell() != c){
+        if (!way.isInto(c) && unit.getCell() != c) {
             return gamer().defaultState.mustUpdate();
         }
-        while (!(t = waitTouch()).lastTouch()) ;        //waiting last touch
+        t = changeFinalWay();
         c = getTrueCell(t);
-        if (unit.getCell() == c){
+        if (unit.getCell() == c) {
             return gamer().defaultState.mustUpdate();
         }
-        if (way.isInto(c)){
+        if (way.isInto(c)) {
             way.getMoveTo(c).apply();
-            if (!unit.hasMovementPoints()){
+            if (!unit.hasMovementPoints()) {
                 return gamer().defaultState.mustUpdate();
             }
             way = new AlternativeWay(gamer().country.map.getTrueMap(), unit);
@@ -51,10 +55,5 @@ class UnitSecondActivation extends Gamer.State{
             return this;
         }
         return gamer().defaultState.mustUpdate();
-    }
-
-    @Override
-    public void paint(Canvas canvas, MapRender render) {
-        camera().render(canvas, gamer().country.map, way);
     }
 }

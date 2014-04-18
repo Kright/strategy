@@ -3,6 +3,7 @@ package game.main.gamelogic;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import game.main.GameThread;
+import game.main.gamelogic.userinput.Gamer;
 import game.main.gamelogic.world.*;
 import game.main.utils.CustomRandom;
 import game.main.utils.LinearCongruentialGenerator;
@@ -174,7 +175,7 @@ public class GameSession {
 
         world.map.getCell(2, 2).getUnit().buildCastle().apply();
 
-        world.addPlayer(new game.main.gamelogic.userinput.Gamer(this, country));
+        world.addPlayer(new Gamer(this, country));
         currentPlayer = world.getNextPlayer();
 
         //panel = GamePanel.getGamePanel2(gamer, sprites);

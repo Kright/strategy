@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import game.main.GUI.GamePanel;
 import game.main.GUI.MapCamera;
+import game.main.GUI.iRenderFeature;
 import game.main.MapActivity;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
@@ -21,9 +22,11 @@ public class MapRender extends MapCamera {
 
     private final RenderParams renderParams;
     private final Sprite[] roads;
+    private final GameProperties properties;
 
-    public MapRender(int spriteHeight, Sprite[] roads) {
+    public MapRender(int spriteHeight, Sprite[] roads, GameProperties properties) {
         super(spriteHeight / 2 * 3, spriteHeight);
+        this.properties = properties;
         renderParams = new RenderParams(new Paint());
         renderParams.paint.setTypeface(MapActivity.font);
         renderParams.paint.setTextSize(36);
@@ -70,6 +73,24 @@ public class MapRender extends MapCamera {
         }*/
         drawUnitsAndShadows(map, renderParams);
         canv.drawText("fps=" + fps.get(), 20, 30, renderParams.paint);
+    }
+
+    public void render(Canvas canv, Map map, iRenderFeature feature){
+        setScreenSize(canv.getWidth(), canv.getHeight());
+
+        checkPosition(screenW, screenH, map.width * w, map.height * dy + h - dy);
+
+        renderParams.setCellSize((int)getCellWidth()+1,(int)getCellHeight()+1 );
+        renderParams.canvas = canv;
+
+        canv.drawColor(0xFF444444); //фон
+        drawLandscapeAndRoads(map, renderParams);
+        drawFlora(map, renderParams);
+        feature.render(this, canv);
+        drawUnitsAndShadows(map, renderParams);
+        if (properties.showFPS){
+            canv.drawText("fps=" + fps.get(), 20, 30, renderParams.paint);
+        }
     }
 
     private void drawLandscapeAndRoads(Map map, RenderParams renderParams) {

@@ -149,7 +149,7 @@ public class GameSession {
 
         render = new MapRender(128, new Sprite[]{sprites.getSprite("road100"), sprites.getSprite("road010"),
                 sprites.getSprite("road110"), sprites.getSprite("road001"), sprites.getSprite("road101"),
-                sprites.getSprite("road011"), sprites.getSprite("road111")});
+                sprites.getSprite("road011"), sprites.getSprite("road111")}, properties);
 
 
 

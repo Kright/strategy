@@ -10,18 +10,19 @@ import java.util.ArrayList;
  */
 public class Village extends Settlement {
 
-    public static final int[] maxWealth = new int[]{10, 20, 30, 40};
+    public static final int[] maxWealth = new int[]{100, 200, 300, 400};
     private static final int productivity = 10;     //доход на жителя
 
     protected int population; // may be {1,2,3,4}
     protected int wealth; // благосостояние
-
+    private int maxPopulation;
     protected ArrayList<Cell> fields;
 
     public Village(Country country, Cell cell) {
         super(country, cell);
         population = 1;
         wealth = 1; // условно
+        maxPopulation=4;
     }
 
     @Override
@@ -54,7 +55,7 @@ public class Village extends Settlement {
     public int getTaxes() {
         Castle castle = cell.controlledByCastle();
         if (castle == null) return 0;
-        return (int) (castle.getLevelOfTaxes() * castle.getEfficiency() * population);
+        return (int) (castle.getLevelOfTaxes() * castle.getEfficiency() * getYield());
     }
 
     /**
@@ -78,7 +79,7 @@ public class Village extends Settlement {
         if (foundNewSettlementNear()){
             return;
         }
-        if (population<4){
+        if (population<maxPopulation){
             population++;
             wealth = 0;
             return;
@@ -87,10 +88,44 @@ public class Village extends Settlement {
     }
 
     /**
+      *  @return set up Town
+     **/
+    public void becomeTown(){
+        new Town(this);
+    }
+    /**
      * @return true if this village can and create new village.
      */
     private boolean foundNewSettlementNear(){
-        return false;    //TODO поиск новых мест для поселения
+
+        if(population<maxPopulation) return false; // если население меньше критического, то ничего не основываем
+
+        int x=cell.x+getRandomXY();
+        int y=cell.y+getRandomXY();
+
+        Cell target=country.map.getCell(x,y);
+
+        if (target.hasSettlement() || target.hasLandUpgrade() || !target.accessible() || target.isNull()
+                || country.map.getCell(x+1,y+1).hasSettlement()
+                || country.map.getCell(x,y+1).hasSettlement()
+                || country.map.getCell(x+1,y).hasSettlement()
+                || country.map.getCell(x-1,y).hasSettlement()
+                || country.map.getCell(x,y-1).hasSettlement()
+                || country.map.getCell(x-1,y-1).hasSettlement())
+        return false;
+
+        if(target.controlledByCastle()!=null){
+            if(target.controlledByCastle().country!=country)
+                return false;
+        }
+
+        country.map.addSettlement(new Village(country, target),x,y);
+
+        return true;    //TODO поиск новых мест для поселения
+    }
+
+    private int getRandomXY(){
+        return country.world.getRandom().get(11)-5;
     }
 
     @Override

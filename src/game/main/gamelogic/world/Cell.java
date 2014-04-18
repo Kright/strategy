@@ -85,6 +85,10 @@ public class Cell implements iRender, Comparable<Cell>, ResourcesCounter.Resourc
         }
     }
 
+    public boolean hasLandUpgrade(){
+        return (landUpgrade!= null);
+    }
+
     /**
      * @return крепость, которая контролирует эту клетку
      */
@@ -255,6 +259,11 @@ public class Cell implements iRender, Comparable<Cell>, ResourcesCounter.Resourc
         @Override
         public void setLandUpgrade(LandUpgrade landUpgrade) {
             //никаких апгрейдов
+        }
+
+        @Override
+        public boolean hasLandUpgrade(){
+            return false;
         }
     };
 }

@@ -1,15 +1,15 @@
 package game.main.gamelogic;
 
 import android.content.res.Resources;
-import android.graphics.*;
+import android.graphics.Canvas;
 import game.main.GameThread;
 import game.main.gamelogic.world.*;
 import game.main.utils.CustomRandom;
 import game.main.utils.LinearCongruentialGenerator;
+import game.main.utils.Touch;
 import game.main.utils.sprites.AdvancedSprite;
 import game.main.utils.sprites.Sprite;
 import game.main.utils.sprites.SpriteBank;
-import game.main.utils.Touch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +38,12 @@ public class GameSession {
         this.resources = resources;
     }
 
-    public void setCallback(GameThread thread){
+    public void setCallback(GameThread thread) {
         this.thread = thread;
     }
 
     public void run() {
-        while (notFinished){
+        while (notFinished) {
             currentPlayer.run(render);
             currentPlayer = world.getNextPlayer();
         }
@@ -57,9 +57,9 @@ public class GameSession {
      * приложение было свёрнуто и снова открыто.
      * обновляем картинку на экране
      */
-    public void resume(){
+    public void resume() {
         sprites.load();
-        while(!repaint()){
+        while (!repaint()) {
             sleep(20);
             Thread.yield();
         }
@@ -68,24 +68,31 @@ public class GameSession {
     /**
      * вызывается перед тем, как приложение будет поставлено на паузу
      */
-    public void pause(){
+    public void pause() {
         save();
     }
 
     /**
      * сохранение gameSession в долговременную память
      */
-    public void save(){
+    public void save() {
 
     }
 
     /**
      * @param need - нуждается ли, по мнению вызывающего, экран приложения в перерисовке
      */
-    public void needUpdate(boolean need){
-        if (need){
+    public void needUpdate(boolean need) {
+        if (need) {
             screenUpdated = false;
         }
+    }
+
+    /**
+     * @return успешность последнего обновления экрана
+     */
+    public boolean screenNotUpdated() {
+        return !screenUpdated;
     }
 
     private boolean screenUpdated = false;
@@ -94,12 +101,12 @@ public class GameSession {
      * если ничего не изменилось и режим энергосбережения - пропускаем обновление экрана
      * на этом вызове приложение может приостановиться, если его свернули
      */
-    public void safeRepaint(){
+    public void safeRepaint() {
         checkPause();
         if (!screenUpdated || !properties.powerSaving) {
             screenUpdated = thread.repaint();
         } else {
-            if (properties.sleepingInsteadRender>0){
+            if (properties.sleepingInsteadRender > 0) {
                 sleep(properties.sleepingInsteadRender);
             }
         }
@@ -108,26 +115,27 @@ public class GameSession {
     /**
      * особое обновление экрана, нельзя прервать.
      * Надо вручную использовать проверку на паузу в приложении.
+     *
      * @return success of repaint() call;
      */
-    public boolean repaint(){
+    public boolean repaint() {
         return screenUpdated = thread.repaint();
     }
 
-    public boolean checkPause(){
+    public boolean checkPause() {
         return thread.checkPause();
     }
 
     /**
      * @return список нажатий на экран, произощедших после последнего вызова этой функции
      */
-    public List<Touch> getTouches(){
+    public List<Touch> getTouches() {
         List<Touch> touches = thread.getTouches();
         needUpdate(!touches.isEmpty());
         return touches;
     }
 
-    public final void sleep(long ms){
+    public final void sleep(long ms) {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException ex) {
@@ -152,10 +160,9 @@ public class GameSession {
                 sprites.getSprite("road011"), sprites.getSprite("road111")}, properties);
 
 
-
-        PathPaint.arrows=new AdvancedSprite[]{(AdvancedSprite)sprites.getSprite("arrow NE"), (AdvancedSprite)sprites.getSprite("arrow E"),
-                (AdvancedSprite)sprites.getSprite("arrow SE"),(AdvancedSprite) sprites.getSprite("arrow SW"),
-                (AdvancedSprite)sprites.getSprite("arrow W"), (AdvancedSprite) sprites.getSprite("arrow NW")};
+        PathPaint.arrows = new AdvancedSprite[]{(AdvancedSprite) sprites.getSprite("arrow NE"), (AdvancedSprite) sprites.getSprite("arrow E"),
+                (AdvancedSprite) sprites.getSprite("arrow SE"), (AdvancedSprite) sprites.getSprite("arrow SW"),
+                (AdvancedSprite) sprites.getSprite("arrow W"), (AdvancedSprite) sprites.getSprite("arrow NW")};
 
         world = new World(width, height, landscape, this);
 
@@ -167,7 +174,7 @@ public class GameSession {
 
         world.map.getCell(2, 2).getUnit().buildCastle().apply();
 
-        world.addPlayer(new Gamer(this, country));
+        world.addPlayer(new game.main.gamelogic.userinput.Gamer(this, country));
         currentPlayer = world.getNextPlayer();
 
         //panel = GamePanel.getGamePanel2(gamer, sprites);

@@ -49,15 +49,10 @@ public class SpriteBank {
         add(R.drawable.menu, 320, 1080, "game panel");
         addLine(R.drawable.roads, 312, 120, 0, 120, new String[]{
                 "road100", "road010", "road001", "road110", "road101", "road011", "road111"},
-                new int[]{ -12, -44, 192, 128});
-        add(R.drawable.arrows,0, 160, 160, 160, "arrow NE", new int[]{0,-64,192,128});
-        add(R.drawable.arrows,160, 160, 160, 160, "arrow E", new int[]{96,0,192,128});
-        add(R.drawable.arrows,320, 160, 160, 160, "arrow SE", new int[]{96,64,192,128});
-        add(R.drawable.arrows,480, 160, 160, 160, "arrow SW", new int[]{0,64,192,128});
-        add(R.drawable.arrows,480, 160, 160, 160, "arrow W", new int[]{-96,0,192,128});
-        add(R.drawable.arrows,480, 160, 160, 160, "arrow NW", new int[]{-96,-64,192,128});
-
-
+                new int[]{-12, -44, 192, 128});
+        add(R.drawable.arrows, 0, 0, 64, 64, "↗", new int[]{96 + 16, -16, 192, 128});
+        add(R.drawable.arrows, 128, 0, 128, 64, "→", new int[]{128, 32, 192, 128});
+        add(R.drawable.arrows, 64, 0, 64, 64, "↘", new int[]{96 + 16, 64 + 16, 192, 128});
         load();
     }
 
@@ -94,7 +89,7 @@ public class SpriteBank {
         spritesData.add(new Data(name, bmpId, 0, 0, w, h, k));
     }
 
-    protected void add(int bmpId, int x, int y,int w, int h, String name, int[] k) {
+    protected void add(int bmpId, int x, int y, int w, int h, String name, int[] k) {
         spritesData.add(new Data(name, bmpId, x, y, w, h, k));
     }
 

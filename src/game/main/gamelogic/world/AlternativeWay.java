@@ -21,12 +21,20 @@ public class AlternativeWay extends Region {
             throw new IllegalArgumentException("Way hasn't this cell!");
         }
         List<Cell> way = new ArrayList<Cell>();
+        getWayTo(way, c);
+        return new MoveUnit(unit, way);
+    }
+
+    /**
+     * записывает в path путь от начальной клетки до клетки c
+     * path изначально должен быть пустым!
+     */
+    public void getWayTo(List<Cell> path, Cell c){
         while (c != null) {
-            way.add(c);
+            path.add(c);
             c = getPrev(c, cellsMap.get(c) + c.getMovindCost());
         }
-        Collections.reverse(way);
-        return new MoveUnit(unit, way);
+        Collections.reverse(path);
     }
 
     private Cell getPrev(Cell c, int goal) {

@@ -1,7 +1,5 @@
 package game.main.gamelogic.userinput;
 
-import android.graphics.Canvas;
-import game.main.gamelogic.MapRender;
 import game.main.gamelogic.world.AlternativeWay;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Unit;
@@ -12,16 +10,13 @@ import game.main.utils.Touch;
  * Если отпустить нажатие на оступном поле - ещё и ходит
  * Created by lgor on 18.04.14.
  */
-class UnitActivation extends Gamer.State{
+class UnitFirstActivation extends UnitActivation {
 
-    public UnitActivation(Gamer gamer){
-        gamer.super();
+    public UnitFirstActivation(Gamer gamer) {
+        super(gamer);
     }
 
-    private Unit unit;
-    private AlternativeWay way;
-
-    public UnitActivation setUnit(Unit unit){
+    public UnitFirstActivation setUnit(Unit unit) {
         this.unit = unit;
         way = new AlternativeWay(gamer().country.map.getTrueMap(), unit);
         return this;
@@ -30,21 +25,15 @@ class UnitActivation extends Gamer.State{
     @Override
     public Gamer.State getNext() {
         repaint();
-        Touch t;
-        while(!(t = waitTouch()).lastTouch()) ; //waiting last touch
+        Touch t = changeFinalWay();
         Cell c = getTrueCell(t);
-        if (way.isInto(c)){
+        if (way.isInto(c)) {
             way.getMoveTo(c).apply();
             return gamer().defaultState.mustUpdate();
         }
-        if (unit.getCell() == c){
+        if (unit.getCell() == c) {
             return gamer().unitSecondActivation.set(unit, way);
         }
         return gamer().defaultState.mustUpdate();
-    }
-
-    @Override
-    public void paint(Canvas canvas, MapRender render) {
-        camera().render(canvas, gamer().country.map, way);
     }
 }

@@ -8,8 +8,6 @@ import game.main.gamelogic.world.*;
 import game.main.utils.CustomRandom;
 import game.main.utils.LinearCongruentialGenerator;
 import game.main.utils.Touch;
-import game.main.utils.sprites.AdvancedSprite;
-import game.main.utils.sprites.Sprite;
 import game.main.utils.sprites.SpriteBank;
 
 import java.util.ArrayList;
@@ -156,20 +154,12 @@ public class GameSession {
         landscape.get(0).landUpgrades.add(new LandUpgrade(sprites.getSprite("field"), "field"));
         Settlement.init(sprites);
 
-        render = new MapRender(128, new Sprite[]{sprites.getSprite("road100"), sprites.getSprite("road010"),
-                sprites.getSprite("road110"), sprites.getSprite("road001"), sprites.getSprite("road101"),
-                sprites.getSprite("road011"), sprites.getSprite("road111")}, properties);
-
-
-        PathPaint.arrows = new AdvancedSprite[]{(AdvancedSprite) sprites.getSprite("arrow NE"), (AdvancedSprite) sprites.getSprite("arrow E"),
-                (AdvancedSprite) sprites.getSprite("arrow SE"), (AdvancedSprite) sprites.getSprite("arrow SW"),
-                (AdvancedSprite) sprites.getSprite("arrow W"), (AdvancedSprite) sprites.getSprite("arrow NW")};
-
+        render = new MapRender(128, sprites, properties);
         world = new World(width, height, landscape, this);
 
         Country country = new Country(world, 1);
 
-        UnitType crusader = new UnitType(2, 2, 0, sprites.getSprite("crusader"));
+        UnitType crusader = new UnitType(4, 2, 0, sprites.getSprite("crusader"));
         country.createUnit(crusader, 2, 2);
         country.createUnit(crusader, 4, 4);
 

@@ -45,6 +45,6 @@ class UnitActivation extends Gamer.State{
 
     @Override
     public void paint(Canvas canvas, MapRender render) {
-        camera().render(canvas, gamer().country.map, way);
+        render.render(canvas, gamer().country.map, way);
     }
 }

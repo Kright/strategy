@@ -44,6 +44,7 @@ public class Gamer extends Player {
 
     @Override
     public void paint(Canvas canvas, MapRender render) {
+        camera = render;
         currentState.paint(canvas, render);
     }
 

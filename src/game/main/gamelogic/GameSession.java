@@ -154,7 +154,9 @@ public class GameSession {
         landscape.get(0).landUpgrades.add(new LandUpgrade(sprites.getSprite("field"), "field"));
         Settlement.init(sprites);
 
-        render = new MapRender(128, sprites, properties);
+        //render = new MapRender(128, sprites, properties);
+        render = new BufferedRender(128, sprites, properties);
+
         world = new World(width, height, landscape, this);
 
         Country country = new Country(world, 1);

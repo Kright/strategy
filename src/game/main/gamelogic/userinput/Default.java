@@ -20,6 +20,10 @@ class Default extends Gamer.State{
 
     @Override
     public Gamer.State getNext() {
+        while (noTouches()){    //TODO убрать 4 стрчоки, они для теста
+            repaint();
+            checkPause();
+        }
         mayBeRepaint();
         Touch t = waitTouch();
         Cell c = getTrueCell(t);

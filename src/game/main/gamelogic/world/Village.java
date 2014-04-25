@@ -85,7 +85,10 @@ public class Village extends Settlement {
             removeSettlement();
         } else {
             population--;
-            wealth = maxWealth[population + 1];
+            wealth = maxWealth[population - 1];
+            if (fields.size()>population){
+                fields.get(fields.size()-1).setLandUpgrade(null);
+            }
         }
     }
 
@@ -100,7 +103,7 @@ public class Village extends Settlement {
             addLandUpgrade();
             return;
         }
-        //TODO превращение в город
+        becomeTown();
     }
 
     private void addLandUpgrade(){
@@ -118,14 +121,18 @@ public class Village extends Settlement {
         }
         CustomRandom random = country.world.getRandom();
         Cell c = near.get(random.get(near.size()));
-        c.setLandUpgrade(c.land.landUpgrades.get(random.get(c.land.landUpgrades.size())));
+        LandUpgrade upgrade = c.land.landUpgrades.get(random.get(c.land.landUpgrades.size()));
+        c.setLandUpgrade(upgrade);
+        fields.add(c);
     }
 
     /**
       * set up Town
      **/
     public void becomeTown(){
-        new Town(this);
+        country.settlements.remove(this);
+        //TODO превращение в город, now town hasn't picture and doesn't builded
+        //new Town(this);
     }
     /**
      * @return true if this village can and create new village.

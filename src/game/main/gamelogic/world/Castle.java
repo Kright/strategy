@@ -5,7 +5,6 @@ import game.main.utils.sprites.Sprite;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * замок
@@ -34,12 +33,6 @@ public class Castle extends Settlement {
         while (iterator.hasNext()) {      //замок может захватить только ничью территорию
             if (iterator.next().controlledByCastle() != null) {
                 iterator.remove();
-            }
-        }
-        // only for test!!
-        for(Cell c: region){
-            if (!c.land.landUpgrades.isEmpty()){
-                c.setLandUpgrade(c.land.landUpgrades.get(0));
             }
         }
         region.updateAfrerChange();

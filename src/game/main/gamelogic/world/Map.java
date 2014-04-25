@@ -109,13 +109,21 @@ public class Map implements Iterable<Cell> {
      * добавляет соседние и данную клетку в множество клеток
      */
     public void addCellsNear(Collection<Cell> set, int x, int y) {
-        set.add(getCell(x, y));
-        set.add(getCell(x - 1, y - 1));
-        set.add(getCell(x - 1, y));
-        set.add(getCell(x, y - 1));
-        set.add(getCell(x + 1, y));
-        set.add(getCell(x, y + 1));
-        set.add(getCell(x + 1, y + 1));
+        addCellsNear(set, x, y, 1);
+    }
+
+    /**
+     * adds Cell, with distance to (x,y) less then "dist"
+     */
+    public void addCellsNear(Collection<Cell> list, int x, int y, int dist) {
+        for (int dx = -dist; dx <= dist; dx++)
+            for (int dy = -dist; dy <= dist; dy++)
+                if (getInterval(dx, dy) <= dist) {
+                    Cell c = getCell(x + dx, y + dy);
+                    if (!c.isNull()) {
+                        list.add(c);
+                    }
+                }
     }
 
     /**
@@ -152,21 +160,21 @@ public class Map implements Iterable<Cell> {
     /**
      * возвращает крепость, владеющую данной клеткой или null, если такой нет
      */
-    public Castle getControllingCastle(int x, int y){
-        return Map.this.getCell(x,y).controlledByCastle();
+    public Castle getControllingCastle(int x, int y) {
+        return Map.this.getCell(x, y).controlledByCastle();
     }
 
     /**
      * @param castle устанавливается владение этой крепостью на клетки из castle.region
      */
-    public void setCastleControll(Castle castle){
+    public void setCastleControll(Castle castle) {
         castle.country.map.setCastleControll(castle);
     }
 
     /**
      * @return правильную карту, где открыты все клетки
      */
-    public Map getTrueMap(){
+    public Map getTrueMap() {
         return this;
     }
 
@@ -189,16 +197,17 @@ public class Map implements Iterable<Cell> {
     /**
      * спецефическая функция, необходимая для рисования дорог
      */
-    public final int getRoads(Cell c){
-        int result=0;
-        if (getCell(c.x-1, c.y-1).hasRoad()) result += 1;
-        if (getCell(c.x,c.y-1).hasRoad()) result +=2;
-        if (getCell(c.x+1, c.y).hasRoad()) result +=4;
+    public final int getRoads(Cell c) {
+        int result = 0;
+        if (getCell(c.x - 1, c.y - 1).hasRoad()) result += 1;
+        if (getCell(c.x, c.y - 1).hasRoad()) result += 2;
+        if (getCell(c.x + 1, c.y).hasRoad()) result += 4;
         return result;
     }
 
     /**
      * итератор по всем непустым клеткам карты
+     *
      * @return итератор
      */
     @Override
@@ -242,7 +251,7 @@ public class Map implements Iterable<Cell> {
             public Cell getCell(int x, int y) {
                 LandType type = types.get(rnd.get(types.size()));
                 Cell cell = new Cell(x, y, type, type.nextLayer());
-                cell.setRoad(rnd.get(2)==0);
+                cell.setRoad(rnd.get(2) == 0);
                 return cell;
             }
         };
@@ -279,12 +288,12 @@ public class Map implements Iterable<Cell> {
             /**
              * @param castle устанавливается владение этой крепостью на клетки из castle.region и поселения в нём
              */
-            public void setCastleControll(Castle castle){
-                for(Cell c:castle.getControlledRegion()){
+            public void setCastleControll(Castle castle) {
+                for (Cell c : castle.getControlledRegion()) {
                     openСellsNear(c.x, c.y);
-                    Cell cell = getCell(c.x,c.y);
+                    Cell cell = getCell(c.x, c.y);
                     cell.setCastleControl(castle);
-                    if (cell.hasSettlement()){
+                    if (cell.hasSettlement()) {
                         cell.getSettlement().country = castle.country;
                     }
                 }
@@ -326,7 +335,7 @@ public class Map implements Iterable<Cell> {
             private boolean check(int x, int y) {
                 Cell c = Map.this.getCell(x, y);
                 return c.hasUnit() && c.getUnit().country.map == this ||
-                        c.controlledByCastle()!=null && c.controlledByCastle().country.map == this;
+                        c.controlledByCastle() != null && c.controlledByCastle().country.map == this;
             }
         };
     }

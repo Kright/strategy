@@ -33,7 +33,7 @@ public class MapActivity extends Activity {
         synchronized (monitor) {
             if (thread == null) {
                 GameSession session = new GameSession(getResources());
-                session.createNewWorld(120, 120);
+                session.createNewWorld(240, 240);
                 thread = new GameThread(monitor, session);
             }
         }

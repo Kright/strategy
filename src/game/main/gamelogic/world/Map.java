@@ -63,7 +63,7 @@ public class Map implements Iterable<Cell> {
         settlements.clear();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                Cell c = table[j][i];
+                Cell c = table[i][j];
                 if (c.hasUnit() && c.getUnit().country.id == id) {
                     units.add(c.getUnit());
                 }

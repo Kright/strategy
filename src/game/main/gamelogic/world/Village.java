@@ -1,8 +1,11 @@
 package game.main.gamelogic.world;
 
+import android.util.Log;
+import game.main.utils.CustomRandom;
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.Sprite;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Деревушка
@@ -18,20 +21,32 @@ public class Village extends Settlement {
     private int maxPopulation;
     protected ArrayList<Cell> fields;
 
-    public Village(Country country, Cell cell) {
-        super(country, cell);
+    public Village(Country country, int x, int y){
+        super(getCountry(country.world, x ,y), country.map.getTrueMap().getCell(x,y));
         population = 1;
         wealth = 1; // условно
         maxPopulation=4;
+        country.map.getTrueMap().addSettlement(this, x, y);
+    }
+
+    protected static Country getCountry(World world, int x, int y){
+        Castle c = world.map.getControllingCastle(x, y);
+        if (c!=null){
+            return c.country;
+        }
+        return world.international;
     }
 
     @Override
     public void nextTurn() {
+        Log.d("mylog","population = "+population+" , wealth = "+wealth);
+
         wealth += getProfit();
         if (wealth < 0) {
             decreasePopulation();
         }
-        if (wealth > maxWealth[population + 1]) {
+        if (wealth > maxWealth[population - 1]) {
+            Log.d("mylog","population = "+population+" , wealth = "+wealth);
             increasePopulation();
         }
     }
@@ -82,13 +97,32 @@ public class Village extends Settlement {
         if (population<maxPopulation){
             population++;
             wealth = 0;
+            addLandUpgrade();
             return;
         }
         //TODO превращение в город
     }
 
+    private void addLandUpgrade(){
+        ArrayList<Cell> near = new ArrayList<Cell>(7);
+        country.map.getTrueMap().addCellsNear(near, cell.x, cell.y);
+        Iterator<Cell> iter = near.iterator();
+        while (iter.hasNext()){
+            Cell c = iter.next();
+            if (c.hasLandUpgrade() || c.hasSettlement() || !c.accessible() || c.land.landUpgrades.isEmpty()){
+                iter.remove();
+            }
+        }
+        if (near.size()==0){    //hasn't place near, fail
+            return;
+        }
+        CustomRandom random = country.world.getRandom();
+        Cell c = near.get(random.get(near.size()));
+        c.setLandUpgrade(c.land.landUpgrades.get(random.get(c.land.landUpgrades.size())));
+    }
+
     /**
-      *  @return set up Town
+      * set up Town
      **/
     public void becomeTown(){
         new Town(this);
@@ -103,15 +137,17 @@ public class Village extends Settlement {
         int x=cell.x+getRandomXY();
         int y=cell.y+getRandomXY();
 
-        Cell target=country.map.getCell(x,y);
+        Map trueMap = country.map.getTrueMap();
+        //Map must be original because country.map may has wrong information about cells
+        Cell target=trueMap.getCell(x, y);
 
         if (target.hasSettlement() || target.hasLandUpgrade() || !target.accessible() || target.isNull()
-                || country.map.getCell(x+1,y+1).hasSettlement()
-                || country.map.getCell(x,y+1).hasSettlement()
-                || country.map.getCell(x+1,y).hasSettlement()
-                || country.map.getCell(x-1,y).hasSettlement()
-                || country.map.getCell(x,y-1).hasSettlement()
-                || country.map.getCell(x-1,y-1).hasSettlement())
+                || trueMap.getCell(x + 1, y + 1).hasSettlement()
+                || trueMap.getCell(x, y + 1).hasSettlement()
+                || trueMap.getCell(x+1,y).hasSettlement()
+                || trueMap.getCell(x - 1, y).hasSettlement()
+                || trueMap.getCell(x, y - 1).hasSettlement()
+                || trueMap.getCell(x - 1, y - 1).hasSettlement())
         return false;
 
         if(target.controlledByCastle()!=null){
@@ -119,7 +155,8 @@ public class Village extends Settlement {
                 return false;
         }
 
-        country.map.addSettlement(new Village(country, target),x,y);
+        //country.map.addSettlement(new Village(country, target),x,y);
+        new Village(country, target.x, target.y);
 
         return true;    //TODO поиск новых мест для поселения
     }

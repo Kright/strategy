@@ -154,8 +154,8 @@ public class GameSession {
         landscape.get(0).landUpgrades.add(new LandUpgrade(sprites.getSprite("field"), "field"));
         Settlement.init(sprites);
 
-        //render = new MapRender(128, sprites, properties);
-        render = new BufferedRender(128, sprites, properties);
+        render = new MapRender(128, sprites, properties);
+        //render = new BufferedRender(128, sprites, properties);
 
         world = new World(width, height, landscape, this);
 
@@ -166,8 +166,9 @@ public class GameSession {
         country.createUnit(crusader, 4, 4);
 
         world.map.getCell(2, 2).getUnit().buildCastle().apply();
-
+        new Village(country, 4, 4);
         world.addPlayer(new Gamer(this, country));
+        currentPlayer = world.getNextPlayer();
         currentPlayer = world.getNextPlayer();
 
         //panel = GamePanel.getGamePanel2(gamer, sprites);

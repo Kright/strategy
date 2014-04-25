@@ -17,7 +17,7 @@ public class Town extends Settlement{
     /**
      * Town is an upgrade of village
      */
-    public Town(Village village){
+    protected Town(Village village){
         super(village.country, village.cell);
         country.map.addSettlement(this, cell.x, cell.y);
         fields = village.fields;

@@ -19,26 +19,41 @@ public class World {
 
     private ArrayList<Player> players = new ArrayList<Player>();
     private int currentPlayer = -1;
-    private GameSession session;
+    private CustomRandom random;
 
     public World(int width, int height, List<LandType> types, GameSession session) {
-        this.session = session;
-        map = new Map(Map.getTestConstructor(width, height, types, getRandom()));
+        random = session.random;
+        map = new Map(Map.getTestConstructor(width, height, types, random));
         Action.init(this);
         international = new Country(this, 0);
     }
 
     public CustomRandom getRandom(){
-        return session.random;
+        return random;
     }
 
     public Player getNextPlayer() {
         currentPlayer++;
         if (currentPlayer >= players.size()) {
             currentPlayer = 0;
+            endOfTurns();
         }
         lastAction = null;    //негоже отменять ходы предыдущего игрока
         return players.get(currentPlayer);
+    }
+
+    /**
+     * called when all players end his turns
+     * there may be increasing of settlements, which don't controlled by players
+     */
+    public void endOfTurns(){
+        for(Cell c:map){
+            if (!c.hasSettlement()) continue;
+            Settlement s = c.getSettlement();
+            if (s.country == international){
+                s.nextTurn();
+            }
+        }
     }
 
     public void addPlayer(Player player) {

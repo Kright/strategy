@@ -60,6 +60,17 @@ public class SpriteBank {
      * reloading bitmaps, на которые ссылаются прямоугольники
      */
     public void load() {
+        for(Data s: spritesData){
+            if (s.sprite.bmp!=null){
+                try{
+                    s.sprite.bmp.recycle();
+                } catch (Exception ex){
+                    //nothing
+                } finally {
+                    s.sprite.bmp = null;
+                }
+            }
+        }
         TreeMap<Integer, Bitmap> bmps = new TreeMap<Integer, Bitmap>();
         for (Data s : spritesData) {
             if (!bmps.containsKey(s.bmpId)) {

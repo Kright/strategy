@@ -30,8 +30,6 @@ public class BufferedRender extends MapRender {
         canvas = new Canvas(buf);
         smaller = new Matrix();
         bigger = new Matrix();
-        //bigger.setScale(1.5f,1.5f);
-        //smaller.setScale(2f/3, 2f/3);
         bigger.setScale(2,2);
         smaller.setScale(0.5f, 0.5f);
     }
@@ -41,7 +39,6 @@ public class BufferedRender extends MapRender {
     @Override
     public void render(Canvas canv, Map map) {
         checkBuf(canv.getWidth()/2, canv.getHeight()/2);
-        //checkBuf(canv.getWidth()/3*2, canv.getHeight()/3*2);
         w = canv.getWidth();
         h = canv.getHeight();
         super.render(canvas, map);
@@ -50,6 +47,7 @@ public class BufferedRender extends MapRender {
 
     private void checkBuf(int w, int h){
         if (buf.getWidth()!= w || buf.getHeight() != h){
+            buf.recycle();
             buf = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             canvas = new Canvas(buf);
             canvas.setMatrix(smaller);

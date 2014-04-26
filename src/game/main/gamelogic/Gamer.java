@@ -10,13 +10,14 @@ import game.main.gamelogic.world.World;
 import game.main.gamelogic.world.AlternativeWay;
 import game.main.utils.Touch;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Класс игрока, который сидит и тыкает в экран пальцем.
  * Created by lgor on 09.02.14.
  */
-public class Gamer extends Player {
+public class Gamer extends Player implements Serializable{
 
     private AlternativeWay way = null;
     private boolean nextTurnReady = false;

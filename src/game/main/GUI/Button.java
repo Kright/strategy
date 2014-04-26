@@ -2,10 +2,12 @@ package game.main.GUI;
 
 import android.graphics.Canvas;
 
+import java.io.Serializable;
+
 /**
  * Created by lgor on 10.03.14.
  */
-public abstract class Button {
+public abstract class Button implements Serializable{
 
     protected int width, height;
 

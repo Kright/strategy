@@ -15,7 +15,6 @@ import java.util.Iterator;
  * Created by lgor on 17.01.14.
  */
 public abstract class MapCamera {
-
     protected Point position = new Point(); //левый верхний угол экрана
     protected float dy, h, w;
 

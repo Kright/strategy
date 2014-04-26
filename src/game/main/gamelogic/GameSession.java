@@ -11,6 +11,7 @@ import game.main.utils.sprites.Sprite;
 import game.main.utils.sprites.SpriteBank;
 import game.main.utils.Touch;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +19,15 @@ import java.util.List;
  * main() - главная часть программы, repaint() - вызов, после которого, если возможно, будет вызван paint()
  * Created by lgor on 02.04.14.
  */
-public class GameSession {
+public class GameSession implements Serializable{
 
-    private volatile GameThread thread;
-    private final Resources resources;
-    private SpriteBank sprites;
+    transient private volatile GameThread thread;
+    transient private  Resources resources;
+    transient private SpriteBank sprites;
 
     private boolean notFinished = true;
 
-    World world;
+    public World world;
     MapRender render;
     public GameProperties properties;
     public Player currentPlayer;
@@ -35,6 +36,11 @@ public class GameSession {
     List<ActiveArea> gui = new ArrayList<ActiveArea>();
 
     private ActiveArea currentActive;
+
+    public void initRes(Resources resources) {
+        this.resources = resources;
+        sprites.initRes(resources);
+    }
 
     public GameSession(Resources resources) {
         this.resources = resources;

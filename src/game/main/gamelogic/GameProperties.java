@@ -1,10 +1,12 @@
 package game.main.gamelogic;
 
+import java.io.Serializable;
+
 /**
  * игровые настройки
  * Created by lgor on 25.01.14.
  */
-public class GameProperties {
+public class GameProperties implements Serializable{
 
     /**
      * рисовать ли на карте границы ячеек.

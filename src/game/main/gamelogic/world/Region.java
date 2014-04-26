@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -14,11 +15,10 @@ import java.util.List;
  * умеет рисовать сама себя
  * Created by lgor on 17.03.14.
  */
-public class Region implements iRenderFeature, Iterable<Cell> {
+public class Region implements iRenderFeature, Iterable<Cell>, Serializable {
 
     protected List<Cell> cells;
-    protected Paint p;
-
+    transient protected Paint p;
     protected Region(List<Cell> cells) {
         this.cells = cells;
         p = new Paint();

@@ -1,8 +1,8 @@
 package game.main.gamelogic.world;
 
 import game.main.utils.CustomRandom;
-import game.main.utils.LinearCongruentialGenerator;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +10,8 @@ import java.util.List;
  * Created by lgor on 31.12.13.
  * игровой мир - карта, игроки
  */
-public class World {
-
-    public final Map map;
+public class World implements Serializable{
+     public final Map map;
     /**
      * мирные поселения, которые могут существовать без игрока, "принадлежат" этой "стране"
      */
@@ -58,4 +57,6 @@ public class World {
         lastAction.cancel();
         lastAction = null;
     }
+
+
 }

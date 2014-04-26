@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import game.main.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -14,9 +15,9 @@ import java.util.TreeMap;
  * В частности, при загрузке игры спарйты берутся отсюда
  * Created by lgor on 23.03.14.
  */
-public class SpriteBank {
+public class SpriteBank implements Serializable{
 
-    protected static class Data {
+    protected static class Data implements Serializable {
         Sprite sprite;
         final int bmpId;
         final String name;
@@ -34,10 +35,13 @@ public class SpriteBank {
         }
     }
 
-    private final Resources resources;
-    private final BitmapFactory.Options bmpOptions;
+    transient private  Resources resources;
+    transient private final BitmapFactory.Options bmpOptions;
     private List<Data> spritesData = new ArrayList<Data>(32);
 
+    public  void initRes(Resources res){
+        resources = res;
+    }
     public SpriteBank(Resources resources) {
         this.resources = resources;
         bmpOptions = new BitmapFactory.Options();

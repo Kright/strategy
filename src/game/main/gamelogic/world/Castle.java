@@ -3,6 +3,7 @@ package game.main.gamelogic.world;
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.Sprite;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * замок
  * Created by lgor on 14.03.14.
  */
-public class Castle extends Settlement {
+public class Castle extends Settlement implements Serializable{
     private Region region;    //подконтрольная территория
 
     public Castle(Country country, Cell cell) {

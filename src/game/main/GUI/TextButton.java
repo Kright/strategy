@@ -7,14 +7,16 @@ import android.util.Log;
 import game.main.gamelogic.Gamer;
 import game.main.gamelogic.world.Action;
 
+import java.io.Serializable;
+
 /**
  * кнопочки с текстом внутри, которые можно одноразово нажимать
  * Created by lgor on 10.03.14.
  */
-public abstract class TextButton extends Button {
+public abstract class TextButton extends Button implements Serializable{
 
     protected String text;
-    private Paint paint;
+    transient private Paint paint;
 
     private int dx, dy;
 

@@ -4,17 +4,19 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import game.main.utils.Touch;
 
+import java.io.Serializable;
+
 /**
  * Реализация миникарты.
  * В данный момент не используется, но раньше работало исправно и удалять жаль - думаю, код отсуюда может пригодиться
  * Created by lgor on 20.02.14.
  */
-public class MiniMap extends ActiveArea {
+public class MiniMap extends ActiveArea implements Serializable{
 
     private final MapCamera camera;
-    private boolean activated = false;
+    transient private boolean activated = false;
     private final float small = 48, big = 128;
-    private final Paint paint;
+    transient private final Paint paint;
 
     public MiniMap(MapCamera camera) {
         this.camera = camera;
@@ -38,21 +40,24 @@ public class MiniMap extends ActiveArea {
         return false;
     }
 
-    private Touch t;
+    transient private Touch t;
 
     @Override
     public void update(Touch touch) {
+
         if (activated) {
             t = touch;
         }
-        if (touch.lastTouch()) {
-            if (activated) {
+        if (touch.lastTouch() ) {
+            if (activated)
+            {
                 camera.move(t.x - camera.getScreenWidth() / 2, t.y - camera.getScreenHeight() / 2);
                 setScale(big);
                 t = null;
             }
             activated = !activated;
-        }
+            }
+
     }
 
     @Override

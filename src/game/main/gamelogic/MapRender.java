@@ -12,13 +12,14 @@ import game.main.gamelogic.world.Settlement;
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.Sprite;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  * объект, который рисует карту и эффекты на ней
  * Created by lgor on 20.02.14.
  */
-public class MapRender extends MapCamera {
+public class MapRender extends MapCamera implements Serializable{
 
     private final RenderParams renderParams;
     private final Sprite[] roads;

@@ -10,6 +10,7 @@ import game.main.utils.sprites.Sprite;
 import game.main.utils.sprites.SpriteBank;
 import game.main.utils.Touch;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +20,13 @@ import java.util.List;
  * "меню" вызывается стандартной кнопкой андроида "назад", её тут не будет
  * Created by lgor on 10.03.14.
  */
-public class GamePanel extends ActiveArea {
+public class GamePanel extends ActiveArea implements Serializable{
 
     protected int x = 0, width = 0;
     protected List<Button> buttons;
     private boolean rightSide;
     protected Button activeButton = null;
-    protected Paint paint = new Paint();
+    transient protected Paint paint = new Paint();
 
     {
         paint.setColor(0xFFAAAAAA);
@@ -119,9 +120,9 @@ public class GamePanel extends ActiveArea {
             @Override
             public void render(Canvas canv, int x, int y, boolean isPressed) {
                 if (isPressed) {
-                    paint.setColor(0x44000000);
-                    canv.drawRect(x, y, x + width, y + height, paint);
-                    paint.setColor(0xFF000000);
+                    //paint.setColor(0x44000000);
+                    //canv.drawRect(x, y, x + width, y + height, paint);
+                   // paint.setColor(0xFF000000);
                 }
             }
         });
@@ -136,15 +137,15 @@ public class GamePanel extends ActiveArea {
             @Override
             public void render(Canvas canv, int x, int y, boolean isPressed) {
                 if (isPressed) {
-                    paint.setColor(0x44000000);
-                    canv.drawRect(x, y, x + width, y + height, paint);
-                    paint.setColor(0xFF000000);
+                   // paint.setColor(0x44000000);
+                    //canv.drawRect(x, y, x + width, y + height, paint);
+                    //paint.setColor(0xFF000000);
                 }
             }
         });
 
         return new GamePanel(buttons, true) {
-            private Rect result = new Rect();
+            //private Rect result = new Rect();
             Sprite panel = sprites.getSprite("game panel");
 
             @Override
@@ -152,11 +153,11 @@ public class GamePanel extends ActiveArea {
                 float scale = camera.getScreenHeight() / panel.rect.height();
                 width = (int) (panel.rect.width() * scale);
                 x = canvas.getWidth() - width;
-                result.set(x, 0, x + width, camera.getScreenHeight());
+                //result.set(x, 0, x + width, camera.getScreenHeight());
                 for (Button b : buttons) {
                     b.setSize(width, (int) (scale * 240));
                 }
-                canvas.drawBitmap(panel.bmp, panel.rect, result, paint);
+                canvas.drawBitmap(panel.bmp, panel.rect, /**result*/ new Rect(5,5,6,6), paint);
                 int dy = 0;
                 for (Button b : buttons) {
                     b.render(canvas, x, dy, activeButton == b);

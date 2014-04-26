@@ -2,6 +2,7 @@ package game.main.gamelogic.world;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +12,11 @@ import java.util.List;
  * состояние (юниты, развитие, производство, казна и т.п.)
  * Created by lgor on 12.03.14.
  */
-public class Country {
+public class Country implements Serializable{
 
     public final int id;
-    public final Map map;
-    protected final World world;
+    transient public final Map map;
+    transient protected final World world;
 
     protected List<Unit> units = new ArrayList<Unit>();
     protected List<Settlement> settlements = new ArrayList<Settlement>();

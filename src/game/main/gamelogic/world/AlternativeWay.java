@@ -1,5 +1,6 @@
 package game.main.gamelogic.world;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import java.util.List;
  * множество возможных перемещнию юнита, выдаёт Action перемещения в конкретную клетку
  * Created by lgor on 10.03.14.
  */
-public class AlternativeWay extends Region {
+public class AlternativeWay extends Region implements Serializable{
 
     protected List<Cell> open = new ArrayList<Cell>(16);
     protected java.util.Map<Cell, Integer> cellsMap = new HashMap<Cell, Integer>(32);

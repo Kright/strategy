@@ -1,7 +1,12 @@
 package game.main.gamelogic.world;
 
+import game.main.gamelogic.world.PMap.CellIterator;
+import game.main.gamelogic.world.PMap.MMapConstructor;
+import game.main.gamelogic.world.PMap.MapConstructor;
+import game.main.gamelogic.world.PMap.PlayerMap;
 import game.main.utils.CustomRandom;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -17,21 +22,14 @@ import java.util.List;
  * Та карта может отличаться от "правильной" карты - часть клеток может быть невидима или затенена (т.е, находиться в
  * том состоянии, в котором её видели последний раз, и без юнитов)
  */
-public class Map implements Iterable<Cell> {
+public class Map implements Iterable<Cell>, Serializable {
 
-    public interface MapConstructor {
-        public int getWidth();
-
-        public int getHeight();
-
-        public Cell getCell(int x, int y);
-    }
 
     public final int width, height;
     /**
      * клетки хранятся хитро, не стоит присваивать значения в table напрямую.
      */
-    protected final Cell[][] table;
+    public final Cell[][] table;
 
     public Map(MapConstructor constructor) {
         this.width = constructor.getWidth();
@@ -153,7 +151,7 @@ public class Map implements Iterable<Cell> {
      * возвращает крепость, владеющую данной клеткой или null, если такой нет
      */
     public Castle getControllingCastle(int x, int y){
-        return Map.this.getCell(x,y).controlledByCastle();
+        return this.getCell(x,y).controlledByCastle();
     }
 
     /**
@@ -197,55 +195,15 @@ public class Map implements Iterable<Cell> {
         return result;
     }
 
-    /**
-     * итератор по всем непустым клеткам карты
-     * @return итератор
-     */
-    @Override
-    public Iterator<Cell> iterator() {
-        return new Iterator<Cell>() {
-            private int counter = -1;
 
-            @Override
-            public boolean hasNext() {
-                counter++;
-                for (; counter < width * height; counter++)
-                    if (!table[counter / width][counter % width].isNull())
-                        return true;
-                return false;
-            }
 
-            @Override
-            public Cell next() {
-                return table[counter / width][counter % width];
-            }
+    public Iterator<Cell>  iterator()  {
+        return new CellIterator(width,height,table);
 
-            @Override
-            public void remove() {
-            }
-        };
     }
 
     public static MapConstructor getTestConstructor(final int width, final int height, final List<LandType> types, final CustomRandom rnd) {
-        return new MapConstructor() {
-            @Override
-            public int getWidth() {
-                return width;
-            }
-
-            @Override
-            public int getHeight() {
-                return height;
-            }
-
-            @Override
-            public Cell getCell(int x, int y) {
-                LandType type = types.get(rnd.get(types.size()));
-                Cell cell = new Cell(x, y, type, type.nextLayer());
-                cell.setRoad(rnd.get(2)==0);
-                return cell;
-            }
-        };
+        return new MMapConstructor(width,height,rnd,types);
     }
 
     /**
@@ -255,80 +213,7 @@ public class Map implements Iterable<Cell> {
      * @return персонализированную карту мира для игрока
      */
     public Map createPlayerMap() {
-        return new Map(width, height) {
-            @Override
-            public void setUnit(Unit unit, int x, int y) {
-                Map.this.setUnit(unit, x, y);
-            }
-
-            @Override
-            public void addSettlement(Settlement settlement, int x, int y) {
-                Map.this.addSettlement(settlement, x, y);
-            }
-
-            @Override
-            public void listsUnitsSettlements(int id, List<Unit> units, List<Settlement> settlements) {
-                Map.this.listsUnitsSettlements(id, units, settlements);
-            }
-
-            @Override
-            public Map getTrueMap() {
-                return Map.this;
-            }
-
-            /**
-             * @param castle устанавливается владение этой крепостью на клетки из castle.region и поселения в нём
-             */
-            public void setCastleControll(Castle castle){
-                for(Cell c:castle.getControlledRegion()){
-                    openСellsNear(c.x, c.y);
-                    Cell cell = getCell(c.x,c.y);
-                    cell.setCastleControl(castle);
-                    if (cell.hasSettlement()){
-                        cell.getSettlement().country = castle.country;
-                    }
-                }
-            }
-
-            @Override
-            public void openCell(int x, int y) {
-                if (isOnMap(x, y)) {
-                    x -= y / 2;
-                    table[y][x] = Map.this.table[y][x];
-                }
-            }
-
-            @Override
-            public void shadowCell(int x, int y) {
-                if (isOnMap(x, y)) {
-                    x -= y / 2;
-                    table[y][x] = table[y][x].getShadowded();
-                }
-            }
-
-            @Override
-            public void checkShadows(int x, int y) {
-                if ((check(x, y) || check(x - 1, y - 1) || check(x - 1, y) || check(x, y - 1) ||
-                        check(x + 1, y) || check(x, y + 1) || check(x + 1, y + 1))) {
-                    if (getCell(x, y).shadowded) {
-                        openCell(x, y);
-                    }
-                } else {
-                    if (!getCell(x, y).shadowded) {
-                        shadowCell(x, y);
-                    }
-                }
-            }
-
-            /**
-             * есть ли на клетке С союзные юнит или контролируется ли оно поселением
-             */
-            private boolean check(int x, int y) {
-                Cell c = Map.this.getCell(x, y);
-                return c.hasUnit() && c.getUnit().country.map == this ||
-                        c.controlledByCastle()!=null && c.controlledByCastle().country.map == this;
-            }
-        };
+        return new PlayerMap(width,height,this);
     }
 
 }

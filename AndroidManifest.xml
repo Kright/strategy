@@ -6,10 +6,11 @@
     <uses-sdk android:minSdkVersion="12"
               android:targetSdkVersion="17"/>
     <application
-            android:label="@string/app_name"
+
+            android:label="apapap"
             android:icon="@drawable/ic_launcher">
-        <activity android:name=".v.MenusActivity"
-                  android:label="@string/app_name"
+        <activity android:name=".v.Menus"
+                  android:label="menus"
                   android:icon="@drawable/ic_launcher"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
@@ -17,17 +18,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
 
         <activity
                 android:name=".MapActivity"
                 android:label="Map Activity"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-                android:parentActivityName= "v.MenusActivity" >
+                android:parentActivityName= "v.Menus" >
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="v.MenusActivity" />
+                    android:value="v.Menus" />
         </activity>
 
     </application>

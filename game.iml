@@ -3,7 +3,11 @@
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
+        <option name="APK_PATH" value="/out/production/game/gamex.apk" />
+        <option name="PACK_TEST_CODE" value="true" />
         <option name="UPDATE_PROPERTY_FILES" value="true" />
+        <option name="ENABLE_PRE_DEXING" value="false" />
+        <includeAssetsFromLibraries>true</includeAssetsFromLibraries>
       </configuration>
     </facet>
   </component>

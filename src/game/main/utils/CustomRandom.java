@@ -9,7 +9,7 @@ import java.io.*;
  * Int - слишком мало!
  * Created by lgor on 04.03.14.
  */
-public interface CustomRandom extends Serializable {
+public interface CustomRandom extends Serializable{
 
     /**
      * @return число, описывающее внутреннее состояние в данный момент

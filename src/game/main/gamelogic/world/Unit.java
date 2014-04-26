@@ -3,11 +3,13 @@ package game.main.gamelogic.world;
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.iRender;
 
+import java.io.Serializable;
+
 /**
  * Created by lgor on 08.01.14.
  * игровой юнит. Его координаты можно узнать как координаты клетки, на которой он стоит
  */
-public class Unit implements iRender {
+public class Unit implements iRender , Serializable{
 
     public final UnitType type;
     public final Country country;   //страна

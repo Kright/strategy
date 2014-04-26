@@ -4,6 +4,7 @@ import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
 import game.main.utils.Touch;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * абстрактный класс игрока
  * Created by lgor on 09.02.14.
  */
-public abstract class Player {
+public abstract class Player implements Serializable{
 
     protected final World world;
     protected List<iRenderFeature> features = new ArrayList<iRenderFeature>();

@@ -1,5 +1,7 @@
 package game.main.gamelogic.world;
 
+import java.io.Serializable;
+
 /**
  * действие игрока над миром - команда юниту, выбор улучшения города, дипломатическое соглашение и т.п.
  * нужен единый интерфейс для возможности отмены действия в случае ошибки пользователя
@@ -8,7 +10,7 @@ package game.main.gamelogic.world;
  *
  * Created by lgor on 08.01.14.
  */
-public abstract class Action {
+public abstract class Action implements Serializable{
     protected static World world;
 
     /**

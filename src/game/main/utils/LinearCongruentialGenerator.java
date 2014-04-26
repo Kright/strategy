@@ -1,12 +1,14 @@
 package game.main.utils;
 
+import java.io.Serializable;
+
 /**
  * Created by lgor on 07.03.14.
  * Внаглую копировать исходный код Java.util.Random как-то совестно, потому что тот выложен под GPL, а мой - не пойми
  * под чем.
  * Так что тут просто абстрактная реализация линейного конгруэнтного метода.
  */
-public abstract class LinearCongruentialGenerator implements CustomRandom {
+public abstract class LinearCongruentialGenerator implements CustomRandom, Serializable {
 
     protected final long a, c, m;
     protected long seed;

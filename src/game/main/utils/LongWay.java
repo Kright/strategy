@@ -3,12 +3,13 @@ package game.main.utils;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Created by Michael-PC on 25.03.14.
  */
-public class LongWay {
+public class LongWay implements Serializable {
     protected final Map map;
     protected TreeSet<CellWay> open = new TreeSet<CellWay>();
     protected HashSet<Cell> openCell = new HashSet<Cell>();
@@ -67,7 +68,6 @@ public class LongWay {
     }
 
     private void addClose(CellWay p) {
-
         open.remove(p);
         openCell.remove(p.c);
         closeCell.add(p.c);
@@ -95,7 +95,7 @@ public class LongWay {
     }
 
 
-    private static class CellWay implements Comparable {
+    private static class CellWay implements Comparable,Serializable {
         Cell c;
         CellWay parent;
         private int way = 0;

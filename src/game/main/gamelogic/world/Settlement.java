@@ -5,6 +5,7 @@ import game.main.utils.sprites.iRender;
 import game.main.utils.sprites.Sprite;
 import game.main.utils.sprites.SpriteBank;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,11 +13,11 @@ import java.util.List;
  * Наследуются - замок, деревушка, город
  * Created by lgor on 25.01.14.
  */
-public abstract class Settlement implements iRender {
+public abstract class Settlement implements iRender, Serializable {
 
-    public static Sprite shadow;
+    transient public static Sprite shadow;
 
-    protected Country country;
+    public Country country;
     public final Cell cell;
 
     public Settlement(Country country, Cell cell) {
@@ -49,7 +50,7 @@ public abstract class Settlement implements iRender {
     }
 
     //доступные улучшения поселения
-    public abstract class Upgrade extends Action{
+    public abstract class Upgrade extends Action implements Serializable{
         public abstract Sprite getPicture();
 
         public abstract String getDefinition();

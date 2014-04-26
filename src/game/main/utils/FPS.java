@@ -1,10 +1,12 @@
 package game.main.utils;
 
+import java.io.Serializable;
+
 /**
  * Счётчик кадров в секунду
  * Created by lgor on 31.12.13.
  */
-public class FPS {
+public class FPS implements Serializable {
 
     private int fps = 0;
     private long time;

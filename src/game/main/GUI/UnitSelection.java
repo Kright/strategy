@@ -6,14 +6,16 @@ import android.graphics.RectF;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Unit;
 
+import java.io.Serializable;
+
 /**
  * Created by lgor on 17.02.14.
  * добавочная штука, рисует выделение юнита
  */
-public class UnitSelection implements iRenderFeature {
+public class UnitSelection implements iRenderFeature, Serializable {
 
     private final Unit unit;
-    private final Paint paint;
+    transient private final Paint paint;
 
     public UnitSelection(Unit unit) {
         this.unit = unit;

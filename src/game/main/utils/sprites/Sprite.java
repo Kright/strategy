@@ -3,6 +3,8 @@ package game.main.utils.sprites;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 
+import java.io.Serializable;
+
 /**
  * спрайт. Содержит картинку и прямоугольник - то место картинки, которое надо использовать
  * класс SpriteBank аккуратно загружает картинки, а потом может "обновить" bitmap, если приложение сворачивали или
@@ -10,10 +12,10 @@ import android.graphics.Rect;
  * Теоретически, его можно использовать не по назначению - рисовать не через render(), а вручную
  * Created by lgor on 17.01.14.
  */
-public class Sprite implements iRender {
+public class Sprite implements iRender , Serializable{
 
     transient public Bitmap bmp;
-    public final Rect rect;
+    transient public final Rect rect;
 
     public Sprite(Bitmap bmp, int x, int y, int width, int height) {
         this.bmp = bmp;

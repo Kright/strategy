@@ -3,6 +3,7 @@ package game.main.gamelogic.world;
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.Sprite;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * Деревушка
  * Created by lgor on 14.03.14.
  */
-public class Village extends Settlement {
+public class Village extends Settlement implements Serializable{
 
     protected int population; // население
     protected int wealth; // благосостояние

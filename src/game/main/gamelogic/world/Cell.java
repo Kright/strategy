@@ -4,30 +4,32 @@ package game.main.gamelogic.world;
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.iRender;
 
+import java.io.Serializable;
+
 /*
  * Created by lgor on 31.12.13.
  * Клетка карты.
  * Находящиеся на ней юнит и поселение должны иметь ссылку на неё - потому что только клетка знает свои координаты.
  */
-public class Cell implements iRender, Comparable<Cell> {
+public class Cell implements iRender, Comparable<Cell>, Serializable {
     /*
     клетка карты, содержит всякую информацию - тип ландшафта, юнита, если он есть, улучшения и т.п.
     */
     public final int x, y;
     public final boolean shadowded;
-    public LandType land;
+     public LandType land;
     public iRender nextRender;
     private Settlement settlement = null;
     private Unit unit = null;
     private boolean road = false;
-    private Castle controlledByCastle = null;
+     private Castle controlledByCastle = null;
 
     /**
      * почему-то вариант с со строчкой nextRender = land.nextRender выдаёт ошибку java.lang.ExceptionInInitializerError
      * потому nextRender передаётся вручную
      */
 
-    Cell(int x, int y, LandType land, iRender nextRender) {
+    public Cell(int x, int y, LandType land, iRender nextRender) {
         this.x = x;
         this.y = y;
         this.land = land;
@@ -35,7 +37,7 @@ public class Cell implements iRender, Comparable<Cell> {
         this.nextRender = nextRender;
     }
 
-    Cell(int x, int y, LandType land) {
+    public Cell(int x, int y, LandType land) {
         this.x = x;
         this.y = y;
         this.land = land;
@@ -139,7 +141,7 @@ public class Cell implements iRender, Comparable<Cell> {
     }
 
     public String toString(){
-        return ""+x+" "+y;
+        return " " + x + " " + y;
     }
 
 
@@ -186,13 +188,15 @@ public class Cell implements iRender, Comparable<Cell> {
         return empty;
     }
 
-    static private Cell empty = new Cell(-1, -1, null) {
+    //должно быть private
+    static public Cell empty  = new Cell(-1, -1, null)
+     {
         @Override
         public void render(RenderParams params) {
-            /*
-            ничего. Это же пустая клетка.
-            Хотя, возможно, лучше рисовать что-нибудь чёрное
-             */
+
+            //ничего. Это же пустая клетка.
+            //Хотя, возможно, лучше рисовать что-нибудь чёрное
+
         }
 
         @Override

@@ -10,6 +10,7 @@ import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Unit;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,10 +19,10 @@ import java.util.List;
  * класс, описывающий доступные для юнита клетки
  * Created by lgor on 25.02.14.
  */
-public class Way implements iRenderFeature { // Тру путь
+public class Way implements iRenderFeature, Serializable { // Тру путь
 
     private List<Cell> cells = new ArrayList<Cell>();
-    private Paint p = new Paint();
+    transient private Paint p = new Paint();
     private int maxWay=1000;
     private int x0;
     private int y0;

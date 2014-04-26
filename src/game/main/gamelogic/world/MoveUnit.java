@@ -1,5 +1,6 @@
 package game.main.gamelogic.world;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,7 +9,7 @@ import java.util.Set;
  * перемещение юнита по пути из клеток за один ход
  * Created by lgor on 26.02.14.
  */
-public class MoveUnit extends Action {
+public class MoveUnit extends Action implements Serializable{
 
     private final List<Cell> way;
     private final Unit unit, savedUnit;

@@ -2,13 +2,15 @@ package game.main.utils.sprites;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
+
 /**
  * Хитрый спрайт
  * Может рисовать себя так, как будто он больше или меньше, чем область, в которой его рисуют.
  * Коварства ему не занимать
  * Created by lgor on 07.04.14.
  */
-public class AdvancedSprite extends Sprite {
+public class AdvancedSprite extends Sprite implements Serializable{
 
     private final float kx, ky, kw, kh;
 

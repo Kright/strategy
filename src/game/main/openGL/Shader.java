@@ -1,6 +1,10 @@
 package game.main.openGL;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 import android.util.Log;
 
 /**
@@ -11,9 +15,9 @@ import android.util.Log;
 public class Shader {
 
     //handlers
-    public final int program, pixel ,vertex;
+    public final int program, pixel, vertex;
 
-    public Shader(int vertex, int pixel){
+    public Shader(int vertex, int pixel) {
         this.vertex = vertex;
         this.pixel = pixel;
         program = GLES20.glCreateProgram();
@@ -22,7 +26,7 @@ public class Shader {
         GLES20.glLinkProgram(program);
     }
 
-    public void use(){
+    public void use() {
         GLES20.glUseProgram(program);
     }
 
@@ -43,7 +47,35 @@ public class Shader {
     /**
      * must be called after all shaders compiling
      */
-    public static void releaseCompiler(){
+    public static void releaseCompiler() {
         GLES20.glReleaseShaderCompiler();
+    }
+
+    /*
+     * didn't tested
+     */
+    public static int loadTexture(Resources resources, final int resourceId) {
+        final int[] textureHandle = new int[1];
+
+        GLES20.glGenTextures(1, textureHandle, 0);
+        if (textureHandle[0] == 0) {
+            throw new RuntimeException("Error loading texture.");
+        }
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        final Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId, options);
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_NEAREST);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR_MIPMAP_NEAREST);
+
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+
+        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
+
+        bitmap.recycle();
+        return textureHandle[0];
     }
 }

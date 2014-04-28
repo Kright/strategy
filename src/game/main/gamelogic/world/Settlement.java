@@ -1,9 +1,8 @@
 package game.main.gamelogic.world;
 
 import game.main.utils.sprites.RenderParams;
-import game.main.utils.sprites.iRender;
-import game.main.utils.sprites.Sprite;
 import game.main.utils.sprites.SpriteBank;
+import game.main.utils.sprites.iRender;
 
 /**
  * поселение
@@ -12,7 +11,7 @@ import game.main.utils.sprites.SpriteBank;
  */
 public abstract class Settlement implements iRender {
 
-    public static Sprite shadow;
+    public static iRender shadow;
 
     protected Country country;
     public final Cell cell;
@@ -25,10 +24,11 @@ public abstract class Settlement implements iRender {
     /**
      * удаление поселения
      */
-     abstract public void removeSettlement();
+    abstract public void removeSettlement();
 
     /**
      * called once per turn
+     *
      * @return taxes from this settlement, may be positive or 0 or negative (if unprofitable)
      */
     public abstract int getTaxes();

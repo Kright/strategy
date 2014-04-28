@@ -13,7 +13,7 @@ import android.graphics.Rect;
 public class Sprite implements iRender {
 
     transient public Bitmap bmp;
-    public final Rect rect;
+    transient protected Rect rect;
 
     public Sprite(Bitmap bmp, int x, int y, int width, int height) {
         this.bmp = bmp;
@@ -22,7 +22,11 @@ public class Sprite implements iRender {
 
     @Override
     public void render(RenderParams p) {
-        p.rect.set(p.x, p.y, p.x + p.width, p.y + p.height);
-        p.canvas.drawBitmap(bmp, rect, p.rect, p.paint);
+        try {
+            p.rect.set(p.x, p.y, p.x + p.width, p.y + p.height);
+            p.canvas.drawBitmap(bmp, rect, p.rect, p.paint);
+        } catch (NullPointerException ex) {
+            throw new NullPointerException("Sprite doesn't load correctly !\n");
+        }
     }
 }

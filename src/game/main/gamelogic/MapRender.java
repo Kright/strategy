@@ -12,6 +12,7 @@ import game.main.gamelogic.world.Settlement;
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.Sprite;
 import game.main.utils.sprites.SpriteBank;
+import game.main.utils.sprites.iRender;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ import java.util.List;
 public class MapRender extends MapCamera {
 
     protected final RenderParams renderParams;
-    private final Sprite[] roads, arrows;
+    private final iRender[] roads, arrows;
     protected final GameProperties properties;
     private final Matrix mirror, identity;
 
@@ -33,10 +34,10 @@ public class MapRender extends MapCamera {
         renderParams.paint.setTypeface(MapActivity.font);
         renderParams.paint.setTextSize(36);
         renderParams.paint.setColor(0xFF000055);
-        roads = new Sprite[]{sprites.getSprite("road100"), sprites.getSprite("road010"),
+        roads = new iRender[]{sprites.getSprite("road100"), sprites.getSprite("road010"),
                 sprites.getSprite("road110"), sprites.getSprite("road001"), sprites.getSprite("road101"),
                 sprites.getSprite("road011"), sprites.getSprite("road111")};
-        arrows = new Sprite[]{sprites.getSprite("↗"), sprites.getSprite("→"), sprites.getSprite("↘")};
+        arrows = new iRender[]{sprites.getSprite("↗"), sprites.getSprite("→"), sprites.getSprite("↘")};
         identity = new Matrix();
         mirror = new Matrix();
         mirror.setScale(-1, 1);

@@ -1,7 +1,7 @@
 package game.main.gamelogic.world;
 
 import game.main.utils.sprites.RenderParams;
-import game.main.utils.sprites.Sprite;
+import game.main.utils.sprites.iRender;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -73,14 +73,14 @@ public class Castle extends Settlement {
      * @return уровень культуры провинции
      * от него зависит максимальный размер городов
      */
-    public double getCultureLevel(){
+    public double getCultureLevel() {
         return cultureLevel;
     }
 
     /**
      * @return эффективность сбора налогов - не все налоги доходят до казны.
      */
-    public double getEfficiency(){
+    public double getEfficiency() {
         return efficiency;
     }
 
@@ -89,7 +89,7 @@ public class Castle extends Settlement {
 
     }
 
-    protected static Sprite sprite;
+    protected static iRender sprite;
 
     @Override
     public void render(RenderParams params) {

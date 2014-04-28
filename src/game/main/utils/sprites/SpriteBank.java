@@ -24,6 +24,7 @@ public class SpriteBank {
         private Data(String name, int bmpId, int x, int y, int w, int h) {
             this.name = name;
             this.bmpId = bmpId;
+
             sprite = new Sprite(null, x, y, w, h);
         }
 
@@ -34,8 +35,8 @@ public class SpriteBank {
         }
     }
 
-    private final Resources resources;
-    private final BitmapFactory.Options bmpOptions;
+    protected final Resources resources;
+    protected final BitmapFactory.Options bmpOptions;
     private List<Data> spritesData = new ArrayList<Data>(32);
 
     public SpriteBank(Resources resources) {
@@ -46,7 +47,6 @@ public class SpriteBank {
         addLine(R.drawable.lands, 192, 128, 192, 0, new String[]{"grass", "hill", "village", "castle", "shadow", "windmill", "field"});
         add(R.drawable.landl, 240, 160, "forest", new int[]{0, -32, 192, 128});
         add(R.drawable.xz2, 192, 128, "crusader");
-        add(R.drawable.menu, 320, 1080, "game panel");
         addLine(R.drawable.roads, 312, 120, 0, 120, new String[]{
                 "road100", "road010", "road001", "road110", "road101", "road011", "road111"},
                 new int[]{-12, -44, 192, 128});
@@ -104,7 +104,7 @@ public class SpriteBank {
         spritesData.add(new Data(name, bmpId, x, y, w, h, k));
     }
 
-    public Sprite getSprite(String name) {
+    public iRender getSprite(String name) {
         //Я знаю про бинарный поиск, но так проще, а функция вызывается всего лишь несколько раз
         for (Data sd : spritesData) {
             if (sd.name.equals(name)) {

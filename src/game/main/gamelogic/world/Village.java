@@ -1,9 +1,8 @@
 package game.main.gamelogic.world;
 
-import android.util.Log;
 import game.main.utils.CustomRandom;
 import game.main.utils.sprites.RenderParams;
-import game.main.utils.sprites.Sprite;
+import game.main.utils.sprites.iRender;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -174,7 +173,7 @@ public class Village extends Settlement {
         country.map.addSettlement(null, cell.x, cell.y);
     }
 
-    protected static Sprite sprite;
+    protected static iRender sprite;
 
     @Override
     public void render(RenderParams params) {

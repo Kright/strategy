@@ -1,7 +1,6 @@
 package game.main.gamelogic.world;
 
 import game.main.utils.sprites.RenderParams;
-import game.main.utils.sprites.Sprite;
 import game.main.utils.sprites.iRender;
 
 /**
@@ -11,10 +10,10 @@ public class LandUpgrade implements iRender, ResourcesCounter.ResourcesProducer 
 
     public final String name;
 
-    protected final Sprite sprite;
+    protected final iRender sprite;
     //private final int[] resources;
 
-    public LandUpgrade(Sprite sprite, String name) {
+    public LandUpgrade(iRender sprite, String name) {
         this.sprite = sprite;
         this.name = name;
     }

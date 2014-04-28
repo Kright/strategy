@@ -1,6 +1,6 @@
 package game.main.gamelogic.world;
 
-import game.main.utils.sprites.Sprite;
+import game.main.utils.sprites.iRender;
 
 /**
  * Created by lgor on 08.01.14.
@@ -22,9 +22,9 @@ public class UnitType {
     int distance;
     */
 
-    public final Sprite sprite;
+    public final iRender sprite;
 
-    public UnitType(int movementPoints, int hitPoints, int pay, Sprite sprite) {
+    public UnitType(int movementPoints, int hitPoints, int pay, iRender sprite) {
         this.movementPoints = movementPoints;
         this.hitPoints = hitPoints;
         this.sprite = sprite;

@@ -20,9 +20,14 @@ class GLRenderer implements GLSurfaceView.Renderer {
     private float screenRatio;
     private int screenWidth, screenHeight;
 
+    private final DrawingContext drawingContext;
+
+    public GLRenderer(DrawingContext drawingContext) {
+        this.drawingContext = drawingContext;
+    }
+
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-
     }
 
     @Override
@@ -42,6 +47,9 @@ class GLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl10) {
+        GLES20.glClearColor((float) Math.random(), 0, 0, 1);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+
+        drawingContext.repainted = true;
     }
 }

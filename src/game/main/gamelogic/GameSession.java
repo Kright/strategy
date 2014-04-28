@@ -21,15 +21,15 @@ public class GameSession {
 
     public final CustomRandom random = LinearCongruentialGenerator.getLikeNativeRandom();
 
-    private volatile GameThread thread;
-    private final Resources resources;
-    private SpriteBank sprites;
+    protected volatile GameThread thread;
+    protected final Resources resources;
+    protected SpriteBank sprites;
 
-    private boolean notFinished = true;
+    protected boolean notFinished = true;
     public GameProperties properties;
 
-    World world;
-    MapRender render;
+    protected World world;
+    protected MapRender render;
 
     public Player currentPlayer;
 
@@ -170,8 +170,5 @@ public class GameSession {
         world.addPlayer(new Gamer(this, country));
         currentPlayer = world.getNextPlayer();
         currentPlayer = world.getNextPlayer();
-
-        //panel = GamePanel.getGamePanel2(gamer, sprites);
-        //gui.add(panel);
     }
 }

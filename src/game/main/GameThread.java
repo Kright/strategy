@@ -16,11 +16,12 @@ import java.util.List;
  */
 public class GameThread extends Thread implements View.OnTouchListener{
 
+    protected final GameSession session;
+    protected volatile boolean reallyWait=false;
+    protected volatile boolean mustWait=true;
+
     private final Object monitor;
-    private volatile boolean reallyWait=false;
-    private volatile boolean mustWait=true;
     private volatile SurfaceHolder holder;
-    private final GameSession session;
 
     protected GameThread(Object monitor, GameSession session){
         this.monitor = monitor;
@@ -36,7 +37,7 @@ public class GameThread extends Thread implements View.OnTouchListener{
         session.run();
     }
 
-    public final boolean repaint(){
+    public boolean repaint(){
         boolean success=false;
         Canvas canvas=null;
         if (mustWait){      // если потоку советуют остановиться, рисование будет пропущено
@@ -84,7 +85,7 @@ public class GameThread extends Thread implements View.OnTouchListener{
         return paused;
     }
 
-    public final void resume(SurfaceHolder holder){
+    public void resume(SurfaceHolder holder){
         this.holder = holder;
         mustWait = false;
     }

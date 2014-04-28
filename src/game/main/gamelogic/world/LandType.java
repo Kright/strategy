@@ -2,7 +2,6 @@ package game.main.gamelogic.world;
 
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.iRender;
-import game.main.utils.sprites.Sprite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +21,10 @@ public class LandType implements iRender, ResourcesCounter.ResourcesProducer {
     public final boolean accessable;
     //  Список возможных для данного типа местности улучшений. Может быть пустым.
     public final List<LandUpgrade> landUpgrades = new ArrayList<LandUpgrade>();
-    protected final Sprite sprite;
+    protected final iRender sprite;
     private iRender nextLayer;
 
-    public LandType(Sprite sprite, int movingCost, String name) {
+    public LandType(iRender sprite, int movingCost, String name) {
         this.sprite = sprite;
         this.name = name;
         this.movingCost = movingCost;
@@ -33,14 +32,9 @@ public class LandType implements iRender, ResourcesCounter.ResourcesProducer {
         this.nextLayer = iRender.NullRender.get();
     }
 
-    public LandType(Sprite sprite, int movingCost, String name, final Sprite second) {
+    public LandType(iRender sprite, int movingCost, String name, final iRender second) {
         this(sprite, movingCost, name);
-        this.nextLayer = new iRender() {
-            @Override
-            public void render(RenderParams params) {
-                second.render(params);
-            }
-        };
+        this.nextLayer = second;
     }
 
     @Override

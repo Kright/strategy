@@ -1,6 +1,7 @@
 package game.main.openGL;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
@@ -17,12 +18,16 @@ public class GLActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+
         viewGL = new GLSurfaceView(this);
         viewGL.setPreserveEGLContextOnPause(true);
         viewGL.setEGLContextClientVersion(2);
+
         renderer = new GLRenderer();
         viewGL.setRenderer(renderer);
         viewGL.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
         setContentView(viewGL);
     }
 

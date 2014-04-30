@@ -1,11 +1,9 @@
 package game.main.openGL;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
 import android.util.Log;
+
+import static android.opengl.GLES20.*;
 
 /**
  * class represents compiled shader program.
@@ -26,6 +24,10 @@ public class Shader {
         GLES20.glLinkProgram(program);
     }
 
+    public Shader(String vertexCode, String fragmentCode) {
+        this(loadShader(GL_VERTEX_SHADER, vertexCode), loadShader(GL_FRAGMENT_SHADER, fragmentCode));
+    }
+
     public void use() {
         GLES20.glUseProgram(program);
     }
@@ -33,7 +35,7 @@ public class Shader {
     public static int loadShader(int type, String code) {
         int shaderID = GLES20.glCreateShader(type);
         GLES20.glShaderSource(shaderID, code);
-        GLES20.glCompileShader(shaderID);
+        glCompileShader(shaderID);
         int[] ii = new int[1];
         GLES20.glGetShaderiv(shaderID, GLES20.GL_COMPILE_STATUS, ii, 0);
         if (ii[0] == 0) {
@@ -49,33 +51,5 @@ public class Shader {
      */
     public static void releaseCompiler() {
         GLES20.glReleaseShaderCompiler();
-    }
-
-    /*
-     * didn't tested
-     */
-    public static int loadTexture(Resources resources, final int resourceId) {
-        final int[] textureHandle = new int[1];
-
-        GLES20.glGenTextures(1, textureHandle, 0);
-        if (textureHandle[0] == 0) {
-            throw new RuntimeException("Error loading texture.");
-        }
-
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-        final Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId, options);
-
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_NEAREST);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR_MIPMAP_NEAREST);
-
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-
-        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
-
-        bitmap.recycle();
-        return textureHandle[0];
     }
 }

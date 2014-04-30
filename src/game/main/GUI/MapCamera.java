@@ -16,7 +16,7 @@ import java.util.Iterator;
  * потом при перемещении камеры рисовать тот кусок + вручную небольшой карты.
  * Created by lgor on 17.01.14.
  */
-public abstract class MapCamera {
+public class MapCamera {
 
     protected Point position = new Point(); //левый верхний угол экрана
     protected float dy, h, w;
@@ -24,7 +24,7 @@ public abstract class MapCamera {
     protected FPS fps = new FPS();
     protected int screenH, screenW;
 
-    protected MapCamera(int spriteWidth, int spriteHeight) {
+    public MapCamera(int spriteWidth, int spriteHeight) {
         h = spriteHeight;
         w = spriteWidth;
         dy = spriteHeight * 3 / 4;

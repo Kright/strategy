@@ -1,23 +1,31 @@
 package game.main.openGL;
 
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import game.main.gamelogic.world.World;
+import game.main.utils.Touch;
 import game.main.utils.TouchBuffer;
 
+import java.util.List;
+
 /**
+ * Здесь весь игровой контекст, а заодно есть реализация Runnable
  * Created by lgor on 29.04.14.
  */
 public class GLGameSession implements Runnable {
 
+    /**
+     * координаты нажатия - в пикселях
+     */
     public final TouchBuffer touches = new TouchBuffer();
 
-    protected volatile boolean running = true;
+    protected volatile boolean running = false;
+    protected volatile boolean finished = false;
 
     protected volatile World world;
 
     protected final GLSurfaceView view;
     protected final DrawingContext drawingContext;
+
 
     public GLGameSession(GLSurfaceView view, DrawingContext drawingContext) {
         this.view = view;
@@ -27,21 +35,32 @@ public class GLGameSession implements Runnable {
 
     @Override
     public void run() {
-        int i=0;
-        while (running) {
-            repaint();
-            if (i++ % 100 == 0){
-                Log.e("", "I'm working daemon! :"+ i/100);
+        int i = 0;
+        while (!finished) {
+            while (running) {
+                repaint();
+                List<Touch> tt = touches.getTouches();
+                while (!tt.isEmpty()) {
+                    GLActivity.myLog(tt.remove(0));
                 }
-            try {
-                Thread.sleep(30);
-            } catch (InterruptedException e) {
+                if (i++ % 100 == 0) {
+                    GLActivity.myLog("I'm working : " + i / 100);
+                }
+                sleep(10);
             }
+            sleep(50);
         }
+        GLActivity.myLog("I'm finished");
     }
 
     public void setRunning(boolean running) {
         this.running = running;
+        GLActivity.myLog("set Running");
+    }
+
+    public void finish() {
+        finished = true;
+        running = false;
     }
 
     /**
@@ -56,6 +75,14 @@ public class GLGameSession implements Runnable {
         });
         while (running && !drawingContext.repainted) {
             Thread.yield();
+        }
+    }
+
+    public static void sleep(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            //nothing
         }
     }
 }

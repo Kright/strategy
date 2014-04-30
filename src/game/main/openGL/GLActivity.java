@@ -4,10 +4,11 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
 
 /**
  * Ещё одно, альтернативное активити.
- * Будет использовано для того, чтобы устроить рисование игры через openGL
+ * Будет использовано для рисования игры через openGL
  * Created by lgor on 27.04.14.
  */
 public class GLActivity extends Activity {
@@ -15,6 +16,10 @@ public class GLActivity extends Activity {
     private GLSurfaceView viewGL;
     private GLRenderer renderer;
     private GLGameSession gameSession;
+
+    public GLActivity() {
+        myLog("Activity constructed");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,21 +38,18 @@ public class GLActivity extends Activity {
         viewGL.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
         setContentView(viewGL);
-
+        myLog("onCreate");
         if (gameSession == null) {
+            myLog("gameSession is null, will create");
             gameSession = new GLGameSession(viewGL, drawingContext);
             Thread t = new Thread(gameSession);
-            t.setDaemon(true);
             t.start();
         }
-        /* странное решение, но так работает.   Я не против сделать по-другому
-         * В данный момент демон остаётся жив, если свернуть приложение, и втихаря работает дальше. Забавная возможность,
-         * но мне нужно нечно иное
-         */
     }
 
     @Override
     protected void onResume() {
+        myLog("onResume");
         viewGL.onResume();
         gameSession.setRunning(true);
         super.onResume();
@@ -55,6 +57,7 @@ public class GLActivity extends Activity {
 
     @Override
     protected void onPause() {
+        myLog("onPause");
         viewGL.onPause();
         gameSession.setRunning(false);
         super.onPause();
@@ -62,6 +65,12 @@ public class GLActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        myLog("I'll back");
+        gameSession.finish();
         super.onBackPressed();
+    }
+
+    public static void myLog(Object o) {
+        Log.d("execution", o.toString());
     }
 }

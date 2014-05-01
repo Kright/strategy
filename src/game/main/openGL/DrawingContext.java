@@ -1,8 +1,8 @@
 package game.main.openGL;
 
 import android.content.res.Resources;
-import game.main.GUI.MapCamera;
 import game.main.R;
+import game.main.gamelogic.world.Map;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,22 +15,33 @@ public class DrawingContext {
 
     //  флаг, поток логики устанавливает его в false, поток рисования - в true
     public volatile boolean repainted = false;
+    public final MapCameraGL camera;
 
-    public final Resources resources;
+    private final Resources resources;
 
     protected int textureHandle;
     private final List<TextureSprite> sprites = new ArrayList<TextureSprite>();
-    public final MapCamera camera;
+
+    private Map map;
 
     public DrawingContext(Resources resources) {
         this.resources = resources;
-        camera = new MapCamera(192, 128);
+        camera = new MapCameraGL();
+
         synchronized (sprites) {
             TextureSprite.SpriteFactory sp = new TextureSprite.SpriteFactory(1024);
             sp.setSpriteDefaultSize(192, 128);
             sp.addSpritesLine(sprites, 0, 0, 192, 0, new String[]
                     {"grass", "hill", "village", "castle", "shadow"});
         }
+    }
+
+    public synchronized Map getMap() {
+        return map;
+    }
+
+    public synchronized void setMap(Map map) {
+        this.map = map;
     }
 
     /**

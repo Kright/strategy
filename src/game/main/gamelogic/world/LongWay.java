@@ -1,7 +1,4 @@
-package game.main.utils;
-
-import game.main.gamelogic.world.Cell;
-import game.main.gamelogic.world.Map;
+package game.main.gamelogic.world;
 
 import java.util.*;
 
@@ -87,7 +84,6 @@ public class LongWay {
     int hDistance(Cell c1, Cell c2) { // эвристическая функция расстояния
         return (int) (2 * Map.getInterval(c1.x - c2.x, c1.y - c2.y)) + 2 * c1.getMovindCost();
     }
-
 
 
     public List<Cell> getPath() {

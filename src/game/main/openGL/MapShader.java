@@ -1,50 +1,48 @@
 package game.main.openGL;
 
+import android.opengl.GLES20;
+
 import static android.opengl.GLES20.glGetAttribLocation;
 import static android.opengl.GLES20.glGetUniformLocation;
 
 /**
- * хитрый шейдер.
- * Собственно, хитрость кроется в том, что можно изменить uniforms, которые отвечают за размер спрайтов и их сдвиг при
- * рисовании, и загрузить новые позиции на текстуре (aTexPos),
- * А aExtPos можно использовать много-много раз даже для спрайтов разного размера до тех пор, пока пользователь не
- * подвинет камеру. (В аExtPos пакуются два вектора - собственно позиция, и второй - с единичками и нулями по осям.
- * Created by lgor on 01.05.14.
+ * простейший шейдер, принимает коориднаты вершин, их текстурные координаты, текстуру и рисует это.
+ * Created by lgor on 30.04.14.
  */
 public class MapShader extends Shader {
 
-    public final static String vertexCode = "" +
-            "uniform vec2 uSpriteSize; " +
-            "uniform vec2 uOffset;" +
-            "uniform vec2 uMult;" +
-            "attribute vec4 aExtPos;" +     //на самом деле, сюда упаковано 2 двухмерных вектора
-            "attribute vec2 aTexPos; " +
+    final static String vertexShaderCode = "" +
+            "uniform vec2 uTranslate;" +
+            "uniform vec2 uTexSize;" +          //размер изображений на текстуре
+            "uniform vec2 uSize;" +             //видимый размер спрайта
+            "attribute vec4 aExtPos; " +
+            "attribute vec2 aTexPos;" +
             "varying vec2 vTexPos;" +
-
             "void main(){" +
-            "   vTexPos = aTexPos + uSpriteSize * aExtPos.zw;" +
-            "   gl_Position = vec4(aExtPos.xy + aExtPos.zw * uMult + uOffset, 0.0, 1.0);" +
+            "   gl_Position = vec4(uTranslate + aExtPos.xy + aExtPos.zw * uSize, 0.0, 1.0);" +
+            "   vTexPos = aTexPos + uTexSize * aExtPos.zw; " +
             "}";
 
-    public final static String pixelCode = "" +
+    final static String pixelShaderCode = "" +
             "uniform sampler2D uSampler;" +
-            "varying mediump vec2 vTexPos;" +
+            "varying vec2 vTexPos;" +
             "void main(){" +
-            "   gl_FragColor = texture2D(uSampler, vTexPos);" +
+            "   gl_FragColor =  gl_FragColor = texture2D(uSampler, vTexPos);" +
             "}";
 
-    public final int uSampler, uSpriteSize, uOffset, uMult;
-    public final int aExtPos, aTexPos;
+    public final int uSize, uTexSize, uSampler, uTranslate;
+    public final int aExtendedPosition, aTexturePosition;
 
     public MapShader() {
-        super(vertexCode, pixelCode);
+        super(loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode),
+                loadShader(GLES20.GL_FRAGMENT_SHADER, pixelShaderCode));
 
+        uSize = glGetUniformLocation(program, "uSize");
+        uTexSize = glGetUniformLocation(program, "uTexSize");
         uSampler = glGetUniformLocation(program, "uSampler");
-        uSpriteSize = glGetUniformLocation(program, "uSpriteSize");
-        uOffset = glGetUniformLocation(program, "uOffset");
-        uMult = glGetUniformLocation(program, "uMult");
+        uTranslate = glGetUniformLocation(program, "uTranslate;");
 
-        aExtPos = glGetAttribLocation(program, "aExtPos");
-        aTexPos = glGetAttribLocation(program, "aTexPos");
+        aExtendedPosition = glGetAttribLocation(program, "aExtPos");
+        aTexturePosition = glGetAttribLocation(program, "aTexPos");
     }
 }

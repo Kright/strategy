@@ -4,16 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
-
-import android.util.Log;
-import game.main.gamelogic.world.Action;
-import game.main.gamelogic.world.Cell;
-import game.main.gamelogic.world.Unit;
-import game.main.utils.LongWay;
-
-import java.util.List;
-
 /**
  * перемещение юнита по пути из клеток за один ход
  * Created by lgor on 26.02.14.

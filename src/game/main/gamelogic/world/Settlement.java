@@ -1,5 +1,6 @@
 package game.main.gamelogic.world;
 
+import game.main.openGL.DrawingContext;
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.SpriteBank;
 import game.main.utils.sprites.iRender;
@@ -44,5 +45,11 @@ public abstract class Settlement implements iRender {
         Village.sprite = sprites.getSprite("village");
         Castle.sprite = sprites.getSprite("castle");
         shadow = sprites.getSprite("shadow");
+    }
+
+    public static void initGL(DrawingContext context){
+        Village.sprite = context.getSprite("village");
+        Castle.sprite = context.getSprite("castle");
+        shadow = context.getSprite("shadow");
     }
 }

@@ -2,6 +2,8 @@ package game.main.gamelogic.world;
 
 import game.main.gamelogic.GameSession;
 import game.main.utils.CustomRandom;
+import game.main.utils.LinearCongruentialGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,14 @@ public class World {
         random = session.random;
         map = new Map(Map.getTestConstructor(width, height, types, random));
         Action.init(this);
+        international = new Country(this, 0);
+    }
+
+    public World(int width, int height, List<LandType> types) {
+        random = LinearCongruentialGenerator.getLikeNativeRandom();
+        map = new Map(Map.getTestConstructor(width, height, types, random));
+        Action.init(this);
+
         international = new Country(this, 0);
     }
 

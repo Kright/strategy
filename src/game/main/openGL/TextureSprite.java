@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.Sprite;
+import game.main.utils.sprites.iRender;
 
 import java.util.List;
 
@@ -16,9 +18,11 @@ import java.util.List;
  * для спрайта в верхнем левом углу текстуры
  * yTop = 0.0, yBottom >0;
  *
+ * для удобства внесения изменений в работающий код этот класс маскируется под уже используемый экземпляры iRender
+ *
  * Created by lgor on 30.04.14.
  */
-public class TextureSprite {
+public class TextureSprite implements iRender{
 
     public final String name;
     float xLeft, yBottom, xRight, yTop;
@@ -29,6 +33,11 @@ public class TextureSprite {
         this.yBottom = yBottom;
         this.xRight = xRight;
         this.yTop = yTop;
+    }
+
+    @Override
+    public void render(RenderParams params) {
+        //nothing
     }
 
     public static class SpriteFactory {

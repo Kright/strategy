@@ -1,10 +1,12 @@
 package game.main.openGL;
 
 import android.opengl.GLSurfaceView;
-import game.main.gamelogic.world.World;
+import game.main.gamelogic.userinput.Gamer;
+import game.main.gamelogic.world.*;
 import game.main.utils.Touch;
 import game.main.utils.TouchBuffer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,18 +26,21 @@ public class GLGameSession implements Runnable {
     protected volatile World world;
 
     protected final GLSurfaceView view;
-    protected final DrawingContext drawingContext;
+    protected final DrawingContext context;
 
+    protected Player currentPlayer;
 
     public GLGameSession(GLSurfaceView view, DrawingContext drawingContext) {
         this.view = view;
-        this.drawingContext = drawingContext;
+        this.context = drawingContext;
         view.setOnTouchListener(touches);
+
     }
 
     @Override
     public void run() {
         int i = 0;
+        loadWorld();
         while (!finished) {
             while (running) {
                 repaint();
@@ -69,11 +74,11 @@ public class GLGameSession implements Runnable {
     public void repaint() {
         view.queueEvent(new Runnable() {
             public void run() {
-                drawingContext.repainted = false;
+                context.repainted = false;
                 view.requestRender();
             }
         });
-        while (running && !drawingContext.repainted) {
+        while (running && !context.repainted) {
             Thread.yield();
         }
     }
@@ -84,5 +89,35 @@ public class GLGameSession implements Runnable {
         } catch (InterruptedException e) {
             //nothing
         }
+    }
+
+    void loadWorld() {
+        final int worldH = 200, worldW = 240;
+
+        ArrayList<LandType> landscape = new ArrayList<LandType>();
+        landscape.add(new LandType(context.getSprite("grass"), 2, "Поле"));
+        landscape.add(new LandType(context.getSprite("grass"), 4, "Лес", context.getSprite("forest")));
+        landscape.add(new LandType(context.getSprite("hill"), 4, "Холм"));
+
+        landscape.get(2).landUpgrades.add(new LandUpgrade(context.getSprite("windmill"), "windmill"));
+        landscape.get(0).landUpgrades.add(new LandUpgrade(context.getSprite("field"), "field"));
+
+        Settlement.initGL(context);
+
+        world = new World(worldW, worldH, landscape);
+
+        Country country = new Country(world, 1);
+
+        UnitType crusader = new UnitType(4, 2, 0, context.getSprite("crusader"));
+        country.createUnit(crusader, 2, 2);
+        country.createUnit(crusader, 4, 4);
+
+        world.map.getCell(2, 2).getUnit().buildCastle().apply();
+        new Village(country, 4, 4);
+
+        world.addPlayer(new Gamer(null , country));
+
+        currentPlayer = world.getNextPlayer();
+        currentPlayer = world.getNextPlayer();
     }
 }

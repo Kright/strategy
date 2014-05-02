@@ -31,8 +31,11 @@ public class DrawingContext {
         synchronized (sprites) {
             TextureSprite.SpriteFactory sp = new TextureSprite.SpriteFactory(1024);
             sp.setSpriteDefaultSize(192, 128);
-            sp.addSpritesLine(sprites, 0, 0, 192, 0, new String[]
-                    {"grass", "hill", "village", "castle", "shadow"});
+            sp.addSpritesLine(sprites, 0, 0, 0, 128, new String[]
+                    {"grass", "hill", "village", "castle", "shadow", "windmill", "field", "crusader"});
+            sp.addSpritesLine(sprites, 1024 - 312, 0, 0, 120, new String[]
+                    {"road100", "road010", "road001", "road110", "road101", "road011", "road111"});
+            sp.addSpritesLine(sprites, 1024 - 240, 1024 - 160, 0, 0, new String[]{"forest"});
         }
     }
 

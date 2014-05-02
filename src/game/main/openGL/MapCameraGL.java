@@ -1,5 +1,6 @@
 package game.main.openGL;
 
+import android.util.FloatMath;
 import game.main.gamelogic.world.Cell;
 import game.main.utils.Vector2f;
 
@@ -34,12 +35,16 @@ public class MapCameraGL {
 
     public MapCameraGL() {
         position = new Vector2f();
-        spriteSize = new Vector2f(0.1f, 0.1f);
+        spriteSize = new Vector2f();
     }
 
     public void scale(float mul, float screenRatio) {
-        spriteSize.y *= mul;
-        spriteSize.x = screenRatio * spriteSize.y;
+        setSpriteSize(spriteSize.y * mul, screenRatio);
+    }
+
+    public void setSpriteSize(float height, float screenRatio){
+        spriteSize.y = height;
+        spriteSize.x = spriteSize.y * 1.5f / screenRatio;
         dH = spriteSize.y * 0.75f;
     }
 
@@ -48,11 +53,11 @@ public class MapCameraGL {
      * @return y coordinate of map cell
      */
     public int getYonMap(float yCoord) {
-        return (int) ((position.y - yCoord) / dH);
+        return Math.round((position.y - yCoord) / dH);
     }
 
     public int getXonMap(float x, float y) {
-        return (int) ((position.x + x + spriteSize.x * 0.5f * getYonMap(y)) / spriteSize.x);
+        return Math.round((position.x + x + spriteSize.x * 0.5f * getYonMap(y)) / spriteSize.x);
     }
 
     /**
@@ -195,6 +200,68 @@ public class MapCameraGL {
             @Override
             public float getY() {
                 return getMapToY(y);
+            }
+
+            @Override
+            public void remove() {
+                //nothing
+            }
+        };
+    }
+
+    /**
+     * bounds may be not correct.
+     * minX < maxX
+     * minY < maxY
+     */
+    protected MapCameraGL.CellIterator getIterator2(/*final Map map, */final float minX,
+                                                   final float minY, final float maxX, final float maxY) {
+        return new MapCameraGL.CellIterator() {
+            private boolean hasNext;
+            private int dx,dy, maxDx, maxDy;
+
+            {
+                clearState();
+            }
+
+            @Override
+            public void clearState() {
+                hasNext = true;
+                dx = 0;
+                maxDx = (int)( (maxX-minY)/spriteSize.x);
+                maxDy = (int)( (maxY-minY)/dH);
+            }
+
+            private void incXY() {
+
+            }
+
+            @Override
+            public Iterator<Cell> iterator() {
+                return this;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return hasNext;
+            }
+
+            @Override
+            public Cell next() {
+                //Cell c = map.getCell(x, y);
+                incXY();
+                //return c;
+                return null;
+            }
+
+            @Override
+            public float getX(){
+                return 0;   //TODO
+            }
+
+            @Override
+            public float getY(){
+                return 0;   //TODO
             }
 
             @Override

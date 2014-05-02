@@ -115,9 +115,9 @@ public class GLGameSession implements Runnable {
         world.map.getCell(2, 2).getUnit().buildCastle().apply();
         new Village(country, 4, 4);
 
-        world.addPlayer(new Gamer(null , country));
+        //world.addPlayer(new Gamer(null , country));
 
-        currentPlayer = world.getNextPlayer();
-        currentPlayer = world.getNextPlayer();
+        //currentPlayer = world.getNextPlayer();
+        //currentPlayer = world.getNextPlayer();
     }
 }

@@ -22,7 +22,7 @@ class GLRenderer implements GLSurfaceView.Renderer {
 
     /**
      * screen coordinates:
-     * left & right:    -+screenRatio
+     * left & right:    -+1.0
      * up & down:       +-1.0
      */
     private float screenRatio;
@@ -85,10 +85,10 @@ class GLRenderer implements GLSurfaceView.Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
 
-        drawingContext.camera.scale(0.2f, screenRatio);
+        drawingContext.camera.setSpriteSize(0.05f, screenRatio);
         grid = drawingContext.camera.getTestGrid();
         //grid.tableLoad(grass);
-        float l = 0.6f;
+        float l = 0.9f;
         grid.mapTableLoad(drawingContext.camera.getIterator(-l, -l, l, l));
     }
 
@@ -128,7 +128,7 @@ class GLRenderer implements GLSurfaceView.Renderer {
         glDisableVertexAttribArray(shaderSprite.aTexturePosition);
 
         */
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 10; i++) {
             drawGrass();
         }
 

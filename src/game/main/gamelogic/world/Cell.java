@@ -4,6 +4,8 @@ package game.main.gamelogic.world;
 import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.iRender;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /*
@@ -12,6 +14,8 @@ import java.io.Serializable;
  * Находящиеся на ней юнит и поселение должны иметь ссылку на неё - потому что только клетка знает свои координаты.
  */
 public class Cell implements iRender, Comparable<Cell>, Serializable {
+    static float max, min, average; //вреия записи клетки
+    static int N;
     /*
     клетка карты, содержит всякую информацию - тип ландшафта, юнита, если он есть, улучшения и т.п.
     */
@@ -63,6 +67,20 @@ public class Cell implements iRender, Comparable<Cell>, Serializable {
      */
     public Cell getShadowded() {
         return shadowded ? this : new Cell(this);
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        N++;
+        long time1 = System.currentTimeMillis();
+        out.defaultWriteObject();
+        long time2 = System.currentTimeMillis();
+        float time = (float)(time2 - time1)/(float)1000;
+        if(N==1) max =min = average= time;
+        else {
+            if (time >max) max = time;
+            if (time <min ) min = time;
+            average=((N-1)*average + time)/N;
+        }
     }
 
     @Override

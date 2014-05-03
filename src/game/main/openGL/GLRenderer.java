@@ -1,8 +1,8 @@
 package game.main.openGL;
 
-import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
+import game.main.gamelogic.world.Cell;
 import game.main.utils.FPS;
 import game.main.utils.Vector2f;
 
@@ -66,9 +66,6 @@ class GLRenderer implements GLSurfaceView.Renderer {
         fb2.put(new float[]{sprite.xLeft, sprite.yBottom, sprite.xRight, sprite.yBottom, sprite.xRight, sprite.yTop,
                 sprite.xLeft, sprite.yBottom, sprite.xRight, sprite.yTop, sprite.xLeft, sprite.yTop});
 
-        int[] max = new int[1];
-        GLES20.glGetIntegerv(GL10.GL_MAX_TEXTURE_SIZE, max, 0);
-        Log.e("", "maxTextureSize = " + max[0]);
     }
 
     @Override
@@ -85,11 +82,14 @@ class GLRenderer implements GLSurfaceView.Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
 
-        drawingContext.camera.setSpriteSize(0.05f, screenRatio);
+        drawingContext.camera.setSpriteSize(0.1f, screenRatio);
         grid = drawingContext.camera.getTestGrid();
-        //grid.tableLoad(grass);
+
         float l = 0.9f;
-        grid.mapTableLoad(drawingContext.camera.getIterator(-l, -l, l, l));
+        while(drawingContext.getMap() == null){
+            Thread.yield();
+        }
+        grid.mapTableLoad(drawingContext.camera.getIterator(drawingContext.getMap(), -l, -l, l, l));
     }
 
     @Override
@@ -97,38 +97,25 @@ class GLRenderer implements GLSurfaceView.Renderer {
         glClearColor((float) (counter % 2), 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        /*
-        shaderSprite.use();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, drawingContext.textureHandle);
-        glUniform1i(shaderSprite.uSampler, 0);
-
-        fb2.position(0);
-        glVertexAttribPointer(shaderSprite.aTexturePosition, 2, GL_FLOAT, false, 8, fb2);
-        glEnableVertexAttribArray(shaderSprite.aTexturePosition);
-        {
-            fb.position(0);
-            glVertexAttribPointer(shaderSprite.aPosition, 2, GL_FLOAT, false, 8, fb);
-            glEnableVertexAttribArray(shaderSprite.aPosition);
-            {
-                glDrawArrays(GL_TRIANGLES, 0, 6);
+        grid.iterator.clearState();
+        float[] f = new float[grid.rectsNum*12];
+        int pos=0;
+        for (Cell c: grid.iterator){
+            try{
+            TextureSprite sp = (TextureSprite)c.land.sprite;
+                for(int i=0;i<12;i+=2){
+                    f[pos+i] = sp.xLeft;
+                    f[pos+i+1] = sp.yTop;
+                }
+            } catch (Exception ex){
+                //nothing
             }
-            glDisableVertexAttribArray(shaderSprite.aPosition);
+            pos+=12;
         }
+        grid.vertPos.position(0);
+        grid.vertPos.put(f);
 
-        {
-            fb3.position(0);
-            glVertexAttribPointer(shaderSprite.aPosition, 2, GL_FLOAT, false, 8, fb3);
-            glEnableVertexAttribArray(shaderSprite.aPosition);
-            {
-                glDrawArrays(GL_TRIANGLES, 0, 6);
-            }
-            glDisableVertexAttribArray(shaderSprite.aPosition);
-        }
-        glDisableVertexAttribArray(shaderSprite.aTexturePosition);
-
-        */
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             drawGrass();
         }
 

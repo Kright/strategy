@@ -1,6 +1,7 @@
 package game.main.openGL;
 
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import game.main.gamelogic.userinput.Gamer;
 import game.main.gamelogic.world.*;
 import game.main.utils.Touch;
@@ -34,7 +35,6 @@ public class GLGameSession implements Runnable {
         this.view = view;
         this.context = drawingContext;
         view.setOnTouchListener(touches);
-
     }
 
     @Override
@@ -106,18 +106,16 @@ public class GLGameSession implements Runnable {
 
         world = new World(worldW, worldH, landscape);
 
-        Country country = new Country(world, 1);
+        synchronized (world){
+            Country country = new Country(world, 1);
 
-        UnitType crusader = new UnitType(4, 2, 0, context.getSprite("crusader"));
-        country.createUnit(crusader, 2, 2);
-        country.createUnit(crusader, 4, 4);
+            UnitType crusader = new UnitType(4, 2, 0, context.getSprite("crusader"));
+            country.createUnit(crusader, 2, 2);
+            country.createUnit(crusader, 4, 4);
 
-        world.map.getCell(2, 2).getUnit().buildCastle().apply();
-        new Village(country, 4, 4);
+            context.setMap(world.map);
 
-        //world.addPlayer(new Gamer(null , country));
-
-        //currentPlayer = world.getNextPlayer();
-        //currentPlayer = world.getNextPlayer();
+            new Village(country, 4, 4);
+        }
     }
 }

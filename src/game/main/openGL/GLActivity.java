@@ -27,9 +27,18 @@ public class GLActivity extends Activity {
 
         DrawingContext drawingContext = new DrawingContext(getResources());
 
+        viewGL = new GLSurfaceView(this);
+
+        myLog("onCreate");
+        if (gameSession == null) {
+            myLog("gameSession is null, will create");
+            gameSession = new GLGameSession(viewGL, drawingContext);
+            Thread t = new Thread(gameSession);
+            t.start();
+        }
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 
-        viewGL = new GLSurfaceView(this);
         viewGL.setPreserveEGLContextOnPause(true);
         viewGL.setEGLContextClientVersion(2);
 
@@ -38,13 +47,6 @@ public class GLActivity extends Activity {
         viewGL.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
         setContentView(viewGL);
-        myLog("onCreate");
-        if (gameSession == null) {
-            myLog("gameSession is null, will create");
-            gameSession = new GLGameSession(viewGL, drawingContext);
-            Thread t = new Thread(gameSession);
-            t.start();
-        }
     }
 
     @Override

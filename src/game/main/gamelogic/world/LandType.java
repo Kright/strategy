@@ -10,7 +10,7 @@ import java.util.List;
  * тип ландшафта
  * Created by lgor on 31.12.13.
  */
-public class LandType implements iRender, ResourcesCounter.ResourcesProducer {
+public class LandType implements iRender {
     /*
     тип ландшафта
         его параметры, возможные улучшения, возможно картинка, но хочется несколько для разнообразия
@@ -21,7 +21,7 @@ public class LandType implements iRender, ResourcesCounter.ResourcesProducer {
     public final boolean accessable;
     //  Список возможных для данного типа местности улучшений. Может быть пустым.
     public final List<LandUpgrade> landUpgrades = new ArrayList<LandUpgrade>();
-    protected final iRender sprite;
+    public final iRender sprite;
     private iRender nextLayer;
 
     public LandType(iRender sprite, int movingCost, String name) {
@@ -40,12 +40,6 @@ public class LandType implements iRender, ResourcesCounter.ResourcesProducer {
     @Override
     public void render(RenderParams params) {
         sprite.render(params);
-    }
-
-    @Override
-    public void produce(ResourcesCounter counter) {
-        //TODO производство ресурсов в зависимости от типа поверхности
-        counter.food++;
     }
 
     /**

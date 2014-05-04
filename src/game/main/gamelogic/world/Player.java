@@ -10,12 +10,12 @@ import game.main.gamelogic.MapRender;
  */
 public abstract class Player {
 
-    protected final Country country;
-    protected final GameSession session;
+    public final Country country;
+    public GameSession session;
 
     public Player(GameSession session, Country country) {
-        this.country = country;
         this.session = session;
+        this.country = country;
     }
 
     public final void run(MapRender render) {

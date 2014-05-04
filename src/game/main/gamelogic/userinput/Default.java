@@ -1,37 +1,35 @@
 package game.main.gamelogic.userinput;
 
+import game.main.gamelogic.GameSession;
 import game.main.gamelogic.world.Cell;
 import game.main.utils.Touch;
 
 /**
- * дефолтное состояние интерфейса - ничего не нажато, никаких активных юнитов и прочего
- * Created by lgor on 18.04.14.
+ * дефолтное состояние - длёт нажатий на экран
+ * Created by lgor on 04.05.14.
  */
-class Default extends Gamer.State{
+class Default extends State {
 
-    public Default(Gamer gamer){
-        gamer.super();
-    }
-
-    public Default mustUpdate(){
-        needRepaint();
-        return this;
+    Default(Gamer gamer) {
+        super(gamer);
     }
 
     @Override
-    public Gamer.State getNext() {
-        while (noTouches()){    //TODO убрать 4 стрчоки, они для теста
-            repaint();
-            checkPause();
+    State getNext() {
+        if (gamer.session.mustUpdate) {
+            gamer.session.repaint();
         }
-        mayBeRepaint();
-        Touch t = waitTouch();
-        Cell c = getTrueCell(t);
-        if (c.hasUnit()){
-            return gamer().unitActivation.setUnit(c.getUnit());
+        if (gamer.session.touchBuffer.isEmpty()) {
+            GameSession.sleep(20);
+        } else {
+            Touch t = gamer.session.touchBuffer.getTouchWithoutRemove();
+            Cell c = getTrueCell(t);
+            if (c.hasUnit()) {
+                return gamer.unitFirstActivation.setUnit(c.getUnit());
+            } else {
+                return gamer.mapMoving;
+            }
         }
-        return gamer().mapMoving;
+        return gamer.defaultState;
     }
 }
-
-

@@ -1,59 +1,54 @@
 package game.main.gamelogic.userinput;
 
-import game.main.gamelogic.world.AlternativeWay;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Unit;
+import game.main.gamelogic.world.utils.AlternativeWay;
 import game.main.utils.Touch;
 
-import java.util.ArrayList;
-
 /**
- * повторное нажатие на активированного юнита.
- * Если нажать на доступное для движения поле - ходит, и если может ходить, остаётся выделенным.
- * иначе снимается выделение с юнита
- * Created by lgor on 18.04.14.
+ * "второе нажатие на юнита"
+ * при отпускании на клетке с этим юнитом выделение снимается
+ * Created by lgor on 04.05.14.
  */
 class UnitSecondActivation extends UnitActivation {
 
-    public UnitSecondActivation(Gamer gamer) {
+    UnitSecondActivation(Gamer gamer) {
         super(gamer);
     }
 
     public UnitSecondActivation set(Unit unit, AlternativeWay way) {
         this.unit = unit;
         this.way = way;
-        path = new ArrayList<Cell>();
-        return this;
-    }
-
-    public UnitSecondActivation set(Unit unit) {
-        this.unit = unit;
-        this.way = new AlternativeWay(unit.country.map.getTrueMap(), unit);
+        path.clear();
         return this;
     }
 
     @Override
-    public Gamer.State getNext() {
-        Touch t;
-        while (!(t = waitTouch()).firstTouch()) ;       //waiting first touch
+    State getNext() {
+        while (gamer.session.touchBuffer.isEmpty()) {
+            if (gamer.session.mustStop || !gamer.session.running) {
+                return gamer.defaultState;
+            }
+        }
+        Touch t = gamer.session.touchBuffer.getTouch();
         Cell c = getTrueCell(t);
         if (!way.isInto(c) && unit.getCell() != c) {
-            return gamer().defaultState.mustUpdate();
+            return gamer.screenUpdate;
         }
         t = changeFinalWay();
         c = getTrueCell(t);
         if (unit.getCell() == c) {
-            return gamer().defaultState.mustUpdate();
+            return gamer.screenUpdate;
         }
         if (way.isInto(c)) {
             way.getMoveTo(c).apply();
             if (!unit.hasMovementPoints()) {
-                return gamer().defaultState.mustUpdate();
+                return gamer.screenUpdate;
             }
-            way = new AlternativeWay(gamer().country.map.getTrueMap(), unit);
-            repaint();
+            way = new AlternativeWay(gamer.country.map.getTrueMap(), unit);
+            gamer.session.repaint();
             return this;
         }
-        return gamer().defaultState.mustUpdate();
+        return gamer.screenUpdate;
     }
 }

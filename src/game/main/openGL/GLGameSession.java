@@ -1,8 +1,6 @@
 package game.main.openGL;
 
 import android.opengl.GLSurfaceView;
-import android.util.Log;
-import game.main.gamelogic.userinput.Gamer;
 import game.main.gamelogic.world.*;
 import game.main.utils.Touch;
 import game.main.utils.TouchBuffer;

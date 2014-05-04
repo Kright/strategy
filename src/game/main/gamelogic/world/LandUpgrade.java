@@ -4,23 +4,18 @@ import game.main.utils.sprites.RenderParams;
 import game.main.utils.sprites.iRender;
 
 /**
+ * улучшение местности (мельница, поле и т.п.)
  * Created by Michael-PC on 10.04.14.
  */
-public class LandUpgrade implements iRender, ResourcesCounter.ResourcesProducer {
+public class LandUpgrade implements iRender{
 
     public final String name;
 
     protected final iRender sprite;
-    //private final int[] resources;
 
     public LandUpgrade(iRender sprite, String name) {
         this.sprite = sprite;
         this.name = name;
-    }
-
-    public void produce(ResourcesCounter counter) {
-        //counter.food += resources[0];
-        //counter.gold += resources[1];
     }
 
     public void render(RenderParams params) {

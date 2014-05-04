@@ -1,4 +1,6 @@
-package game.main.gamelogic.world;
+package game.main.gamelogic.world.utils;
+
+import game.main.gamelogic.world.Cell;
 
 import java.util.*;
 
@@ -6,7 +8,7 @@ import java.util.*;
  * Created by Michael-PC on 25.03.14.
  */
 public class LongWay {
-    protected final Map map;
+    protected final game.main.gamelogic.world.Map map;
     protected TreeSet<CellWay> open = new TreeSet<CellWay>();
     protected HashSet<Cell> openCell = new HashSet<Cell>();
     protected HashSet<Cell> closeCell = new HashSet<Cell>();
@@ -15,7 +17,7 @@ public class LongWay {
     protected CellWay cWTarget;
     protected boolean targetContained;
 
-    public LongWay(Map map, Cell A, Cell B) {
+    public LongWay(game.main.gamelogic.world.Map map, Cell A, Cell B) {
         this.map = map;
         target = B;
         open.add(new CellWay(A, null, hDistance(A, target), B.x - A.x, B.y - B.y));
@@ -82,7 +84,7 @@ public class LongWay {
 
 
     int hDistance(Cell c1, Cell c2) { // эвристическая функция расстояния
-        return (int) (2 * Map.getInterval(c1.x - c2.x, c1.y - c2.y)) + 2 * c1.getMovindCost();
+        return (int) (2 * game.main.gamelogic.world.Map.getInterval(c1.x - c2.x, c1.y - c2.y)) + 2 * c1.getMovindCost();
     }
 
 

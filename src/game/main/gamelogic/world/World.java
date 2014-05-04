@@ -1,8 +1,8 @@
 package game.main.gamelogic.world;
 
-import game.main.gamelogic.GameSession;
 import game.main.utils.CustomRandom;
 import game.main.utils.LinearCongruentialGenerator;
+import game.main.utils.sprites.SpriteBank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +23,16 @@ public class World {
     private int currentPlayer = -1;
     private CustomRandom random;
 
-    public World(int width, int height, List<LandType> types, GameSession session) {
-        random = session.random;
-        map = new Map(Map.getTestConstructor(width, height, types, random));
-        Action.init(this);
-        international = new Country(this, 0);
-    }
+    public SpriteBank spriteBank;
 
     public World(int width, int height, List<LandType> types) {
-        random = LinearCongruentialGenerator.getLikeNativeRandom();
-        map = new Map(Map.getTestConstructor(width, height, types, random));
+        this(Map.getTestConstructor(width, height, types, LinearCongruentialGenerator.getLikeNativeRandom()));
+    }
+
+    public World(Map.MapConstructor constructor){
         Action.init(this);
+        random = LinearCongruentialGenerator.getLikeNativeRandom();
+        map = new Map(constructor);
 
         international = new Country(this, 0);
     }

@@ -2,56 +2,62 @@ package game.main.gamelogic.userinput;
 
 import android.graphics.Canvas;
 import game.main.GUI.MapCamera;
+import game.main.gamelogic.GameSession;
 import game.main.gamelogic.MapRender;
-import game.main.gamelogic.world.AlternativeWay;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Unit;
+import game.main.gamelogic.world.utils.AlternativeWay;
 import game.main.utils.Touch;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Базовый класс для состояния с активным юнитом
- * В частности, здесь функции обновления пути и его рисования
- * Created by lgor on 19.04.14.
+ * абстрактный класс для удобства
+ * Created by lgor on 04.05.14.
  */
-abstract class UnitActivation extends Gamer.State {
+abstract class UnitActivation extends State {
 
     protected Unit unit;
     protected AlternativeWay way;
-    protected ArrayList<Cell> path;
+    protected ArrayList<Cell> path = new ArrayList<Cell>();
 
-    public UnitActivation(Gamer gamer) {
-        gamer.super();
-        path = new ArrayList<Cell>();
+    UnitActivation(Gamer gamer) {
+        super(gamer);
     }
 
     protected Touch changeFinalWay() {
         Cell c1 = unit.getCell();
         Cell c2;
         Touch t;
-        while (!(t = waitTouch()).lastTouch()) {
+        while (true) {
+            if (gamer.session.touchBuffer.isEmpty()) {
+                gamer.session.repaint();
+            }
+            while (gamer.session.touchBuffer.isEmpty()) {
+                GameSession.sleep(20);
+            }
+            t = gamer.session.touchBuffer.getTouch();
             c2 = getTrueCell(t);
             if (c1 != c2) {
-                mayBeRepaint(); //при вызове waitTouch будет вызван repaint(), если не будет новых событий нажатия
                 path.clear();
                 c1 = c2;
                 if (way.isInto(c2)) {
                     way.getWayTo(path, c2);
                 }
             }
+            if (t.lastTouch()) {
+                path.clear();
+                return t;
+            }
         }
-        path.clear();
-        return t;
     }
 
     @Override
     public void paint(Canvas canvas, MapRender render) {
-        MapCamera.CellIterator iterator = camera().initRender(canvas, getMap());
-        camera().drawLands(getMap(), iterator);
-        way.render(camera(), canvas);
-        camera().renderPath(path);
-        camera().drawUnits(iterator);
+        MapCamera.CellIterator iterator = gamer.camera.initRender(canvas, gamer.country.map);
+        gamer.camera.drawLands(gamer.country.map, iterator);
+        way.render(gamer.camera, canvas);
+        gamer.camera.renderPath(path);
+        gamer.camera.drawUnits(iterator);
     }
 }

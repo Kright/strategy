@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import game.main.gamelogic.world.Map;
+import game.main.gamelogic.world.utils.GameProperties;
 import game.main.utils.sprites.SpriteBank;
 
 /**

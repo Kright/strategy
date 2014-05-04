@@ -3,34 +3,38 @@ package game.main.gamelogic.userinput;
 import android.util.FloatMath;
 
 /**
- * перемещении камеры с уменьшающейся скоростью
- * Created by lgor on 18.04.14.
+ * движение камеры по инерции после отпускания
+ * прекращается, если вдруг появляется нажатия на экран или становистя слишком маленькой скорость
+ * Created by lgor on 04.05.14.
  */
-class CameraInertia extends Gamer.State{
+class CameraInertia extends State {
 
-    public CameraInertia(Gamer gamer){
-        gamer.super();
+    CameraInertia(Gamer gamer) {
+        super(gamer);
     }
 
     static float k = 0.9f;
     float dx, dy, minV2;
 
     public CameraInertia setSpeed(float vx, float vy){
-        //TODO
         dx = vx;
         dy = vy;
-        minV2 = 50 * FloatMath.sqrt(camera().getScreenWidth() / 1920f);
+        minV2 = 50 * FloatMath.sqrt(gamer.camera.getScreenWidth() / 1920f);
         return this;
     }
 
     @Override
-    public Gamer.State getNext() {
-        while( noTouches() && MapMoving.len2(dx, dy) > minV2 && !checkPause()){
-            dx *= k;
-            dy *= k;
-            camera().move(dx, dy);
-            repaint();
+    State getNext() {
+        if (!gamer.session.touchBuffer.isEmpty() || !gamer.session.running){
+            return gamer.screenUpdate;
         }
-        return gamer().defaultState;
+        dx *= k;
+        dy *= k;
+        gamer.camera.move(dx, dy);
+        gamer.session.repaint();
+        if (MapMoving.len2(dx, dy) > minV2){
+            return this.setSpeed(dx, dy);
+        }
+        return gamer.defaultState;
     }
 }

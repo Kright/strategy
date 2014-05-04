@@ -1,4 +1,4 @@
-package game.main.gamelogic;
+package game.main.gamelogic.world.utils;
 
 /**
  * игровые настройки
@@ -10,11 +10,6 @@ public class GameProperties {
      * рисовать ли на карте границы ячеек.
      */
     public boolean renderBorders = false;
-
-    /**
-     * если ничего не произошло, картинка на экране не перерисовывается
-     */
-    public boolean powerSaving = false;
 
     /**
      * показывать ли количество кадров в секунду

@@ -3,14 +3,14 @@ package game.main.gamelogic;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import game.main.ActivityS;
 import game.main.GUI.MapCamera;
 import game.main.GUI.iRenderFeature;
-import game.main.MapActivity;
 import game.main.gamelogic.world.Cell;
 import game.main.gamelogic.world.Map;
 import game.main.gamelogic.world.Settlement;
+import game.main.gamelogic.world.utils.GameProperties;
 import game.main.utils.sprites.RenderParams;
-import game.main.utils.sprites.Sprite;
 import game.main.utils.sprites.SpriteBank;
 import game.main.utils.sprites.iRender;
 
@@ -31,7 +31,7 @@ public class MapRender extends MapCamera {
         super(spriteHeight / 2 * 3, spriteHeight);
         this.properties = properties;
         renderParams = new RenderParams(new Paint());
-        renderParams.paint.setTypeface(MapActivity.font);
+        renderParams.paint.setTypeface(ActivityS.font);
         renderParams.paint.setTextSize(36);
         renderParams.paint.setColor(0xFF000055);
         roads = new iRender[]{sprites.getSprite("road100"), sprites.getSprite("road010"),

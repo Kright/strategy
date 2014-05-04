@@ -1,4 +1,6 @@
-package game.main.gamelogic.world;
+package game.main.gamelogic.world.utils;
+
+import game.main.gamelogic.world.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

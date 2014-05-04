@@ -1,174 +1,122 @@
 package game.main.gamelogic;
 
-import android.content.res.Resources;
 import android.graphics.Canvas;
-import game.main.GameThread;
-import game.main.gamelogic.userinput.Gamer;
-import game.main.gamelogic.world.*;
-import game.main.utils.CustomRandom;
-import game.main.utils.LinearCongruentialGenerator;
-import game.main.utils.Touch;
+import android.view.SurfaceHolder;
+import game.main.gamelogic.world.Player;
+import game.main.gamelogic.world.World;
+import game.main.gamelogic.world.utils.GameProperties;
+import game.main.gamelogic.world.utils.iWorldLoader;
+import game.main.utils.TouchBuffer;
 import game.main.utils.sprites.SpriteBank;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * main() - главная часть программы, repaint() - вызов, после которого, если возможно, будет вызван paint()
- * Created by lgor on 02.04.14.
+ * альтернативная реализация (я надеюсь ,в ней будет меньше всего лишнего)
+ * внутри есть поток-демон, который сам запускается и останавливается.
+ * Теоретически, он может работать даже когда приложение свернуто.
+ * Например, сохраняться в фоне.
+ * Created by lgor on 03.05.14.
  */
-public class GameSession {
+public class GameSession implements Runnable {
 
-    public final CustomRandom random = LinearCongruentialGenerator.getLikeNativeRandom();
+    public final TouchBuffer touchBuffer;
 
-    protected volatile GameThread thread;
-    protected final Resources resources;
-    protected SpriteBank sprites;
+    protected volatile Thread me = null;
+    public volatile boolean running = false;
+    public volatile boolean mustStop = false;
+    public volatile boolean mustUpdate = false;
 
-    protected boolean notFinished = true;
+    private volatile SurfaceHolder holder;
+    private final iWorldLoader loader;
+    private World world;
+    private final SpriteBank spriteBank;
+
+    private Player currentPlayer;
+    private MapRender mapRender;
     public GameProperties properties;
 
-    protected World world;
-    protected MapRender render;
-
-    public Player currentPlayer;
-
-    public GameSession(Resources resources) {
-        this.resources = resources;
+    public GameSession(iWorldLoader loader, SpriteBank spriteBank) {
+        this.loader = loader;
+        touchBuffer = new TouchBuffer();
+        this.spriteBank = spriteBank;
     }
 
-    public void setCallback(GameThread thread) {
-        this.thread = thread;
-    }
-
+    @Override
     public void run() {
-        while (notFinished) {
-            currentPlayer.run(render);
+        world = loader.load(this);
+
+        properties = new GameProperties();
+        mapRender = new MapRender(128, spriteBank, properties);
+        currentPlayer = world.getNextPlayer();
+
+        while (true) {
+            currentPlayer.run(mapRender);
+            if (mustStop) {
+                break;
+                //если игрок завершит ход после того, как мы захотим закрыть приложение, сохранится, что ход не завершён
+            }
             currentPlayer = world.getNextPlayer();
         }
+
+        loader.save(world);
     }
 
-    public void paint(Canvas canvas) {
-        currentPlayer.paint(canvas, render);
+    public void render(Canvas canvas) {
+        currentPlayer.paint(canvas, mapRender);
     }
 
-    /**
-     * приложение было свёрнуто и снова открыто.
-     * обновляем картинку на экране
-     */
-    public void resume() {
-        sprites.load();
-        while (!repaint()) {
-            sleep(20);
-            Thread.yield();
+    public void onResume(SurfaceHolder holder) {
+        this.holder = holder;
+        this.running = true;
+        if (me == null) {
+            me = new Thread(this);
+            me.setDaemon(true);
+            me.start();
         }
+        mustUpdate = true;
+    }
+
+    public void onPause() {
+        this.running = false;
     }
 
     /**
-     * вызывается перед тем, как приложение будет поставлено на паузу
+     * ждёт, когда поток остановится
      */
-    public void pause() {
-        save();
-    }
-
-    /**
-     * сохранение gameSession в долговременную память
-     */
-    public void save() {
-
-    }
-
-    /**
-     * @param need - нуждается ли, по мнению вызывающего, экран приложения в перерисовке
-     */
-    public void needUpdate(boolean need) {
-        if (need) {
-            screenUpdated = false;
-        }
-    }
-
-    /**
-     * @return успешность последнего обновления экрана
-     */
-    public boolean screenNotUpdated() {
-        return !screenUpdated;
-    }
-
-    private boolean screenUpdated = false;
-
-    /**
-     * если ничего не изменилось и режим энергосбережения - пропускаем обновление экрана
-     * на этом вызове приложение может приостановиться, если его свернули
-     */
-    public void safeRepaint() {
-        checkPause();
-        if (!screenUpdated || !properties.powerSaving) {
-            screenUpdated = thread.repaint();
-        } else {
-            if (properties.sleepingInsteadRender > 0) {
-                sleep(properties.sleepingInsteadRender);
+    public void stop() {
+        mustStop = true;
+        running = false;
+        while (me.isAlive()) {
+            try {
+                me.join();
+            } catch (InterruptedException e) {
+                //nothing
             }
         }
     }
 
-    /**
-     * особое обновление экрана, нельзя прервать.
-     * Надо вручную использовать проверку на паузу в приложении.
-     *
-     * @return success of repaint() call;
-     */
     public boolean repaint() {
-        return screenUpdated = thread.repaint();
+        boolean success = false;
+        Canvas canvas = null;
+        try {                       // получаем объект Canvas и выполняем отрисовку
+            canvas = holder.lockCanvas(null);
+            if (canvas != null)
+                synchronized (holder) {
+                    render(canvas);
+                    success = true;
+                    mustUpdate = false;
+                }
+        } finally {
+            if (canvas != null) {   // отрисовка выполнена. выводим результат на экран
+                holder.unlockCanvasAndPost(canvas);
+            }
+        }
+        return success;
     }
 
-    public boolean checkPause() {
-        return thread.checkPause();
-    }
-
-    /**
-     * @return список нажатий на экран, произощедших после последнего вызова этой функции
-     */
-    public List<Touch> getTouches() {
-        List<Touch> touches = thread.getTouches();
-        needUpdate(!touches.isEmpty());
-        return touches;
-    }
-
-    public final void sleep(long ms) {
+    public static void sleep(long ms) {
         try {
             Thread.sleep(ms);
-        } catch (InterruptedException ex) {
+        } catch (InterruptedException e) {
         }
-    }
-
-    public void createNewWorld(int width, int height) {
-        properties = new GameProperties();
-
-        sprites = new SpriteBank(resources);
-
-        ArrayList<LandType> landscape = new ArrayList<LandType>();
-        landscape.add(new LandType(sprites.getSprite("grass"), 2, "Поле"));
-        landscape.add(new LandType(sprites.getSprite("grass"), 4, "Лес", sprites.getSprite("forest")));
-        landscape.add(new LandType(sprites.getSprite("hill"), 4, "Холм"));
-        landscape.get(2).landUpgrades.add(new LandUpgrade(sprites.getSprite("windmill"), "windmill"));
-        landscape.get(0).landUpgrades.add(new LandUpgrade(sprites.getSprite("field"), "field"));
-        Settlement.init(sprites);
-
-        render = new MapRender(128, sprites, properties);
-        //render = new BufferedRender(128, sprites, properties);
-
-        world = new World(width, height, landscape, this);
-
-        Country country = new Country(world, 1);
-
-        UnitType crusader = new UnitType(4, 2, 0, sprites.getSprite("crusader"));
-        country.createUnit(crusader, 2, 2);
-        country.createUnit(crusader, 4, 4);
-
-        world.map.getCell(2, 2).getUnit().buildCastle().apply();
-        new Village(country, 4, 4);
-        world.addPlayer(new Gamer(this, country));
-        currentPlayer = world.getNextPlayer();
-        currentPlayer = world.getNextPlayer();
     }
 }

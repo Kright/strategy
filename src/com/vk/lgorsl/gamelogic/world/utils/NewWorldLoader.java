@@ -1,4 +1,5 @@
 package com.vk.lgorsl.gamelogic.world.utils;
+import com.vk.lgorsl.GUI.BorderLine;
 import com.vk.lgorsl.gamelogic.GameSession;
 import com.vk.lgorsl.gamelogic.userinput.Gamer;
 import com.vk.lgorsl.gamelogic.world.*;
@@ -23,6 +24,7 @@ public class NewWorldLoader implements iWorldLoader {
 
     @Override
     public World load(GameSession session) {
+        BorderLine.circles = sprites.getCircles();
         ArrayList<LandType> landscape = new ArrayList<LandType>();
         landscape.add(new LandType(sprites.getSprite("grass"), 2, "Поле"));
         landscape.add(new LandType(sprites.getSprite("grass"), 4, "Лес", sprites.getSprite("forest")));

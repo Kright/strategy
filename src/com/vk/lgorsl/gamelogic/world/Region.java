@@ -1,7 +1,7 @@
 package com.vk.lgorsl.gamelogic.world;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
+import com.vk.lgorsl.GUI.BorderLine;
 import com.vk.lgorsl.GUI.MapCamera;
 import com.vk.lgorsl.GUI.iRenderFeature;
 
@@ -17,12 +17,17 @@ import java.util.List;
 public class Region implements iRenderFeature, Iterable<Cell> {
 
     protected List<Cell> cells;
-    protected Paint p;
+    private BorderLine borderLine;
+    private boolean borderInit = false;
 
     protected Region(List<Cell> cells) {
         this.cells = cells;
-        p = new Paint();
+        borderLine = new BorderLine();
         updateAfrerChange();
+    }
+
+    public void setColorNum(int colorNum) {
+        borderLine.setColorNum(colorNum);
     }
 
     /**
@@ -35,13 +40,14 @@ public class Region implements iRenderFeature, Iterable<Cell> {
     /**
      * обновление внутреннего состояния, после того как были добавлены или убраны новые клетки.
      */
-    public void updateAfrerChange(){
+    public void updateAfrerChange() {
         Collections.sort(cells);            //сортируем, чтобы работал бинарный поиск
+        borderInit = false;
     }
 
     @Override
     public void render(MapCamera camera, Canvas canvas) {
-        for (Cell c : cells) {
+        /*for (Cell c : cells) {
             float y = camera.MapToY(c.y);
             float x = camera.MapToX(c.x, c.y);
             float h = camera.getCellHeight();
@@ -52,7 +58,12 @@ public class Region implements iRenderFeature, Iterable<Cell> {
             canvas.drawLine(x + w, y + h / 4, x + w, y + h * 3 / 4, p);
             canvas.drawLine(x, y + h * 3 / 4, x + w / 2, y + h, p);
             canvas.drawLine(x + w / 2, y + h, x + w, y + h * 3 / 4, p);
+        }*/
+        if (!borderInit) {
+            borderInit = true;
+            borderLine.init(cells);
         }
+        borderLine.render(camera, canvas);
     }
 
     @Override

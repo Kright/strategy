@@ -1,8 +1,7 @@
-package com.vk.lgorsl.gamelogic.world;
+package com.vk.lgorsl.gamelogic;
 
 import android.graphics.Canvas;
-import com.vk.lgorsl.gamelogic.GameSession;
-import com.vk.lgorsl.gamelogic.MapRender;
+import com.vk.lgorsl.gamelogic.world.Country;
 
 /**
  * абстрактный класс игрока

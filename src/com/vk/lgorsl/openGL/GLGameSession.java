@@ -1,6 +1,7 @@
 package com.vk.lgorsl.openGL;
 
 import android.opengl.GLSurfaceView;
+import com.vk.lgorsl.gamelogic.Player;
 import com.vk.lgorsl.gamelogic.world.*;
 import com.vk.lgorsl.utils.Touch;
 import com.vk.lgorsl.utils.TouchBuffer;

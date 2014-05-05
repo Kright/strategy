@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import com.vk.lgorsl.gamelogic.GameSession;
 import com.vk.lgorsl.gamelogic.MapRender;
 import com.vk.lgorsl.gamelogic.world.Country;
-import com.vk.lgorsl.gamelogic.world.Player;
+import com.vk.lgorsl.gamelogic.Player;
 
 /**
  * интерфейс игрока

@@ -1,5 +1,6 @@
 package com.vk.lgorsl.gamelogic.world;
 
+import com.vk.lgorsl.gamelogic.Player;
 import com.vk.lgorsl.utils.CustomRandom;
 import com.vk.lgorsl.utils.LinearCongruentialGenerator;
 import com.vk.lgorsl.utils.sprites.SpriteBank;

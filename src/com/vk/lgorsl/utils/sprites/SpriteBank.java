@@ -38,6 +38,7 @@ public class SpriteBank {
     protected final Resources resources;
     protected final BitmapFactory.Options bmpOptions;
     private List<Data> spritesData = new ArrayList<Data>(32);
+    private Data[][] borders = new Data[4][12];
 
     public SpriteBank(Resources resources) {
         this.resources = resources;
@@ -53,6 +54,26 @@ public class SpriteBank {
         add(R.drawable.arrows, 0, 0, 64, 64, "↗", new int[]{96 + 16, -16, 192, 128});
         add(R.drawable.arrows, 128, 0, 128, 64, "→", new int[]{128, 32, 192, 128});
         add(R.drawable.arrows, 64, 0, 64, 64, "↘", new int[]{96 + 16, 64 + 16, 192, 128});
+
+        for (int i = 0; i < 4; i++) {
+            borders[i][0] = new Data("otop", R.drawable.circles, 48, i * 128 + 8, 96, 16, new int[]{48, 8, 192, 128});
+            borders[i][1] = new Data("otop&right", R.drawable.circles, 96 + 48, i * 128 + 16, 48, 48, new int[]{48 + 96, 16, 192, 128});
+            borders[i][2] = new Data("obottom&right", R.drawable.circles, 96 + 48, i * 128 + 64, 48, 48, new int[]{48 + 96, 16 + 48, 192, 128});
+            borders[i][3] = new Data("obottom", R.drawable.circles, 48, i * 128 + 104, 96, 16, new int[]{48, 104, 192, 128});
+            borders[i][4] = new Data("obottom&left", R.drawable.circles, 0, i * 128 + 64, 48, 48, new int[]{0, 64, 192, 128});
+            borders[i][5] = new Data("otop&left", R.drawable.circles, 0, i * 128 + 16, 48, 48, new int[]{0, 16, 192, 128});
+
+            borders[i][6] = new Data("Otop", R.drawable.circles, 192 + 56, i * 128, 96, 16, new int[]{48, 0, 192, 128});
+            borders[i][7] = new Data("Otop&right", R.drawable.circles, 192 + 8 + 96 + 48, i * 128 + 8, 56, 56, new int[]{96 + 48, 8, 192, 128});
+            borders[i][8] = new Data("Obottom&right", R.drawable.circles, 192 + 8 + 96 + 48, i * 128 + 64, 56, 56, new int[]{96 + 48, 64, 192, 128});
+            borders[i][9] = new Data("Obottom", R.drawable.circles, 192 + 56, i * 128 + 128 - 16, 96, 16, new int[]{48, 128 - 16, 192, 128});
+            borders[i][10] = new Data("Obottom&left", R.drawable.circles, 192, i * 128 + 64, 56, 56, new int[]{-8, 64, 192, 128});
+            borders[i][11] = new Data("Otop&left", R.drawable.circles, 192, i * 128 + 8, 56, 56, new int[]{-8, 8, 192, 128});
+
+            for (int j = 0; j < 12; j++) {
+                spritesData.add(borders[i][j]);
+            }
+        }
         load();
     }
 
@@ -60,11 +81,11 @@ public class SpriteBank {
      * reloading bitmaps, на которые ссылаются прямоугольники
      */
     public void load() {
-        for(Data s: spritesData){
-            if (s.sprite.bmp!=null){
-                try{
+        for (Data s : spritesData) {
+            if (s.sprite.bmp != null) {
+                try {
                     s.sprite.bmp.recycle();
-                } catch (Exception ex){
+                } catch (Exception ex) {
                     //nothing
                 } finally {
                     s.sprite.bmp = null;
@@ -112,6 +133,16 @@ public class SpriteBank {
             }
         }
         throw new IllegalArgumentException("Sprite with name \"" + name + "\" doesn't exists");
+    }
+
+    public iRender[][] getCircles() {
+        iRender[][] result = new iRender[borders.length][borders[0].length];
+        for (int i = 0; i < borders.length; i++) {
+            for (int j = 0; j < borders[0].length; j++) {
+                result[i][j] = borders[i][j].sprite;
+            }
+        }
+        return result;
     }
 }
 

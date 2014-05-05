@@ -2,7 +2,6 @@ package com.vk.lgorsl.gamelogic;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
-import com.vk.lgorsl.gamelogic.world.Player;
 import com.vk.lgorsl.gamelogic.world.World;
 import com.vk.lgorsl.gamelogic.world.utils.GameProperties;
 import com.vk.lgorsl.gamelogic.world.utils.iWorldLoader;

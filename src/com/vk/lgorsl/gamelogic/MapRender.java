@@ -75,6 +75,9 @@ public class MapRender extends MapCamera {
     public void drawLands(Map map, CellIterator iter) {
         drawLandscapeAndRoads(map, iter, renderParams);
         drawFlora(iter, renderParams);
+        if (properties.renderBorders){
+            drawBorders(renderParams.canvas);
+        }
     }
 
     public void drawUnits(CellIterator iter) {
@@ -136,6 +139,10 @@ public class MapRender extends MapCamera {
         }
     }
 
+    /**
+     * рисует путь красными стрелочками
+     * @param path
+     */
     public void renderPath(List<Cell> path) {
         if (path.isEmpty())
             return;

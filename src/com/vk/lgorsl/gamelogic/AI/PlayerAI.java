@@ -1,6 +1,7 @@
 package com.vk.lgorsl.gamelogic.AI;
 
 import android.graphics.Canvas;
+import android.service.textservice.SpellCheckerService;
 import com.vk.lgorsl.gamelogic.GameSession;
 import com.vk.lgorsl.gamelogic.MapRender;
 import com.vk.lgorsl.gamelogic.world.Country;
@@ -18,11 +19,12 @@ public class PlayerAI extends Player{
 
     @Override
     protected void doTurn(MapRender render) {
-
+        GameSession.sleep(100);
+        session.repaint();
     }
 
     @Override
     public void paint(Canvas canvas, MapRender render) {
-
+        render.render(canvas, country.map.getTrueMap());
     }
 }

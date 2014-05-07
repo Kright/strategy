@@ -251,7 +251,6 @@ public class Map implements Iterable<Cell> {
             public Cell getCell(int x, int y) {
                 LandType type = types.get(rnd.get(types.size()));
                 Cell cell = new Cell(x, y, type, type.nextLayer());
-                cell.setRoad(rnd.get(2) == 0);
                 return cell;
             }
         };

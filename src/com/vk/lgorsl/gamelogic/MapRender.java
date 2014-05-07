@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import com.vk.lgorsl.ActivityS;
 import com.vk.lgorsl.GUI.MapCamera;
 import com.vk.lgorsl.GUI.iRenderFeature;
+import com.vk.lgorsl.gamelogic.world.Castle;
 import com.vk.lgorsl.gamelogic.world.Cell;
 import com.vk.lgorsl.gamelogic.world.Map;
 import com.vk.lgorsl.gamelogic.world.Settlement;
@@ -14,7 +15,10 @@ import com.vk.lgorsl.utils.sprites.RenderParams;
 import com.vk.lgorsl.utils.sprites.SpriteBank;
 import com.vk.lgorsl.utils.sprites.iRender;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * объект, который рисует карту и эффекты на ней
@@ -26,6 +30,7 @@ public class MapRender extends MapCamera {
     private final iRender[] roads, arrows;
     protected final GameProperties properties;
     private final Matrix mirror, identity;
+    private Set<Castle> castleSet;
 
     public MapRender(int spriteHeight, SpriteBank sprites, GameProperties properties) {
         super(spriteHeight / 2 * 3, spriteHeight);
@@ -41,6 +46,9 @@ public class MapRender extends MapCamera {
         identity = new Matrix();
         mirror = new Matrix();
         mirror.setScale(-1, 1);
+
+        Set<Castle> castleSet= new HashSet<Castle>();
+
     }
 
     public void render(Canvas canv, Map map) {
@@ -103,9 +111,16 @@ public class MapRender extends MapCamera {
     }
 
     private void drawFlora(CellIterator iterator, RenderParams renderParams) {
+        castleSet.clear();
         iterator.clearState();
         while (iterator.hasNext()) {
-            iterator.next().nextRender.render(renderParams);
+            Cell c = iterator.next();
+            c.nextRender.render(renderParams);
+            if(c.controlledByCastle()!=null)
+            castleSet.add(c.controlledByCastle());
+        }
+        for(Castle castle: castleSet){
+            castle.getControlledRegion().render(this, renderParams.canvas);
         }
     }
 

@@ -19,7 +19,7 @@ public class Town extends Settlement{
      */
     protected Town(Village village){
         super(village.country, village.cell);
-        country.map.addSettlement(this, cell.x, cell.y);
+        country.map.getTrueMap().addSettlement(this, cell.x, cell.y);
         fields = village.fields;
     }
 

@@ -28,6 +28,7 @@ public class Castle extends Settlement {
             }
         }
         region = new Region(near);
+        region.setColorNum(country.id);
         this.country.map.addCellsNear(region.cells, cell.x, cell.y);
         Iterator<Cell> iterator = region.iterator();
         while (iterator.hasNext()) {      //замок может захватить только ничью территорию

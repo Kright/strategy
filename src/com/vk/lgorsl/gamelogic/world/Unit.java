@@ -67,6 +67,11 @@ public class Unit implements iRender {
         return type.pay;
     }
 
+
+    public boolean isFree(){
+        return (hasMovementPoints());
+    }
+
     /**
      * Этот метод используется вместо type.hitPoints, потому что юнит может быть улучшен - тогда хп будет больше
      */

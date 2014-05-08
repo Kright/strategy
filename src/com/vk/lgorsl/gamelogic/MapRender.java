@@ -30,7 +30,7 @@ public class MapRender extends MapCamera {
     private final iRender[] roads, arrows;
     protected final GameProperties properties;
     private final Matrix mirror, identity;
-    private Set<Castle> castleSet;
+    private Set<Castle> castleSet =new HashSet<Castle>();
 
     public MapRender(int spriteHeight, SpriteBank sprites, GameProperties properties) {
         super(spriteHeight / 2 * 3, spriteHeight);

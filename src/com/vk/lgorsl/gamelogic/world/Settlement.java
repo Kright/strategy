@@ -1,6 +1,5 @@
 package com.vk.lgorsl.gamelogic.world;
 
-import com.vk.lgorsl.gamelogic.world.utils.AlternativeWay;
 import com.vk.lgorsl.gamelogic.world.utils.LongWay;
 import com.vk.lgorsl.openGL.DrawingContext;
 import com.vk.lgorsl.utils.sprites.RenderParams;

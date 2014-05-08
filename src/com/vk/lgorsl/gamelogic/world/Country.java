@@ -3,6 +3,7 @@ package com.vk.lgorsl.gamelogic.world;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public class Country {
 
     protected List<Unit> units = new ArrayList<Unit>();
     protected List<Settlement> settlements = new ArrayList<Settlement>();
+    protected List<Unit> freeUnits = new ArrayList<Unit>();
 
     protected int gold; //казна
 
@@ -37,14 +39,27 @@ public class Country {
     public void startNextTurn() {
         map.listsUnitsSettlements(this.id, units, settlements);
         for (Settlement settlement : settlements) {
-            if (settlement.country==this) {
+            if (settlement.country == this) {
                 settlement.nextTurn();
                 gold += settlement.getTaxes();
             }
         }
         for (Unit unit : units) {
             gold -= unit.upkeep();
+            if (unit.isFree()) {
+                freeUnits.add(unit);
+            }
         }
+    }
+
+    public List<Unit> getFreeUnits() {
+        Iterator<Unit> units = freeUnits.iterator();
+        while (units.hasNext()) {
+            if (!units.next().isFree()) {
+                units.remove();
+            }
+        }
+        return freeUnits;
     }
 
     /**

@@ -31,12 +31,12 @@ class UnitFirstActivation extends UnitActivation {
         Cell c = getTrueCell(t);
         if (way.isInto(c)) {
             way.getMoveTo(c).apply();
-            return gamer.screenUpdate;
+            return gamer.checkEndOfTurn;
         }
         if (unit.getCell() == c) {
             gamer.session.repaint();
             return gamer.unitSecondActivation.set(unit, way);
         }
-        return gamer.screenUpdate;
+        return gamer.checkEndOfTurn;
     }
 }

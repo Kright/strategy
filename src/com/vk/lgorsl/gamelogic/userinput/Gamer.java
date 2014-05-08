@@ -22,6 +22,7 @@ public class Gamer extends Player {
     final ScreenUpdate screenUpdate = new ScreenUpdate(this);
     final UnitFirstActivation unitFirstActivation = new UnitFirstActivation(this);
     final UnitSecondActivation unitSecondActivation = new UnitSecondActivation(this);
+    final CheckEndOfTurn checkEndOfTurn = new CheckEndOfTurn(this);
 
     public Gamer(GameSession sessionS, Country country) {
         super(sessionS, country);

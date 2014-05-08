@@ -15,4 +15,9 @@ public class GameProperties {
      * показывать ли количество кадров в секунду
      */
     public boolean showFPS = true;
+
+    /**
+     * автоматический конец хода
+     */
+    public boolean autoEndOfTurn = true;
 }

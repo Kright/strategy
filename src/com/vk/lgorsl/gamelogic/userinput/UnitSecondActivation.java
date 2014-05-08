@@ -43,7 +43,7 @@ class UnitSecondActivation extends UnitActivation {
         if (way.isInto(c)) {
             way.getMoveTo(c).apply();
             if (!unit.hasMovementPoints()) {
-                return gamer.screenUpdate;
+                return gamer.checkEndOfTurn;
             }
             way = new AlternativeWay(gamer.country.map.getTrueMap(), unit);
             gamer.session.repaint();

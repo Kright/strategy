@@ -9,7 +9,7 @@ import com.vk.lgorsl.utils.sprites.iRender;
  * Клетка карты.
  * Находящиеся на ней юнит и поселение должны иметь ссылку на неё - потому что только клетка знает свои координаты.
  */
-public class Cell implements iRender, Comparable<Cell>{
+public class Cell implements iRender, Comparable<Cell> {
     /*
     клетка карты, содержит всякую информацию - тип ландшафта, юнита, если он есть, улучшения и т.п.
     */
@@ -71,15 +71,15 @@ public class Cell implements iRender, Comparable<Cell>{
 
     public void setLandUpgrade(LandUpgrade landUpgrade) {
         this.landUpgrade = landUpgrade;
-        if (landUpgrade!=null){
+        if (landUpgrade != null) {
             this.nextRender = landUpgrade;
-        } else{
+        } else {
             nextRender = land.nextLayer();
         }
     }
 
-    public boolean hasLandUpgrade(){
-        return (landUpgrade!= null);
+    public boolean hasLandUpgrade() {
+        return (landUpgrade != null);
     }
 
     /**
@@ -135,7 +135,8 @@ public class Cell implements iRender, Comparable<Cell>{
      * может ли Unit переместиться на эту клетку прямо сейчас (На ней нет юнитов, вражеских поселений и можно ходить)
      */
     public boolean canMove(Unit unit) {
-        return accessible() && !hasUnit() && (settlement == null || settlement.country == unit.country);
+        return accessible() && !hasUnit() && (settlement == null ||
+                settlement.country == unit.country || !(settlement instanceof Castle));
     }
 
     /**
@@ -177,7 +178,7 @@ public class Cell implements iRender, Comparable<Cell>{
 
     @Override
     public int hashCode() {
-        return  (y << 20) | (x << 8);
+        return (y << 20) | (x << 8);
     }
 
     /**
@@ -255,7 +256,7 @@ public class Cell implements iRender, Comparable<Cell>{
         }
 
         @Override
-        public boolean hasLandUpgrade(){
+        public boolean hasLandUpgrade() {
             return false;
         }
     };

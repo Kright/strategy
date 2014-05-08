@@ -27,7 +27,7 @@ public class BorderLine implements iRenderFeature {
     private Set<Integer> exists = new TreeSet<Integer>();
 
     public BorderLine() {
-        colorNum = 1;
+        colorNum = 0;
         renderParams = new RenderParams(new Paint());
     }
 
@@ -46,9 +46,6 @@ public class BorderLine implements iRenderFeature {
         }
     }
 
-    /**
-     * @param cells
-     */
     public void init(List<Cell> cells) {
         tasks.clear();
         exists.clear();
@@ -63,7 +60,7 @@ public class BorderLine implements iRenderFeature {
             b[3] = hasNeighbor(c.x, c.y + 1);
             b[4] = hasNeighbor(c.x - 1, c.y);
             b[5] = hasNeighbor(c.x - 1, c.y - 1);
-            if (b[0] && b[1] && b[2] && b[3] && b[5] && b[5]) continue;
+            if (b[0] && b[1] && b[2] && b[3] && b[4] && b[5]) continue;
             for (int i = 0; i < 6; i++) {
                 int j = (i + 1) % 6;
                 if (!b[i] && !b[j]) {

@@ -52,7 +52,7 @@ public class NewWorldLoader implements iWorldLoader {
     }
 
     @Override
-    public boolean save(World world) {
+    public boolean save(GameSession world) {
         return false;
     }
 }

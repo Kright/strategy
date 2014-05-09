@@ -12,8 +12,7 @@ public interface iWorldLoader {
     public World load(GameSession session);
 
     /**
-     * @param world which would be saved
      * @return success of saving
      */
-    public boolean save(World world);
+    public boolean save(GameSession session);
 }

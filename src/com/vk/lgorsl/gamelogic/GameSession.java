@@ -56,7 +56,7 @@ public class GameSession implements Runnable {
             currentPlayer = world.getNextPlayer();
         }
 
-        loader.save(world);
+        loader.save(this);
     }
 
     public void render(Canvas canvas) {

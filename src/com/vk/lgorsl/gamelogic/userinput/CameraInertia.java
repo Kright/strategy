@@ -25,13 +25,13 @@ class CameraInertia extends State {
 
     @Override
     State getNext() {
-        if (!gamer.session.touchBuffer.isEmpty() || !gamer.session.running){
+        if (!touchesIsEmpty() || !gameRunning()){
             return gamer.screenUpdate;
         }
         dx *= k;
         dy *= k;
         gamer.camera.move(dx, dy);
-        gamer.session.repaint();
+        repaint();
         if (MapMoving.len2(dx, dy) > minV2){
             return this.setSpeed(dx, dy);
         }

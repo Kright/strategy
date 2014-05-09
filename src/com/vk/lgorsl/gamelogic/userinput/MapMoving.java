@@ -20,13 +20,13 @@ class MapMoving extends State {
         float vx = 0, vy = 0;
         float vx2 = 0, vy2 = 0;
         for (; ; ) {
-            while (gamer.session.touchBuffer.isEmpty()) {
-                if (!gamer.session.running) {
+            while (touchesIsEmpty()) {
+                if (!gameRunning()) {
                     return gamer.screenUpdate;
                 }
                 GameSession.sleep(20);
             }
-            Touch t = gamer.session.touchBuffer.getTouch();
+            Touch t = touches().getTouch();
             if (t.count() == 1) {
                 vx -= t.dx();
                 vy -= t.dy();
@@ -41,12 +41,12 @@ class MapMoving extends State {
                         len2(t.oldX() - t2.oldX(), t.oldY() - t2.oldY()));
                 gamer.camera.scale(scale, (t.x + t2.x) / 2, (t.y + t2.y) / 2);
             }
-            if (gamer.session.touchBuffer.isEmpty()) {
+            if (touchesIsEmpty()) {
                 vx2 = vx;
                 vy2 = vy;
                 vx = 0;
                 vy = 0;
-                gamer.session.repaint();
+                repaint();
             }
         }
     }

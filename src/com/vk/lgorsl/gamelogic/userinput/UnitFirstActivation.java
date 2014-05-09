@@ -26,7 +26,7 @@ class UnitFirstActivation extends UnitActivation {
 
     @Override
     public State getNext() {
-        gamer.session.repaint();
+        repaint();
         Touch t = changeFinalWay();
         Cell c = getTrueCell(t);
         if (way.isInto(c)) {

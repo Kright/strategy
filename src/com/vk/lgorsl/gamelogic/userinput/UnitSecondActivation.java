@@ -25,12 +25,12 @@ class UnitSecondActivation extends UnitActivation {
 
     @Override
     State getNext() {
-        while (gamer.session.touchBuffer.isEmpty()) {
-            if (gamer.session.mustStop || !gamer.session.running) {
+        while (touchesIsEmpty()) {
+            if (gamer.session.mustStop || !gameRunning()) {
                 return gamer.defaultState;
             }
         }
-        Touch t = gamer.session.touchBuffer.getTouch();
+        Touch t = touches().getTouch();
         Cell c = getTrueCell(t);
         if (!way.isInto(c) && unit.getCell() != c) {
             return gamer.screenUpdate;
@@ -46,7 +46,7 @@ class UnitSecondActivation extends UnitActivation {
                 return gamer.checkEndOfTurn;
             }
             way = new AlternativeWay(gamer.country.map.getTrueMap(), unit);
-            gamer.session.repaint();
+            repaint();
             return this;
         }
         return gamer.screenUpdate;

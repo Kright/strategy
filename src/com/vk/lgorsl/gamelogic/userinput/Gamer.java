@@ -23,6 +23,7 @@ public class Gamer extends Player {
     final UnitFirstActivation unitFirstActivation = new UnitFirstActivation(this);
     final UnitSecondActivation unitSecondActivation = new UnitSecondActivation(this);
     final CheckEndOfTurn checkEndOfTurn = new CheckEndOfTurn(this);
+    final GUI gui = new GUI(this);
 
     public Gamer(GameSession sessionS, Country country) {
         super(sessionS, country);
@@ -32,7 +33,8 @@ public class Gamer extends Player {
     @Override
     protected void doTurn(MapRender render) {
         camera = render;
-        currentState = defaultState;
+        currentState = screenUpdate;
+        //currentState = defaultState;
         for(;;) {
             currentState = currentState.getNext();
             if (currentState == endOfTurn || session.mustStop){

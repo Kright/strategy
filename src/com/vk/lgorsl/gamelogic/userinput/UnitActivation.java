@@ -30,13 +30,13 @@ abstract class UnitActivation extends State {
         Cell c2;
         Touch t;
         while (true) {
-            if (gamer.session.touchBuffer.isEmpty()) {
-                gamer.session.repaint();
+            if (touchesIsEmpty()) {
+                repaint();
             }
-            while (gamer.session.touchBuffer.isEmpty()) {
+            while (touchesIsEmpty()) {
                 GameSession.sleep(20);
             }
-            t = gamer.session.touchBuffer.getTouch();
+            t = touches().getTouch();
             c2 = getTrueCell(t);
             if (c1 != c2) {
                 path.clear();

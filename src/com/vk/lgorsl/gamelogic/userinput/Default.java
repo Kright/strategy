@@ -17,12 +17,15 @@ class Default extends State {
     @Override
     State getNext() {
         if (gamer.session.mustUpdate) {
-            gamer.session.repaint();
+            repaint();
         }
-        if (gamer.session.touchBuffer.isEmpty()) {
+        if (touches().isEmpty()) {
             GameSession.sleep(20);
         } else {
-            Touch t = gamer.session.touchBuffer.getTouchWithoutRemove();
+            Touch t = touches().getTouchWithoutRemove();
+            if (gamer.gui.interestedInTouch(t)) {
+                return gamer.gui;
+            }
             Cell c = getTrueCell(t);
             if (c.hasUnit()) {
                 return gamer.unitFirstActivation.setUnit(c.getUnit());

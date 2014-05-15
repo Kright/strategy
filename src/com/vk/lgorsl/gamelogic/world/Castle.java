@@ -5,6 +5,7 @@ import com.vk.lgorsl.utils.sprites.iRender;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * замок
@@ -16,6 +17,8 @@ public class Castle extends Settlement {
     protected double levelOfTaxes;
     protected double cultureLevel;
     protected double efficiency;
+
+    protected List<Settlement> settlements = new ArrayList<Settlement>();
 
     public Castle(Country country, Cell cell) {
         super(country, cell);
@@ -31,17 +34,30 @@ public class Castle extends Settlement {
         region.setColorNum(country.id);
         this.country.map.addCellsNear(region.cells, cell.x, cell.y);
         Iterator<Cell> iterator = region.iterator();
+        Cell c;
         while (iterator.hasNext()) {      //замок может захватить только ничью территорию
-            if (iterator.next().controlledByCastle() != null) {
+            if ((c=iterator.next()).controlledByCastle() != null) {
                 iterator.remove();
+            }else{
+                c.setCastleControl(this);
+                if(c.hasSettlement()&&! (c.getSettlement() instanceof Castle)){
+                    settlements.add(c.getSettlement());
+                }
+
             }
+
         }
+
         region.updateAfrerChange();
+
         country.map.setCastleControll(this);
     }
 
     @Override
     public void nextTurn() {
+        for(Settlement s:settlements){
+            s.nextTurn();
+        }
     }
 
     /**
@@ -56,7 +72,11 @@ public class Castle extends Settlement {
      */
     @Override
     public int getTaxes() {
-        return 0; //и ещё вычесть стоимость содержания замка, которой пока нет
+        int taxes=0;
+        for(Settlement s:settlements){
+            taxes+=s.getTaxes();
+        }
+        return taxes; //и ещё вычесть стоимость содержания замка, которой пока нет
     }
 
     public void setLevelOfTaxes(double levelOfTaxes) {
@@ -83,6 +103,15 @@ public class Castle extends Settlement {
      */
     public double getEfficiency() {
         return efficiency;
+    }
+
+    /**
+     *
+     * @return возвращает поселения подконтрольные замку.
+     */
+
+    public List<Settlement> getSettlements(){
+        return settlements;
     }
 
     @Override

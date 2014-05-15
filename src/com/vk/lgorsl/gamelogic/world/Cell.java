@@ -37,7 +37,7 @@ public class Cell implements iRender, Comparable<Cell> {
     }
 
     /**
-     * используется только внутеннее клеткой
+     * используется только внутенним классом клетки
      */
     private Cell(int x, int y, LandType land) {
         this.x = x;

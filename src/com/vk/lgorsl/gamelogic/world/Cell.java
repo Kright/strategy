@@ -28,7 +28,7 @@ public class Cell implements iRender, Comparable<Cell> {
      * потому nextRender передаётся вручную
      */
 
-    Cell(int x, int y, LandType land, iRender nextRender) {
+    public Cell(int x, int y, LandType land, iRender nextRender) {
         this.x = x;
         this.y = y;
         this.land = land;

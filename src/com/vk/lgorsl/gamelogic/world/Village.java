@@ -131,7 +131,7 @@ public class Village extends Settlement {
      */
     public void becomeTown() {
         if(country.world.getRandom().get(pTown)!=0) return;
-        country.settlements.remove(this);
+        cell.controlledByCastle().settlements.remove(this);
         //TODO превращение в город, now town hasn't picture and won't builded
         //new Town(this);
     }

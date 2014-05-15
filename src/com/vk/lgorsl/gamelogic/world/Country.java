@@ -19,6 +19,7 @@ public class Country {
     protected final World world;
 
     protected List<Unit> units = new ArrayList<Unit>();
+    protected List<Castle> castles=new ArrayList<Castle>();
     protected List<Settlement> settlements = new ArrayList<Settlement>();
     protected List<Unit> freeUnits = new ArrayList<Unit>();
 
@@ -28,8 +29,8 @@ public class Country {
         this.id = id;
         this.world = world;
         this.map = world.map.createPlayerMap();
-        map.listsUnitsSettlements(this.id, units, settlements);
-        Log.d("action", "Country constructor : " + settlements.size() + " settlements, " + units.size() + " units");
+        map.listsUnitsCastles(this.id, units, castles);
+        Log.d("action", "Country constructor : " + castles.size() + " settlements, " + units.size() + " units");
     }
 
     /**
@@ -37,11 +38,11 @@ public class Country {
      * города что-нибудь производят, пополняется казна и т.п.
      */
     public void startNextTurn() {
-        map.listsUnitsSettlements(this.id, units, settlements);
-        for (Settlement settlement : settlements) {
-            if (settlement.country == this) {
-                settlement.nextTurn();
-                gold += settlement.getTaxes();
+        map.listsUnitsCastles(this.id, units, castles);
+        for (Castle castle : castles) {
+            if (castle.country == this) {
+                castle.nextTurn();
+                gold += castle.getTaxes();
             }
         }
         for (Unit unit : units) {

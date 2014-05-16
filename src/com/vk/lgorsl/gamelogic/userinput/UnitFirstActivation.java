@@ -18,10 +18,14 @@ class UnitFirstActivation extends UnitActivation {
         super(gamer);
     }
 
-    public UnitFirstActivation setUnit(Unit unit) {
+    public State setUnit(Unit unit) {
         this.unit = unit;
-        way = new AlternativeWay(getMap(), unit);
-        return this;
+        if (unit.hasMovementPoints()) {
+            way = new AlternativeWay(getMap(), unit);
+            return this;
+        } else {
+            return gamer.unmovingUnitActivation.setUnit(unit);
+        }
     }
 
     @Override

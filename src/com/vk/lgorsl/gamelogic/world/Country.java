@@ -20,7 +20,6 @@ public class Country {
 
     protected List<Unit> units = new ArrayList<Unit>();
     protected List<Castle> castles=new ArrayList<Castle>();
-    protected List<Settlement> settlements = new ArrayList<Settlement>();
     protected List<Unit> freeUnits = new ArrayList<Unit>();
 
     protected int gold; //казна
@@ -75,31 +74,6 @@ public class Country {
                 if (u.country == this) {
                     u.endTurn();
                 }
-            }
-        }
-    }
-
-    /**
-     * добавляет в список всех юнитов своей страны с карты
-     */
-    protected void addOwnUnits(List<Unit> units) {
-        for (Cell c : map) {
-            if (c.hasUnit()) {
-                Unit u = c.getUnit();
-                if (u.country == this) {
-                    units.add(u);
-                }
-            }
-        }
-    }
-
-    /**
-     * добавляет в список все поселения своей страны
-     */
-    protected void addOwnSettlements(List<Settlement> settlements) {
-        for (Cell c : map) {
-            if (c.hasSettlement() && c.getSettlement().country == this) {
-                settlements.add(c.getSettlement());
             }
         }
     }

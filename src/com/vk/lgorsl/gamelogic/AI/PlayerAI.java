@@ -1,11 +1,10 @@
 package com.vk.lgorsl.gamelogic.AI;
 
 import android.graphics.Canvas;
-import android.service.textservice.SpellCheckerService;
 import com.vk.lgorsl.gamelogic.GameSession;
 import com.vk.lgorsl.gamelogic.MapRender;
-import com.vk.lgorsl.gamelogic.world.Country;
 import com.vk.lgorsl.gamelogic.Player;
+import com.vk.lgorsl.gamelogic.world.Country;
 
 /**
  * игрок - искусственный интеллект

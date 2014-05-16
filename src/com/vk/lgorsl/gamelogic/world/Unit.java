@@ -63,12 +63,12 @@ public class Unit implements iRender {
     /**
      * @return unitType.pay: стоимость содержания юнита
      */
-    public int upkeep(){
+    public int upkeep() {
         return type.pay;
     }
 
 
-    public boolean isFree(){
+    public boolean isFree() {
         return (hasMovementPoints());
     }
 
@@ -102,16 +102,16 @@ public class Unit implements iRender {
 
     /**
      * отнимаются очки перемещения, если это возможно
+     *
      * @param count - отнимаемое количество очков
      */
     public void decreaseMovementPoints(int count) {
         if (movementPoints > count) {
             movementPoints -= count;
-        }else{
-        movementPoints = 0;
+        } else {
+            movementPoints = 0;
         }
-     }
-
+    }
 
     public int getMaxMovementPoints() {
         return type.movementPoints;

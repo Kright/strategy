@@ -15,7 +15,6 @@ import com.vk.lgorsl.utils.sprites.RenderParams;
 import com.vk.lgorsl.utils.sprites.SpriteBank;
 import com.vk.lgorsl.utils.sprites.iRender;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,9 +45,6 @@ public class MapRender extends MapCamera {
         identity = new Matrix();
         mirror = new Matrix();
         mirror.setScale(-1, 1);
-
-        Set<Castle> castleSet= new HashSet<Castle>();
-
     }
 
     public void render(Canvas canv, Map map) {
@@ -156,7 +152,7 @@ public class MapRender extends MapCamera {
 
     /**
      * рисует путь красными стрелочками
-     * @param path
+     * @param path - путь
      */
     public void renderPath(List<Cell> path) {
         if (path.isEmpty())

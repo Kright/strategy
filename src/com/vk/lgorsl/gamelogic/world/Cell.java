@@ -157,7 +157,7 @@ public class Cell implements iRender, Comparable<Cell> {
     }
 
     public String toString() {
-        return "" + x + " " + y;
+        return "(" + x + "," + y + ")";
     }
 
 

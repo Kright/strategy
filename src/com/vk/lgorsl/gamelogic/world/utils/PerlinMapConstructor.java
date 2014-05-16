@@ -16,6 +16,7 @@ public class PerlinMapConstructor implements Map.MapConstructor {
     private int height;
     private int numberOfOctavs;
     private List<LandType> types;
+    private double average;
 
 
     public PerlinMapConstructor(int width, int height, List<LandType> types){
@@ -23,6 +24,11 @@ public class PerlinMapConstructor implements Map.MapConstructor {
         this.height=height;
         this.numberOfOctavs=5;
         this.types= types;
+        for(int i=0;  i<width; i++)
+            for(int j=0; j<height; j++){
+                average+=perlinNoise(i,j);
+            }
+        average/=(width*height);
     }
 
     public int getWidth(){
@@ -35,7 +41,7 @@ public class PerlinMapConstructor implements Map.MapConstructor {
 
     public Cell getCell(int x, int y){
         LandType type=types.get(0); // Должно быть поле
-        if(perlinNoise(x,y)<0.59){
+        if(perlinNoise(x,y)<average){// 0.59
                 type=types.get(1);
         }
         Cell c= new Cell(x, y, type, type.nextLayer());

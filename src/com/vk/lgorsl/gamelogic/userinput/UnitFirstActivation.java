@@ -20,7 +20,7 @@ class UnitFirstActivation extends UnitActivation {
 
     public UnitFirstActivation setUnit(Unit unit) {
         this.unit = unit;
-        way = new AlternativeWay(gamer.country.map.getTrueMap(), unit);
+        way = new AlternativeWay(getMap(), unit);
         return this;
     }
 

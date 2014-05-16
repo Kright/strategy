@@ -45,7 +45,7 @@ class UnitSecondActivation extends UnitActivation {
             if (!unit.hasMovementPoints()) {
                 return gamer.checkEndOfTurn;
             }
-            way = new AlternativeWay(gamer.country.map.getTrueMap(), unit);
+            way = new AlternativeWay(getMap(), unit);
             repaint();
             return this;
         }

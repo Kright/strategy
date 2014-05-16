@@ -15,8 +15,8 @@ public class Village extends Settlement {
 
     public static final int[] maxWealth = new int[]{100, 200, 300, 400};    //small numbers only for test
     private static final int productivity = 10;     //доход на жителя
-    private static final int pNewSettlement= 10; // вероятность отпочковаться
-    private static final int pTown=20; // вероятность стать городом
+    private static final int pNewSettlement = 2; // вероятность отпочковаться
+    private static final int pTown = 20; // вероятность стать городом
 
     protected int population; // may be {1,2,3,4}
     protected int wealth; // благосостояние
@@ -130,7 +130,7 @@ public class Village extends Settlement {
      * set up Town
      */
     public void becomeTown() {
-        if(country.world.getRandom().get(pTown)!=0) return;
+        if (country.world.getRandom().get(pTown) != 0) return;
         cell.controlledByCastle().settlements.remove(this);
         //TODO превращение в город, now town hasn't picture and won't builded
         //new Town(this);
@@ -140,9 +140,10 @@ public class Village extends Settlement {
      * @return true if this village can and create new village.
      */
     private boolean foundNewSettlementNear() {
-        if (population < maxPopulation) return false; // если население меньше критического, то ничего не основываем
+        //  if (population < maxPopulation) return false; // если население меньше критического, то ничего не основываем
+        //э нет, основываем
 
-      if(country.world.getRandom().get(pNewSettlement)!=0) return false; // основываем деревушки с вероятностью 1/p
+        if (country.world.getRandom().get(pNewSettlement) != 0) return false; // основываем деревушки с вероятностью 1/p
 
         int x = cell.x + getRandomXY();
         int y = cell.y + getRandomXY();

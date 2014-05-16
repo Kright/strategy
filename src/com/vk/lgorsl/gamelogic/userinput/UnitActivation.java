@@ -5,6 +5,7 @@ import com.vk.lgorsl.GUI.MapCamera;
 import com.vk.lgorsl.gamelogic.GameSession;
 import com.vk.lgorsl.gamelogic.MapRender;
 import com.vk.lgorsl.gamelogic.world.Cell;
+import com.vk.lgorsl.gamelogic.world.Map;
 import com.vk.lgorsl.gamelogic.world.Unit;
 import com.vk.lgorsl.gamelogic.world.utils.AlternativeWay;
 import com.vk.lgorsl.utils.Touch;
@@ -23,6 +24,14 @@ abstract class UnitActivation extends State {
 
     UnitActivation(Gamer gamer) {
         super(gamer);
+    }
+
+    Map getMap(){
+        return gamer.country.map;
+    }
+
+    Cell getTrueCell(Touch t) {
+        return gamer.camera.getCell(getMap(), t.x, t.y);
     }
 
     protected Touch changeFinalWay() {

@@ -76,7 +76,7 @@ public class World {
      */
     protected Action lastAction = null;
 
-    protected void cancelPreviousAction() {
+    public void cancelPreviousAction() {
         if (lastAction == null) {
             return;
         }

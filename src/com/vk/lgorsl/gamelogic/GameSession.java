@@ -2,6 +2,7 @@ package com.vk.lgorsl.gamelogic;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
+import com.vk.lgorsl.GUI.panels.PanelsGUI;
 import com.vk.lgorsl.gamelogic.world.World;
 import com.vk.lgorsl.gamelogic.world.utils.GameProperties;
 import com.vk.lgorsl.gamelogic.world.utils.iWorldLoader;
@@ -43,8 +44,10 @@ public class GameSession implements Runnable {
     public void run() {
         world = loader.load(this);
 
+        PanelsGUI panelsGUI = new PanelsGUI(spriteBank);
+
         properties = new GameProperties();
-        mapRender = new MapRender(128, spriteBank, properties);
+        mapRender = new MapRender(128, spriteBank, properties, panelsGUI);
         currentPlayer = world.getNextPlayer();
 
         while (true) {
@@ -57,6 +60,10 @@ public class GameSession implements Runnable {
         }
 
         loader.save(this);
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public void render(Canvas canvas) {

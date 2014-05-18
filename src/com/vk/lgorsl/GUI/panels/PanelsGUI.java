@@ -1,6 +1,9 @@
-package com.vk.lgorsl.GUI;
+package com.vk.lgorsl.GUI.panels;
 
 import android.graphics.Canvas;
+import com.vk.lgorsl.GUI.MapCamera;
+import com.vk.lgorsl.GUI.iRenderFeature;
+import com.vk.lgorsl.utils.Touch;
 import com.vk.lgorsl.utils.sprites.SpriteBank;
 
 /**
@@ -13,6 +16,10 @@ public class PanelsGUI implements iRenderFeature {
 
     public PanelsGUI(SpriteBank spriteBank) {
         rightButtonsPanel = new RightButtonsPanel(spriteBank);
+    }
+
+    public boolean onTouch(Touch t) {
+        return rightButtonsPanel.onTouch(t);
     }
 
     @Override

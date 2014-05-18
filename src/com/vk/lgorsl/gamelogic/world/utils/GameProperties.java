@@ -19,5 +19,5 @@ public class GameProperties {
     /**
      * автоматический конец хода
      */
-    public boolean autoEndOfTurn = true;
+    public boolean autoEndOfTurn = false;
 }

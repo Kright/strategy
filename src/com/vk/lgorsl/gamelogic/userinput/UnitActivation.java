@@ -26,12 +26,23 @@ abstract class UnitActivation extends State {
         super(gamer);
     }
 
-    Map getMap(){
+    Map getMap() {
         return gamer.country.map;
     }
 
     Cell getTrueCell(Touch t) {
         return gamer.camera.getCell(getMap(), t.x, t.y);
+    }
+
+    public State setUnit(Unit unit) {
+        this.unit = unit;
+        if (unit.hasMovementPoints()) {
+            way = new AlternativeWay(getMap(), unit);
+            path.clear();
+            return this;
+        } else {
+            return gamer.unmovingUnitActivation.setUnit(unit);
+        }
     }
 
     protected Touch changeFinalWay() {

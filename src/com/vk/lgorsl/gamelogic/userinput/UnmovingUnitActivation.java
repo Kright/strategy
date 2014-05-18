@@ -50,9 +50,10 @@ class UnmovingUnitActivation extends State{
 
     @Override
     void paint(Canvas canvas, MapRender render) {
-        MapCamera.CellIterator iterator = gamer.camera.initRender(canvas, gamer.country.map);
-        gamer.camera.drawLands(gamer.country.map, iterator);
-        borderLine.render(gamer.camera, canvas);
-        gamer.camera.drawUnits(iterator);
+        MapCamera.CellIterator iterator = render.initRender(canvas, gamer.country.map);
+        render.drawLands(gamer.country.map, iterator);
+        borderLine.render(render, canvas);
+        render.drawUnits(iterator);
+        render.drawGUI();
     }
 }

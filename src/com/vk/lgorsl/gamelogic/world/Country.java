@@ -19,7 +19,7 @@ public class Country {
     protected final World world;
 
     protected List<Unit> units = new ArrayList<Unit>();
-    protected List<Castle> castles=new ArrayList<Castle>();
+    protected List<Castle> castles = new ArrayList<Castle>();
     protected List<Unit> freeUnits = new ArrayList<Unit>();
 
     protected int gold; //казна
@@ -57,6 +57,16 @@ public class Country {
         while (units.hasNext()) {
             if (!units.next().isFree()) {
                 units.remove();
+            }
+        }
+        if (freeUnits.isEmpty()) {
+            for (Cell c : map) {
+                if (c.hasUnit()) {
+                    Unit u = c.getUnit();
+                    if (u.country == this && u.isFree()) {
+                        freeUnits.add(u);
+                    }
+                }
             }
         }
         return freeUnits;

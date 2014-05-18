@@ -25,12 +25,16 @@ class UnitSecondActivation extends UnitActivation {
 
     @Override
     State getNext() {
+        repaint();
         while (touchesIsEmpty()) {
             if (gamer.session.mustStop || !gameRunning()) {
                 return gamer.defaultState;
             }
         }
         Touch t = touches().getTouch();
+        if (gamer.gui.interestedInTouch(t)){
+            return gamer.gui.set(unit);
+        }
         Cell c = getTrueCell(t);
         if (!way.isInto(c) && unit.getCell() != c) {
             return gamer.screenUpdate;

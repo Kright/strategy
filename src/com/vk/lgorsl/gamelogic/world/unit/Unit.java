@@ -1,5 +1,6 @@
-package com.vk.lgorsl.gamelogic.world;
+package com.vk.lgorsl.gamelogic.world.unit;
 
+import com.vk.lgorsl.gamelogic.world.*;
 import com.vk.lgorsl.utils.sprites.RenderParams;
 import com.vk.lgorsl.utils.sprites.iRender;
 
@@ -11,12 +12,13 @@ public class Unit implements iRender {
 
     public final UnitType type;
     public final Country country;   //страна
-    private int movementPoints;     //очки перемещения
-    private int hitPoints;
-    private Settlement home;
-    private Cell cell;      //при перемещении надо обновлять
+    int movementPoints;     //очки перемещения
+    int hitPoints;
+    Settlement home;
+    Cell cell;      //при перемещении надо обновлять
+    UnitTask task = UnitTask.emptyTask;  //задача, которую делает юнит
 
-    Unit(Country country, UnitType type) {
+    public Unit(Country country, UnitType type) {
         this.type = type;
         this.country = country;
         this.cell = Cell.getEmpty();
@@ -31,6 +33,7 @@ public class Unit implements iRender {
         this.hitPoints = u.hitPoints;
         this.home = u.home;
         this.cell = u.cell;
+        this.task = u.task;
     }
 
     public Unit getClone() {
@@ -45,10 +48,17 @@ public class Unit implements iRender {
             hitPoints++;
         }
         movementPoints = type.movementPoints;
-        /*
-        восполнение запасов хп, если ничего не сделал за прошлый ход.
-        строительство улучшений, если занят постройкой (рабочий например)
-         */
+    }
+
+    /**
+     * called when new turn started
+     */
+    public void startNextTurn() {
+        task = task.process(this);
+    }
+
+    public void setTask(UnitTask task) {
+        this.task = task.process(this);
     }
 
     public Cell getCell() {
@@ -67,9 +77,8 @@ public class Unit implements iRender {
         return type.pay;
     }
 
-
     public boolean isFree() {
-        return (hasMovementPoints());
+        return (task == UnitTask.emptyTask);
     }
 
     /**

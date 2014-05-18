@@ -5,7 +5,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import com.vk.lgorsl.ActivityS;
 import com.vk.lgorsl.GUI.MapCamera;
-import com.vk.lgorsl.GUI.PanelsGUI;
+import com.vk.lgorsl.GUI.panels.PanelsGUI;
 import com.vk.lgorsl.GUI.iRenderFeature;
 import com.vk.lgorsl.gamelogic.world.Castle;
 import com.vk.lgorsl.gamelogic.world.Cell;
@@ -34,7 +34,7 @@ public class MapRender extends MapCamera {
     private final Matrix mirror, identity;
     private Set<Castle> castleSet = new HashSet<Castle>();
 
-    public MapRender(int spriteHeight, SpriteBank sprites, GameProperties properties) {
+    public MapRender(int spriteHeight, SpriteBank sprites, GameProperties properties, PanelsGUI panelGUI) {
         super(spriteHeight / 2 * 3, spriteHeight);
         this.properties = properties;
 
@@ -52,7 +52,7 @@ public class MapRender extends MapCamera {
         mirror = new Matrix();
         mirror.setScale(-1, 1);
 
-        panelGUI = new PanelsGUI(sprites);
+        this.panelGUI = panelGUI;
     }
 
     public void render(Canvas canv, Map map) {

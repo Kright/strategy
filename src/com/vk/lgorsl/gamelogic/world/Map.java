@@ -1,5 +1,6 @@
 package com.vk.lgorsl.gamelogic.world;
 
+import com.vk.lgorsl.gamelogic.world.unit.Unit;
 import com.vk.lgorsl.utils.CustomRandom;
 
 import java.util.Collection;
@@ -250,8 +251,7 @@ public class Map implements Iterable<Cell> {
             @Override
             public Cell getCell(int x, int y) {
                 LandType type = types.get(rnd.get(types.size()));
-                Cell cell = new Cell(x, y, type, type.nextLayer());
-                return cell;
+                return new Cell(x, y, type, type.nextLayer());
             }
         };
     }

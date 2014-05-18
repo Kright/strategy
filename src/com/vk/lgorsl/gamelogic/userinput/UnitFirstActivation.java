@@ -1,8 +1,6 @@
 package com.vk.lgorsl.gamelogic.userinput;
 
 import com.vk.lgorsl.gamelogic.world.Cell;
-import com.vk.lgorsl.gamelogic.world.Unit;
-import com.vk.lgorsl.gamelogic.world.utils.AlternativeWay;
 import com.vk.lgorsl.utils.Touch;
 
 /**
@@ -16,16 +14,6 @@ class UnitFirstActivation extends UnitActivation {
 
     UnitFirstActivation(Gamer gamer) {
         super(gamer);
-    }
-
-    public State setUnit(Unit unit) {
-        this.unit = unit;
-        if (unit.hasMovementPoints()) {
-            way = new AlternativeWay(getMap(), unit);
-            return this;
-        } else {
-            return gamer.unmovingUnitActivation.setUnit(unit);
-        }
     }
 
     @Override

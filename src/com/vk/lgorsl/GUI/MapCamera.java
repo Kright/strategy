@@ -57,14 +57,14 @@ public class MapCamera {
     }
 
     /**
-     * отображение клетки карты на конечное ихображение
+     * отображение клетки карты на конечное изображение
      */
     final public int MapToY(int y) {
         return (int) (y * dy - position.y);
     }
 
     /**
-     * отображение клетки карты на конечное ихображение
+     * отображение клетки карты на конечное изображение
      */
     final public int MapToX(int x, int y) {
         return (int) (x * w - y * w * 0.5f - position.x);
@@ -120,6 +120,17 @@ public class MapCamera {
     final public void move(float dx, float dy) {
         position.x += dx;
         position.y += dy;
+    }
+
+    /**
+     * установить камеру
+     * @param cell - клетка, которая будет в центре обзора камеры
+     */
+    final public void setPosition(Cell cell){
+        int x = MapToX(cell.x, cell.y);
+        int y = MapToY(cell.y);
+        position.x = x - screenW/2+(int)w/2;
+        position.y = y - screenW/2+(int)h/2;
     }
 
     //если камера уползла за край карты, двигаем её обратно

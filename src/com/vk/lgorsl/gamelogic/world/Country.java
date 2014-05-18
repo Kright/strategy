@@ -1,6 +1,7 @@
 package com.vk.lgorsl.gamelogic.world;
 
 import android.util.Log;
+import com.vk.lgorsl.gamelogic.world.unit.Unit;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,7 +20,7 @@ public class Country {
     protected final World world;
 
     protected List<Unit> units = new ArrayList<Unit>();
-    protected List<Castle> castles=new ArrayList<Castle>();
+    protected List<Castle> castles = new ArrayList<Castle>();
     protected List<Unit> freeUnits = new ArrayList<Unit>();
 
     protected int gold; //казна
@@ -46,6 +47,7 @@ public class Country {
         }
         for (Unit unit : units) {
             gold -= unit.upkeep();
+            unit.startNextTurn();
             if (unit.isFree()) {
                 freeUnits.add(unit);
             }
@@ -57,6 +59,16 @@ public class Country {
         while (units.hasNext()) {
             if (!units.next().isFree()) {
                 units.remove();
+            }
+        }
+        if (freeUnits.isEmpty()) {
+            for (Cell c : map) {
+                if (c.hasUnit()) {
+                    Unit u = c.getUnit();
+                    if (u.country == this && u.isFree()) {
+                        freeUnits.add(u);
+                    }
+                }
             }
         }
         return freeUnits;

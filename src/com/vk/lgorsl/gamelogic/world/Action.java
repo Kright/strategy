@@ -1,11 +1,13 @@
 package com.vk.lgorsl.gamelogic.world;
 
+import com.vk.lgorsl.gamelogic.world.unit.Unit;
+
 /**
  * действие игрока над миром - команда юниту, выбор улучшения города, дипломатическое соглашение и т.п.
  * нужен единый интерфейс для возможности отмены действия в случае ошибки пользователя
- *
+ * <p/>
  * Action.addUnit(), Action.addSettlement() дают Action, добавляющие юнита или поселение на карту
- *
+ * <p/>
  * Created by lgor on 08.01.14.
  */
 public abstract class Action {
@@ -70,6 +72,19 @@ public abstract class Action {
 
         @Override
         protected void cancel() {
+        }
+    };
+
+    public static final Action UnCanceledAction = new Action() {
+        @Override
+        protected boolean doAction() {
+            //сообщаем, что успешно завершились, но при этом ничего не делаем и "затираем" пердыдущее action
+            return true;
+        }
+
+        @Override
+        protected void cancel() {
+
         }
     };
 

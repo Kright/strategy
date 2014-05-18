@@ -6,7 +6,7 @@ import com.vk.lgorsl.gamelogic.GameSession;
 import com.vk.lgorsl.gamelogic.MapRender;
 import com.vk.lgorsl.gamelogic.world.Cell;
 import com.vk.lgorsl.gamelogic.world.Map;
-import com.vk.lgorsl.gamelogic.world.Unit;
+import com.vk.lgorsl.gamelogic.world.unit.Unit;
 import com.vk.lgorsl.gamelogic.world.utils.AlternativeWay;
 import com.vk.lgorsl.utils.Touch;
 
@@ -36,6 +36,7 @@ abstract class UnitActivation extends State {
 
     public State setUnit(Unit unit) {
         this.unit = unit;
+        gamer.camera.panelGUI.leftButtonsPanel.setUnit(unit);
         if (unit.hasMovementPoints()) {
             way = new AlternativeWay(getMap(), unit);
             path.clear();

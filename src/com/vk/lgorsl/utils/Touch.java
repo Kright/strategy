@@ -10,6 +10,10 @@ import android.view.MotionEvent;
  */
 public class Touch {
 
+    public interface TouchListener {
+        boolean onTouch(Touch t);
+    }
+
     public static int
             PRESSED = 1,
             DRAGGED = 2,

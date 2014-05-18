@@ -1,7 +1,7 @@
 package com.vk.lgorsl.gamelogic.userinput;
 
 import com.vk.lgorsl.gamelogic.world.Cell;
-import com.vk.lgorsl.gamelogic.world.Unit;
+import com.vk.lgorsl.gamelogic.world.unit.Unit;
 import com.vk.lgorsl.gamelogic.world.utils.AlternativeWay;
 import com.vk.lgorsl.utils.Touch;
 
@@ -19,6 +19,7 @@ class UnitSecondActivation extends UnitActivation {
     public UnitSecondActivation set(Unit unit, AlternativeWay way) {
         this.unit = unit;
         this.way = way;
+        gamer.camera.panelGUI.leftButtonsPanel.setUnit(unit);
         path.clear();
         return this;
     }

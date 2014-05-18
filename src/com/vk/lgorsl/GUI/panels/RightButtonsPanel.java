@@ -15,7 +15,7 @@ import com.vk.lgorsl.utils.sprites.iRender;
  * "прижимается" к правому краю экрана, занимает всё пространство сверху донизу
  * Created by lgor on 18.05.14.
  */
-public class RightButtonsPanel implements iRenderFeature {
+public class RightButtonsPanel implements iRenderFeature, Touch.TouchListener{
 
     public enum ButtonState {
         empty,

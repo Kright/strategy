@@ -1,6 +1,7 @@
 package com.vk.lgorsl.gamelogic.world;
 
 import android.util.Log;
+import com.vk.lgorsl.gamelogic.world.unit.Unit;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -46,6 +47,7 @@ public class Country {
         }
         for (Unit unit : units) {
             gold -= unit.upkeep();
+            unit.startNextTurn();
             if (unit.isFree()) {
                 freeUnits.add(unit);
             }

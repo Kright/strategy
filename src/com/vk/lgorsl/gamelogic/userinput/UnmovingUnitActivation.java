@@ -6,7 +6,7 @@ import com.vk.lgorsl.GUI.MapCamera;
 import com.vk.lgorsl.gamelogic.GameSession;
 import com.vk.lgorsl.gamelogic.MapRender;
 import com.vk.lgorsl.gamelogic.world.Cell;
-import com.vk.lgorsl.gamelogic.world.Unit;
+import com.vk.lgorsl.gamelogic.world.unit.Unit;
 
 import java.util.ArrayList;
 

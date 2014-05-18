@@ -53,9 +53,20 @@ public class SpriteBank {
                 "road100", "road010", "road001", "road110", "road101", "road011", "road111"},
                 new int[]{-12, -44, 192, 128});
 
+        /*
         add(R.drawable.arrows, 0, 0, 64, 64, "↗", new int[]{96 + 16, -16, 192, 128});
         add(R.drawable.arrows, 128, 0, 128, 64, "→", new int[]{128, 32, 192, 128});
         add(R.drawable.arrows, 64, 0, 64, 64, "↘", new int[]{96 + 16, 64 + 16, 192, 128});
+        */
+
+        add(R.drawable.rounds, 0, 0, 64, 64, "↗", new int[]{96 + 16, -16, 192, 128});
+        add(R.drawable.rounds, 0, 64, 128, 64, "→", new int[]{128, 32, 192, 128});
+        add(R.drawable.rounds, 64, 0, 64, 64, "↘", new int[]{96 + 16, 64 + 16, 192, 128});
+
+        add(R.drawable.rounds, 0, 128, 128, 128, "buttonZz");
+        add(R.drawable.rounds, 0, 256, 128, 128, "buttonShield");
+        add(R.drawable.rounds, 0, 384, 128, 128, "buttonCastle");
+        add(R.drawable.rounds, 0, 512, 128, 128, "buttonShadow");
 
         add(R.drawable.circles4, 400, 0, 320, 1080, "rightButtonsPanel");
 

@@ -14,7 +14,7 @@ public class GameProperties {
     /**
      * показывать ли количество кадров в секунду
      */
-    public boolean showFPS = true;
+    public boolean showFPS = false;
 
     /**
      * автоматический конец хода

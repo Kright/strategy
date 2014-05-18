@@ -5,7 +5,7 @@ import com.vk.lgorsl.gamelogic.world.Cell;
 import com.vk.lgorsl.utils.Touch;
 
 /**
- * дефолтное состояние - длёт нажатий на экран
+ * дефолтное состояние - ждёт нажатий на экран
  * Created by lgor on 04.05.14.
  */
 class Default extends State {
@@ -28,7 +28,9 @@ class Default extends State {
             }
             Cell c = getTrueCell(t);
             if (c.hasUnit()) {
-                return gamer.unitFirstActivation.setUnit(c.getUnit());
+                if (c.getUnit().country == gamer.country){
+                    return gamer.unitFirstActivation.setUnit(c.getUnit());
+                }
             } else {
                 return gamer.mapMoving;
             }

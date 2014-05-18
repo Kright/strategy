@@ -47,18 +47,6 @@ public class Region implements iRenderFeature, Iterable<Cell> {
 
     @Override
     public void render(MapCamera camera, Canvas canvas) {
-        /*for (Cell c : cells) {
-            float y = camera.MapToY(c.y);
-            float x = camera.MapToX(c.x, c.y);
-            float h = camera.getCellHeight();
-            float w = camera.getCellWidth();
-            canvas.drawLine(x, y + h / 4, x + w / 2, y, p);
-            canvas.drawLine(x + w / 2, y, x + w, y + h / 4, p);
-            canvas.drawLine(x, y + h / 4, x, y + h * 3 / 4, p);
-            canvas.drawLine(x + w, y + h / 4, x + w, y + h * 3 / 4, p);
-            canvas.drawLine(x, y + h * 3 / 4, x + w / 2, y + h, p);
-            canvas.drawLine(x + w / 2, y + h, x + w, y + h * 3 / 4, p);
-        }*/
         if (!borderInit) {
             borderInit = true;
             borderLine.init(cells);
@@ -69,5 +57,17 @@ public class Region implements iRenderFeature, Iterable<Cell> {
     @Override
     public Iterator<Cell> iterator() {
         return cells.iterator();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("size = " + cells.size());
+        sb.append('{');
+        for(Cell c: cells){
+            sb.append(c.toString()+",");
+        }
+        sb.append('}');
+        return sb.toString();
     }
 }

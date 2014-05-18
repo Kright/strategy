@@ -28,9 +28,10 @@ public class World {
 
     public World(int width, int height, List<LandType> types) {
         this(Map.getTestConstructor(width, height, types, LinearCongruentialGenerator.getLikeNativeRandom()));
+        //this(new PerlinMapConstructor(width, height, types));
     }
 
-    public World(Map.MapConstructor constructor){
+    public World(Map.MapConstructor constructor) {
         Action.init(this);
         random = LinearCongruentialGenerator.getLikeNativeRandom();
         map = new Map(constructor);
@@ -38,7 +39,7 @@ public class World {
         international = new Country(this, 0);
     }
 
-    public CustomRandom getRandom(){
+    public CustomRandom getRandom() {
         return random;
     }
 
@@ -56,11 +57,11 @@ public class World {
      * called when all players end his turns
      * there may be increasing of settlements, which don't controlled by players
      */
-    public void endOfTurns(){
-        for(Cell c:map){
+    public void endOfTurns() {
+        for (Cell c : map) {
             if (!c.hasSettlement()) continue;
             Settlement s = c.getSettlement();
-            if (s.country == international){
+            if (s.country == international) {
                 s.nextTurn();
             }
         }

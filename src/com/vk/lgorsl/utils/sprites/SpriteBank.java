@@ -48,14 +48,18 @@ public class SpriteBank {
         addLine(R.drawable.lands, 192, 128, 192, 0, new String[]{"grass", "hill", "village", "castle", "shadow", "windmill", "field"});
         add(R.drawable.landl, 240, 160, "forest", new int[]{0, -32, 192, 128});
         add(R.drawable.xz2, 192, 128, "crusader");
+
         addLine(R.drawable.roads, 312, 120, 0, 120, new String[]{
                 "road100", "road010", "road001", "road110", "road101", "road011", "road111"},
                 new int[]{-12, -44, 192, 128});
+
         add(R.drawable.arrows, 0, 0, 64, 64, "↗", new int[]{96 + 16, -16, 192, 128});
         add(R.drawable.arrows, 128, 0, 128, 64, "→", new int[]{128, 32, 192, 128});
         add(R.drawable.arrows, 64, 0, 64, 64, "↘", new int[]{96 + 16, 64 + 16, 192, 128});
 
-        int Rc = R.drawable.circles3;
+        add(R.drawable.circles4, 400, 0, 320, 1080, "rightButtonsPanel");
+
+        int Rc = R.drawable.circles4;
         for (int i = 0; i < borders.length; i++) {
             borders[i][0] = new Data("otop", Rc, 48, i * 128 + 8, 96, 16, new int[]{48, 8, 192, 128});
             borders[i][1] = new Data("otop&right", Rc, 96 + 48, i * 128 + 16, 48, 48, new int[]{48 + 96, 16, 192, 128});
@@ -116,6 +120,10 @@ public class SpriteBank {
 
     protected void add(int bmpId, int w, int h, String name) {
         spritesData.add(new Data(name, bmpId, 0, 0, w, h));
+    }
+
+    protected void add(int bmpId, int x, int y, int w, int h, String name) {
+        spritesData.add(new Data(name, bmpId, x, y, w, h));
     }
 
     protected void add(int bmpId, int w, int h, String name, int[] k) {

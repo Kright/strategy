@@ -28,7 +28,7 @@ public class Cell implements iRender, Comparable<Cell> {
      * потому nextRender передаётся вручную
      */
 
-    Cell(int x, int y, LandType land, iRender nextRender) {
+    public Cell(int x, int y, LandType land, iRender nextRender) {
         this.x = x;
         this.y = y;
         this.land = land;
@@ -36,7 +36,10 @@ public class Cell implements iRender, Comparable<Cell> {
         this.nextRender = nextRender;
     }
 
-    Cell(int x, int y, LandType land) {
+    /**
+     * используется только внутенним классом клетки
+     */
+    private Cell(int x, int y, LandType land) {
         this.x = x;
         this.y = y;
         this.land = land;
@@ -154,7 +157,7 @@ public class Cell implements iRender, Comparable<Cell> {
     }
 
     public String toString() {
-        return "" + x + " " + y;
+        return "(" + x + "," + y + ")";
     }
 
 

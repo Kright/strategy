@@ -9,7 +9,7 @@ public class GameProperties {
     /**
      * рисовать ли на карте границы ячеек.
      */
-    public boolean renderBorders = true;
+    public boolean renderBorders = false;
 
     /**
      * показывать ли количество кадров в секунду

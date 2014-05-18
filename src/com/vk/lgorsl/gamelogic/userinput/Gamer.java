@@ -24,6 +24,7 @@ public class Gamer extends Player {
     final UnitSecondActivation unitSecondActivation = new UnitSecondActivation(this);
     final CheckEndOfTurn checkEndOfTurn = new CheckEndOfTurn(this);
     final GUI gui = new GUI(this);
+    final UnmovingUnitActivation unmovingUnitActivation = new UnmovingUnitActivation(this);
 
     public Gamer(GameSession sessionS, Country country) {
         super(sessionS, country);

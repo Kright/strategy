@@ -64,9 +64,10 @@ abstract class UnitActivation extends State {
     @Override
     public void paint(Canvas canvas, MapRender render) {
         MapCamera.CellIterator iterator = gamer.camera.initRender(canvas, gamer.country.map);
-        gamer.camera.drawLands(gamer.country.map, iterator);
-        way.render(gamer.camera, canvas);
-        gamer.camera.renderPath(path);
-        gamer.camera.drawUnits(iterator);
+        render.drawLands(gamer.country.map, iterator);
+        way.render(render, canvas);
+        render.renderPath(path);
+        render.drawUnits(iterator);
+        render.drawGUI();
     }
 }

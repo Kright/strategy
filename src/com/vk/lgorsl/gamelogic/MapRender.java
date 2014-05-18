@@ -5,6 +5,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import com.vk.lgorsl.ActivityS;
 import com.vk.lgorsl.GUI.MapCamera;
+import com.vk.lgorsl.GUI.PanelsGUI;
 import com.vk.lgorsl.GUI.iRenderFeature;
 import com.vk.lgorsl.gamelogic.world.Castle;
 import com.vk.lgorsl.gamelogic.world.Cell;
@@ -25,32 +26,40 @@ import java.util.Set;
  */
 public class MapRender extends MapCamera {
 
+    public final PanelsGUI panelGUI;
+
     protected final RenderParams renderParams;
     private final iRender[] roads, arrows;
     protected final GameProperties properties;
     private final Matrix mirror, identity;
-    private Set<Castle> castleSet =new HashSet<Castle>();
+    private Set<Castle> castleSet = new HashSet<Castle>();
 
     public MapRender(int spriteHeight, SpriteBank sprites, GameProperties properties) {
         super(spriteHeight / 2 * 3, spriteHeight);
         this.properties = properties;
+
         renderParams = new RenderParams(new Paint());
         renderParams.paint.setTypeface(ActivityS.font);
         renderParams.paint.setTextSize(36);
         renderParams.paint.setColor(0xFF000055);
+
         roads = new iRender[]{sprites.getSprite("road100"), sprites.getSprite("road010"),
                 sprites.getSprite("road110"), sprites.getSprite("road001"), sprites.getSprite("road101"),
                 sprites.getSprite("road011"), sprites.getSprite("road111")};
+
         arrows = new iRender[]{sprites.getSprite("↗"), sprites.getSprite("→"), sprites.getSprite("↘")};
         identity = new Matrix();
         mirror = new Matrix();
         mirror.setScale(-1, 1);
+
+        panelGUI = new PanelsGUI(sprites);
     }
 
     public void render(Canvas canv, Map map) {
         CellIterator iterator = initRender(canv, map);
         drawLands(map, iterator);
         drawUnits(iterator);
+        drawGUI();
     }
 
     /**
@@ -61,6 +70,7 @@ public class MapRender extends MapCamera {
         drawLands(map, iterator);
         feature.render(this, canv);
         drawUnits(iterator);
+        drawGUI();
     }
 
     /*
@@ -68,7 +78,8 @@ public class MapRender extends MapCamera {
      * путь юнита) и потом поверх - юнитов
      */
     public CellIterator initRender(Canvas canv, Map map) {
-        setScreenSize(canv.getWidth(), canv.getHeight());
+        setScreenSize(canv.getWidth() - panelGUI.rightButtonsPanel.getWidth(), canv.getHeight());
+
         checkPosition(screenW, screenH, map.width * w, map.height * dy + h - dy);
         renderParams.setCellSize((int) getCellWidth() + 1, (int) getCellHeight() + 1);
         renderParams.canvas = canv;
@@ -79,7 +90,7 @@ public class MapRender extends MapCamera {
     public void drawLands(Map map, CellIterator iter) {
         drawLandscapeAndRoads(map, iter, renderParams);
         drawFlora(iter, renderParams);
-        if (properties.renderBorders){
+        if (properties.renderBorders) {
             drawBorders(renderParams.canvas);
         }
     }
@@ -89,6 +100,10 @@ public class MapRender extends MapCamera {
         if (properties.showFPS) {
             renderParams.canvas.drawText("fps=" + fps.get(), 20, 30, renderParams.paint);
         }
+    }
+
+    public void drawGUI() {
+        panelGUI.render(this, renderParams.canvas);
     }
 
     private void drawLandscapeAndRoads(Map map, CellIterator iterator, RenderParams renderParams) {
@@ -112,10 +127,10 @@ public class MapRender extends MapCamera {
         while (iterator.hasNext()) {
             Cell c = iterator.next();
             c.nextRender.render(renderParams);
-            if(c.controlledByCastle()!=null)
-            castleSet.add(c.controlledByCastle());
+            if (c.controlledByCastle() != null)
+                castleSet.add(c.controlledByCastle());
         }
-        for(Castle castle: castleSet){
+        for (Castle castle : castleSet) {
             castle.getControlledRegion().render(this, renderParams.canvas);
         }
     }
@@ -152,6 +167,7 @@ public class MapRender extends MapCamera {
 
     /**
      * рисует путь красными стрелочками
+     *
      * @param path - путь
      */
     public void renderPath(List<Cell> path) {
@@ -170,7 +186,7 @@ public class MapRender extends MapCamera {
         }
         renderParams.canvas.setMatrix(mirror);
         f = path.get(0);
-        int w = - (int) getCellWidth();
+        int w = -(int) getCellWidth();
         for (int i = 1; i < path.size(); i++) {
             Cell s = path.get(i);
             int dx = s.x - f.x;

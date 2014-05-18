@@ -27,11 +27,12 @@ public class ActivityS extends Activity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         view = new SurfaceView(this);
+        setContentView(view);
+
         SpriteBank sp = new SpriteBank(getResources());
         if (session == null) {
             session = new GameSession(new NewWorldLoader(sp, 120, 140), sp);
         }
-        setContentView(view);
         view.setOnTouchListener(session.touchBuffer);
     }
 
@@ -43,7 +44,7 @@ public class ActivityS extends Activity {
 
     @Override
     protected void onPause() {
-        if (session!=null){
+        if (session != null) {
             session.onPause();
         }
         super.onPause();

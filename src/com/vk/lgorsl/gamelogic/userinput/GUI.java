@@ -1,5 +1,6 @@
 package com.vk.lgorsl.gamelogic.userinput;
 
+import com.vk.lgorsl.gamelogic.GameSession;
 import com.vk.lgorsl.utils.Touch;
 
 /**
@@ -8,9 +9,8 @@ import com.vk.lgorsl.utils.Touch;
  */
 class GUI extends State {
 
-    public boolean interestedInTouch(Touch t){
-        //если вернуть true, то у нас вызовут getNext(), где можно будет обработать нажатие на кнопочку.
-        return false;
+    public boolean interestedInTouch(Touch t) {
+        return gamer.camera.panelGUI.rightButtonsPanel.interestedInTouch(t);
     }
 
     GUI(Gamer gamer) {
@@ -19,6 +19,17 @@ class GUI extends State {
 
     @Override
     State getNext() {
+        for (; ; ) {
+            while (touchesIsEmpty()) {
+                if (!gameRunning()) {
+                    return gamer.screenUpdate;
+                }
+                GameSession.sleep(20);
+            }
+            if (touches().getTouch().lastTouch()){
+                break;
+            }
+        }
         return gamer.endOfTurn;
     }
 }

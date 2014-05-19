@@ -24,7 +24,8 @@ public class UnitType {
 
     public final iRender sprite;
 
-    public UnitType(int movementPoints, int hitPoints, int pay, iRender sprite) {
+    public UnitType(String name, int movementPoints, int hitPoints, int pay, iRender sprite) {
+        this.name = name;
         this.movementPoints = movementPoints;
         this.hitPoints = hitPoints;
         this.sprite = sprite;

@@ -55,12 +55,7 @@ public class Country {
     }
 
     public List<Unit> getFreeUnits() {
-        Iterator<Unit> units = freeUnits.iterator();
-        while (units.hasNext()) {
-            if (!units.next().isFree()) {
-                units.remove();
-            }
-        }
+        freeUnits.clear();
         if (freeUnits.isEmpty()) {
             for (Cell c : map) {
                 if (c.hasUnit()) {

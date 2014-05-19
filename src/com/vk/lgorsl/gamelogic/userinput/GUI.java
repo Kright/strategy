@@ -1,5 +1,6 @@
 package com.vk.lgorsl.gamelogic.userinput;
 
+import android.util.Log;
 import com.vk.lgorsl.gamelogic.GameSession;
 import com.vk.lgorsl.gamelogic.world.unit.Unit;
 import com.vk.lgorsl.gamelogic.world.unit.UnitTask;
@@ -43,13 +44,16 @@ class GUI extends State {
                 Touch t = touches().getTouch();
                 gamer.camera.panelGUI.onTouch(t);
                 if (t.lastTouch()) {
-                    if (gamer.camera.panelGUI.rightButtonsPanel.onTouch(t)) {
-                        return doActions();
+                    try {
+                        if (gamer.camera.panelGUI.rightButtonsPanel.onTouch(t)) {
+                            return doActions();
+                        }
+                        if (gamer.camera.panelGUI.leftButtonsPanel.onTouch(t)) {
+                            return doActionsLeft();
+                        }
+                    } catch (NullPointerException ex) {
+                        return gamer.screenUpdate;
                     }
-                    if (gamer.camera.panelGUI.leftButtonsPanel.onTouch(t)) {
-                        return doActionsLeft();
-                    }
-                    return gamer.screenUpdate;
                 }
             }
             repaint();
@@ -71,10 +75,19 @@ class GUI extends State {
                 if (free.isEmpty()) {
                     break;
                 }
-                Unit unit = free.get(0);
+                unit = free.get(0);
                 gamer.camera.setPosition(unit.getCell());
+                setGUIUnit(unit);
+                repaint();
+                while(!touchesIsEmpty()){
+                    touches().getTouch();
+                }
                 return gamer.unitSecondActivation.setUnit(unit);
             }
+
+            case empty:
+                break;
+
             default:
                 throw new UnsupportedOperationException("gamer.GUI : unknown button was pressed");
         }

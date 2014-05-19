@@ -56,6 +56,7 @@ public class RightButtonsPanel implements iRenderFeature, Touch.TouchListener{
      * @return последнюю нажатую кнопку или ButtonState.empty в случае некорректного нажатия
      */
     public ButtonState getLastPressedButton() {
+        activeNumber = -1;
         return lastPressed;
     }
 

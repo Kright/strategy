@@ -19,8 +19,9 @@ class UnitSecondActivation extends UnitActivation {
     public UnitSecondActivation set(Unit unit, AlternativeWay way) {
         this.unit = unit;
         this.way = way;
-        gamer.camera.panelGUI.leftButtonsPanel.setUnit(unit);
+        setGUIUnit(unit);
         path.clear();
+        repaint();
         return this;
     }
 
@@ -48,12 +49,14 @@ class UnitSecondActivation extends UnitActivation {
         if (way.isInto(c)) {
             way.getMoveTo(c).apply();
             if (!unit.hasMovementPoints()) {
+                setGUIUnit(unit);
                 return gamer.checkEndOfTurn;
             }
             way = new AlternativeWay(getMap(), unit);
             repaint();
             return this;
         }
+        setGUIUnit(unit);
         return gamer.screenUpdate;
     }
 }

@@ -14,6 +14,7 @@ class ScreenUpdate extends State {
 
     @Override
     State getNext() {
+        setGUIUnit(null);
         repaint();
         if (gamer.session.mustUpdate){
             GameSession.sleep(40);

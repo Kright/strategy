@@ -14,7 +14,6 @@ public class Unit implements iRender {
     public final Country country;   //страна
     int movementPoints;     //очки перемещения
     int hitPoints;
-    Settlement home;
     Cell cell;      //при перемещении надо обновлять
     UnitTask task = UnitTask.emptyTask;  //задача, которую делает юнит
 
@@ -29,9 +28,8 @@ public class Unit implements iRender {
     private Unit(Unit u) {
         this.type = u.type;
         this.country = u.country;
-        this.movementPoints = u.getMovementPoints();
+        this.movementPoints = u.movementPoints;
         this.hitPoints = u.hitPoints;
-        this.home = u.home;
         this.cell = u.cell;
         this.task = u.task;
     }
@@ -78,7 +76,7 @@ public class Unit implements iRender {
     }
 
     public boolean isFree() {
-        return (task == UnitTask.emptyTask);
+        return (task == UnitTask.emptyTask && hasMovementPoints());
     }
 
     /**
@@ -149,5 +147,10 @@ public class Unit implements iRender {
                 cell.setSettlement(null);
             }
         };
+    }
+
+    @Override
+    public String toString() {
+        return "type = " + type.name + ", position " + cell + ", movementPoints: " + getMovementPoints();
     }
 }

@@ -36,7 +36,7 @@ abstract class UnitActivation extends State {
 
     public State setUnit(Unit unit) {
         this.unit = unit;
-        gamer.camera.panelGUI.leftButtonsPanel.setUnit(unit);
+        setGUIUnit(unit);
         if (unit.hasMovementPoints()) {
             way = new AlternativeWay(getMap(), unit);
             path.clear();

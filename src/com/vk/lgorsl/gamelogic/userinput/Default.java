@@ -16,6 +16,7 @@ class Default extends State {
 
     @Override
     State getNext() {
+        setGUIUnit(null);
         if (gamer.session.mustUpdate) {
             repaint();
         }

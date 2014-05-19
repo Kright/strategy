@@ -3,6 +3,7 @@ package com.vk.lgorsl.gamelogic.userinput;
 import android.graphics.Canvas;
 import com.vk.lgorsl.gamelogic.MapRender;
 import com.vk.lgorsl.gamelogic.world.Cell;
+import com.vk.lgorsl.gamelogic.world.unit.Unit;
 import com.vk.lgorsl.utils.Touch;
 import com.vk.lgorsl.utils.TouchBuffer;
 
@@ -37,11 +38,15 @@ abstract class State {
         return gamer.session.touchBuffer;
     }
 
-    public boolean touchesIsEmpty(){
+    public boolean touchesIsEmpty() {
         return gamer.session.touchBuffer.isEmpty();
     }
 
-    public boolean gameRunning(){
+    public boolean gameRunning() {
         return gamer.session.running;
+    }
+
+    public final void setGUIUnit(Unit unit) {
+        gamer.camera.panelGUI.leftButtonsPanel.setUnit(unit);
     }
 }

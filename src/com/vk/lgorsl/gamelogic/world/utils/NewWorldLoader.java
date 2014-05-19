@@ -39,7 +39,7 @@ public class NewWorldLoader implements iWorldLoader {
 
         Country country = new Country(world, 1);
 
-        UnitType crusader = new UnitType(4, 2, 0, sprites.getSprite("crusader"));
+        UnitType crusader = new UnitType("crusader", 4, 2, 0, sprites.getSprite("crusader"));
         country.createUnit(crusader, 2, 2);
         country.createUnit(crusader, 4, 4);
 

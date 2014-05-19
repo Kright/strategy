@@ -57,7 +57,7 @@ public class MoveUnit extends Action {
     @Override
     protected void cancel() {
         finish.setUnit(null);
-        world.map.setUnit(savedUnit, way.get(0).x, way.get(0).y);
+        world.map.getTrueMap().setUnit(savedUnit, way.get(0).x, way.get(0).y);
         checkShadows();
     }
 

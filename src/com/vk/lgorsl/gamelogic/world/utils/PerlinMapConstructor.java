@@ -3,6 +3,7 @@ package com.vk.lgorsl.gamelogic.world.utils;
 import com.vk.lgorsl.gamelogic.world.Cell;
 import com.vk.lgorsl.gamelogic.world.LandType;
 import com.vk.lgorsl.gamelogic.world.Map;
+import com.vk.lgorsl.utils.LinearCongruentialGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,17 +18,20 @@ public class PerlinMapConstructor implements Map.MapConstructor {
     private int numberOfOctavs;
     private List<LandType> types;
     private double average;
+    private int parameter;
 
 
-    public PerlinMapConstructor(int width, int height, List<LandType> types){
+    public PerlinMapConstructor(int width, int height, List<LandType> types, LinearCongruentialGenerator random){
         this.width=width;
         this.height=height;
         this.numberOfOctavs=5;
         this.types= types;
+        parameter=17000+random.get(4000);//         random.get(4000);
         for(int i=0;  i<width; i++)
             for(int j=0; j<height; j++){
                 average+=perlinNoise(i,j);
             }
+
         average/=(width*height);
     }
 
@@ -41,8 +45,11 @@ public class PerlinMapConstructor implements Map.MapConstructor {
 
     public Cell getCell(int x, int y){
         LandType type=types.get(0); // Должно быть поле
-        if(perlinNoise(x,y)<average){// 0.59
-                type=types.get(1);
+        if(perlinNoise(x,y)<average-0.01){// 0.59
+                type=types.get(1); // лес
+        }
+        if(x==3 && y==3){
+            return new Cell(x,y,types.get(3), types.get(3).nextLayer());
         }
         Cell c= new Cell(x, y, type, type.nextLayer());
        return c;
@@ -52,7 +59,7 @@ public class PerlinMapConstructor implements Map.MapConstructor {
     private double noise(int x, int y){ // магический постоянный по своим переменным шум
         int n = x + y * 59;
         n = (n<<13) ^ n;
-        return ( 2.0 - ( (n * (n * n * 17107 + 809909) + 1370092415) & 0x7fffffff) / 1073741824.0);
+        return ( 2.0 - ( (n * (n * n * /*17107*/parameter + 809909) + 1370092415) & 0x7fffffff) / 1073741824.0);
         //return ( 2.0 - ( (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
     }
 
@@ -98,7 +105,7 @@ public class PerlinMapConstructor implements Map.MapConstructor {
         double total=0;
         double a0=0.2;
         double a=a0;
-        double f=0.3;
+        double f=1.5;
         for(int i=0; i<numberOfOctavs-1; i++){
             total+=(interpolateNoise((x)*f,y*f))*a ;
             f*=1.5;

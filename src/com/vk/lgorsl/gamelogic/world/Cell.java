@@ -40,7 +40,7 @@ public class Cell implements iRender, Comparable<Cell> {
     /**
      * используется только внутенним классом клетки
      */
-    private Cell(int x, int y, LandType land) {
+    public Cell(int x, int y, LandType land) {
         this.x = x;
         this.y = y;
         this.land = land;

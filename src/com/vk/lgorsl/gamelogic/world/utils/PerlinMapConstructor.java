@@ -3,6 +3,7 @@ package com.vk.lgorsl.gamelogic.world.utils;
 import com.vk.lgorsl.gamelogic.world.Cell;
 import com.vk.lgorsl.gamelogic.world.LandType;
 import com.vk.lgorsl.gamelogic.world.Map;
+import com.vk.lgorsl.utils.CustomRandom;
 import com.vk.lgorsl.utils.LinearCongruentialGenerator;
 
 import java.util.ArrayList;
@@ -19,20 +20,22 @@ public class PerlinMapConstructor implements Map.MapConstructor {
     private List<LandType> types;
     private double average;
     private int parameter;
+    private int[][] table;
+    private final static int[][] k = {{1,0},{1,1}, {0,1}, {-1,0}, {-1,-1} , {0, -1} };
 
-
-    public PerlinMapConstructor(int width, int height, List<LandType> types, LinearCongruentialGenerator random){
+    public PerlinMapConstructor(int width, int height, List<LandType> types, CustomRandom random){
         this.width=width;
         this.height=height;
         this.numberOfOctavs=5;
         this.types= types;
         parameter=17000+random.get(4000);//         random.get(4000);
-        for(int i=0;  i<width; i++)
+        for(int i=0;  i<width+height/2; i++)
             for(int j=0; j<height; j++){
                 average+=perlinNoise(i,j);
             }
-
-        average/=(width*height);
+        average/=((width+height/2)*height);
+        table=new int[width+height/2][height+1];
+        fillTable(random);
     }
 
     public int getWidth(){
@@ -45,12 +48,17 @@ public class PerlinMapConstructor implements Map.MapConstructor {
 
     public Cell getCell(int x, int y){
         LandType type=types.get(0); // Должно быть поле
-        if(perlinNoise(x,y)<average-0.01){// 0.59
+        double p=perlinNoise(x,y);
+        if(p<average-0.01){// 0.59
                 type=types.get(1); // лес
         }
-        if(x==3 && y==3){
-            return new Cell(x,y,types.get(3), types.get(3).nextLayer());
+        if(table[x][y]==2){
+            type=types.get(3);
         }
+        if(table[x][y]==1){
+            type=types.get(2);
+        }
+
         Cell c= new Cell(x, y, type, type.nextLayer());
        return c;
     }
@@ -114,4 +122,97 @@ public class PerlinMapConstructor implements Map.MapConstructor {
         return total;
     }
 
+    private void fillTable(CustomRandom random){
+        makeMountains(random);
+        makeHills(random);
+        makeRivers(random);
+        makeVillages(random);
+    }
+
+    private void makeMountains(CustomRandom random){
+        for(int x=0; x<width+height/2; x++ )
+            for(int y=0; y<height; y++)
+                if((random.get(500)==0)&& table[x][y]==0){
+                    makeChain(x, y, random.get(10) + 3, 2, random);
+                }
+    }
+     private void makeChain(int x, int y, int length, int kind,  CustomRandom random ){
+         int p=0;
+         table[x][y]=kind;
+         if(kind==2){
+             makeChain(x,y, random.get(3)+1, 1, random);
+         }
+         int count=0;
+         while(random.get(length)!=0 || count<10 ){
+             count++;
+             int i=0;
+             while( (table[x][y]!=0)&& random.get(10)!=0 ){
+                 if(i!=0){
+                     x-=k[p][0];
+                     y-=k[p][1];
+                 }
+                 i++;
+                 p+=-1+random.get(3);
+                 if(p<0){
+                     p=5;
+                 }
+                 if(p>5){
+                     p=0;
+                 }
+                 if(checkXY(x,y,p)){
+                     x+=k[p][0];
+                     y+=k[p][1];
+                 }else{
+                     i=0;
+                 }
+             }
+             table[x][y]=kind;
+             if(random.get(3)==0){
+             int p1=(p+4)%6;
+             if(checkXY(x,y,p1) && kind==2){ // утолщаем горы
+                 table[x+k[p1][0]][y+k[p1][1]]=kind;
+             }
+             }
+         }
+           if(kind==2)
+               makeChain(x,y, random.get(3)+1, 1, random);
+
+     }
+
+    public void makeHills(CustomRandom random){
+        for(int x=0; x<width+height/2; x++ )
+            for(int y=0; y<height; y++)
+                if((table[x][y]==2 && random.get(2)==0)){
+                    for(int p=0; p<6; p++){
+                        if(checkXY(x,y,p)&&(table[x+k[p][0]][y+k[p][1]]==0)&&random.get(6)==0){
+                            table[x+k[p][0]][y+k[p][1]]=1;
+                        }
+                    }
+                }else{
+                if(random.get(200)==0 && table[x][y]==0){
+                    makeChain(x,y,random.get(4)+1,1,random);
+                }
+
+                }
+    }
+
+    public void makeRivers(CustomRandom random){
+
+    }
+
+    public void makeVillages(CustomRandom random){
+
+    }
+
+    /*
+       проверяет клетка в карте или нет
+     */
+    public boolean checkXY(int x, int y, int p){
+        return !(x+k[p][0]<0 || y+k[p][1]<0 || x+k[p][0]>=width+height/2 || y+k[p][1]>=height);
+
+    }
 }
+
+
+
+

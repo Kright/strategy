@@ -24,6 +24,8 @@ public class Cell implements iRender, Comparable<Cell> {
     private Castle controlledByCastle = null;
     private LandUpgrade landUpgrade;
 
+    public boolean needVillage=false;
+
     /**
      * почему-то вариант с со строчкой nextRender = land.nextRender выдаёт ошибку java.lang.ExceptionInInitializerError
      * потому nextRender передаётся вручную

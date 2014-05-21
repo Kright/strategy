@@ -6,6 +6,7 @@ import com.vk.lgorsl.utils.LinearCongruentialGenerator;
 import com.vk.lgorsl.utils.sprites.SpriteBank;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -37,9 +38,22 @@ public class World {
         map = new Map(constructor);
 
         international = new Country(this, 0);
+        this.buildVillages(international);
     }
 
-    public CustomRandom getRandom() {
+    public void buildVillages(Country country){ // строит деревеньки сгенерированные картой
+        Iterator<Cell> i=map.iterator();
+        Cell c;
+
+        while(i.hasNext()){
+            c=i.next();
+            if(c.needVillage){
+                c.setSettlement(new Village(country, c.x, c.y));
+            }
+        }
+    }
+
+    public CustomRandom getRandom(){
         return random;
     }
 
@@ -57,11 +71,11 @@ public class World {
      * called when all players end his turns
      * there may be increasing of settlements, which don't controlled by players
      */
-    public void endOfTurns() {
-        for (Cell c : map) {
+    public void endOfTurns(){
+        for(Cell c:map){
             if (!c.hasSettlement()) continue;
             Settlement s = c.getSettlement();
-            if (s.country == international) {
+            if (s.country == international){
                 s.nextTurn();
             }
         }

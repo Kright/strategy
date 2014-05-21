@@ -9,22 +9,36 @@ import java.util.List;
 
 /**
  * Created by Michael-PC on 15.05.14.
+ * Создает леса с помощью шума Перлина
+ * Создает горы и холмы в виде фрактальных цепочек
  */
 public class PerlinMapConstructor implements Map.MapConstructor {
 
     private int width;
     private int height;
-    private int numberOfOctavs;
     private List<LandType> types;
-    private double average;
-    private int parameter;
-    private int[][] table;
-    private final static int[][] k = {{1,0},{1,1}, {0,1}, {-1,0}, {-1,-1} , {0, -1} };
-    private int pVillages;
-    private int pMountains;
-    private int pHills;
-    private int pRivers;
 
+    private int numberOfOctavs; // количество гармник у шума Перлина, чем больше, тем более зашумленный, не сбивающийся в кучки лес
+    private double average; // среднее значение шума на всей карте
+    private int parameter; // параметр шума, задается с помощью псевдослучайно функции из интерфейса CustomRandom
+
+
+    private final static int[][] k = {{1,0},{1,1}, {0,1}, {-1,0}, {-1,-1} , {0, -1} };
+
+    private int[][] table; // по сути карта высот. 0 - поле, 1 - лес, 2 - холм, 3 - гора, 10 - деревня
+
+    private int pVillages;// вероятность появления деревни в какой-то клетке.
+    private int pMountains; // вероятность появления цепочки гор из какой-то клетки
+    private int pHills; // веротяность поялвения цепочки холмов из какой-то клетки
+    private int pRivers; // вероятнось появления реки из холма или горы
+
+    /**
+     *
+     * @param width
+     * @param height
+     * @param types
+     * @param random
+     */
 
     public PerlinMapConstructor(int width, int height, List<LandType> types, CustomRandom random){
         this.width=width;
@@ -43,20 +57,27 @@ public class PerlinMapConstructor implements Map.MapConstructor {
 
         table=new int[width+height/2][height+1];
 
-
-
-
         fillTable(random);
     }
 
+
+    @Override
     public int getWidth(){
         return width;
     }
 
+    @Override
     public int getHeight(){
         return height;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return возвращает тип клетки
+     */
+    @Override
     public Cell getCell(int x, int y){
         LandType type=types.get(0); // Должно быть поле
 
@@ -82,7 +103,12 @@ public class PerlinMapConstructor implements Map.MapConstructor {
        return c;
     }
 
-
+    /**
+     *
+     * @param x - целое число
+     * @param y - целое число
+     * @return вещественное чилсо из промежутка [0;2]. Магический метод постоянный по своим переменный и зависищий только от параметра, задаваемого при создании контструктора
+     */
     private double noise(int x, int y){ // магический постоянный по своим переменным шум
         int n = x + y * 59;
         n = (n<<13) ^ n;
@@ -90,12 +116,25 @@ public class PerlinMapConstructor implements Map.MapConstructor {
         //return ( 2.0 - ( (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
     }
 
+    /**
+     * интерполирует два значения функции v1 и v2 при смещении x
+     * @param v1 первое значение
+     * @param v2 второе значение
+     * @param x смещение
+     * @return интерполирует два значения функции v1 и v2 при смещении x
+     */
     private double interpolate(double v1, double v2, double x){
         double ft = x * 3.1415927;
         double f1 = (1 - Math.cos(ft)) / 2;
         return v1*(1-f1)+v2*f1;
     }
 
+    /**
+     * интерполируют двумерный шум по трем направлениям
+     * @param x
+     * @param y
+     * @return
+     */
     private double interpolateNoise(double x, double y){
         int xInt = (int)x;
         double xF = x - xInt;
@@ -117,6 +156,12 @@ public class PerlinMapConstructor implements Map.MapConstructor {
         return interpolate(v1, v3, xF+yF);
     }
 
+    /**
+     * сглаживание шума по трем направлениям- за счет гексогональной решетки
+     * @param x
+     * @param y
+     * @return
+     */
     private double smoothNoise(int x, int y){
 
         double corners = (noise(x+1, y-1)+noise(x-1, y+1)+noise(x+2,y+2)+noise(x-2,y-2)+
@@ -127,6 +172,13 @@ public class PerlinMapConstructor implements Map.MapConstructor {
     double center  =  noise(x, y) / 8;
             return corners + sides + center;
     }
+
+    /**
+     *
+     * @param x координата клетки
+     * @param y координата клетки
+     * @return шум Перлина от [0;2]
+     */
 
     private double perlinNoise(int x, int y){
         double total=0;
@@ -141,6 +193,16 @@ public class PerlinMapConstructor implements Map.MapConstructor {
         return total;
     }
 
+    /**
+     * Заполняет таблицу высот
+     * 1)Горы
+     * 2)Холмы
+     * 3)Реки
+     * 4)Леса
+     * 5)Деревни
+     * @param random
+     */
+
     private void fillTable(CustomRandom random){
         makeMountains(random);
         makeHills(random);
@@ -149,6 +211,11 @@ public class PerlinMapConstructor implements Map.MapConstructor {
         makeVillages(random);
     }
 
+
+    /**
+     * Заполняет таблицу там где она не заполнена лесом по шуму Перлина
+     * @param random
+     */
     private void makeForests(CustomRandom random){
         double p;
         for(int x=0; x<width+height/2; x++ )
@@ -160,6 +227,11 @@ public class PerlinMapConstructor implements Map.MapConstructor {
             }
     }
 
+    /**
+     * Заполняет таблицу цепочками гор
+     * @param random
+     */
+
     private void makeMountains(CustomRandom random){
         for(int x=0; x<width+height/2; x++ )
             for(int y=0; y<height; y++)
@@ -167,49 +239,11 @@ public class PerlinMapConstructor implements Map.MapConstructor {
                     makeChain(x, y, random.get(10) + 3, 3, random);
                 }
     }
-     private void makeChain(int x, int y, int length, int kind,  CustomRandom random ){
-         int p=0;
-         table[x][y]=kind;
-         if(kind==3){
-             makeChain(x,y, random.get(5)+1, 2, random);
-         }
-         int count=0;
-         while(random.get(length)!=0 || count<length ){
-             count++;
-             int i=0;
-             while( (table[x][y]!=0)&& random.get(10)!=0 ){
-                 if(i!=0){
-                     x-=k[p][0];
-                     y-=k[p][1];
-                 }
-                 i++;
-                 p+=-1+random.get(3);
-                 if(p<0){
-                     p=5;
-                 }
-                 if(p>5){
-                     p=0;
-                 }
-                 if(checkXY(x,y,p)){
-                     x+=k[p][0];
-                     y+=k[p][1];
-                 }else{
-                     i=0;
-                 }
-             }
-             table[x][y]=kind;
-             if(random.get(3)==0){
-             int p1=(p+4)%6;
-             if(checkXY(x,y,p1) && kind==3){ // утолщаем горы
-                 table[x+k[p1][0]][y+k[p1][1]]=kind;
-             }
-             }
-         }
-           if(kind==3)
-               makeChain(x,y, random.get(5)+1, 1, random);
 
-     }
-
+    /**
+     * Заполняет таблицу цепочками холмов
+     * @param random
+     */
     public void makeHills(CustomRandom random){
         for(int x=0; x<width+height/2; x++ )
             for(int y=0; y<height; y++)
@@ -227,6 +261,10 @@ public class PerlinMapConstructor implements Map.MapConstructor {
                 }
     }
 
+    /**
+     * Там где вокруг есть поля или холмы, заполняет деревнями
+     * @param random
+     */
     public void makeVillages(CustomRandom random){
         int s;
         boolean near;
@@ -255,12 +293,73 @@ public class PerlinMapConstructor implements Map.MapConstructor {
             }
     }
 
+    /**
+     * Создает реки
+     * @param random
+     */
+
     public void makeRivers(CustomRandom random){
 
     }
 
-    /*
-       проверяет клетка в карте или нет
+    /**
+     * Создает цепочку определнного вида
+     * @param x начальная координата клетки
+     * @param y начальная координата клетки
+     * @param length миниммальная дляина цепочки
+     * @param kind вид местности цепочки
+     * @param random
+     */
+
+    private void makeChain(int x, int y, int length, int kind,  CustomRandom random ){
+        int p=0;
+        table[x][y]=kind;
+        if(kind==3){
+            makeChain(x,y, random.get(5)+1, 2, random);
+        }
+        int count=0;
+        while(random.get(length)!=0 || count<length ){
+            count++;
+            int i=0;
+            while( (table[x][y]!=0)&& random.get(10)!=0 ){
+                if(i!=0){
+                    x-=k[p][0];
+                    y-=k[p][1];
+                }
+                i++;
+                p+=-1+random.get(3);
+                if(p<0){
+                    p=5;
+                }
+                if(p>5){
+                    p=0;
+                }
+                if(checkXY(x,y,p)){
+                    x+=k[p][0];
+                    y+=k[p][1];
+                }else{
+                    i=0;
+                }
+            }
+            table[x][y]=kind;
+            if(random.get(3)==0){
+                int p1=(p+4)%6;
+                if(checkXY(x,y,p1) && kind==3){ // утолщаем горы
+                    table[x+k[p1][0]][y+k[p1][1]]=kind;
+                }
+            }
+        }
+        if(kind==3)
+            makeChain(x,y, random.get(5)+1, 1, random);
+
+    }
+
+    /**
+     * Проверяем выползли ли за край карты при определнном смещении
+     * @param x
+     * @param y
+     * @param p параметр смещения от 0 до 5
+     * @return
      */
     public boolean checkXY(int x, int y, int p){
         return !(x+k[p][0]<0 || y+k[p][1]<0 || x+k[p][0]>=width+height/2 || y+k[p][1]>=height);

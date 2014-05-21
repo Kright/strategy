@@ -130,7 +130,7 @@ public class MapCamera {
         int x = MapToX(cell.x, cell.y);
         int y = MapToY(cell.y);
         position.x = x - screenW/2+(int)w/2;
-        position.y = y - screenW/2+(int)h/2;
+        position.y = y - screenH/2+(int)h/2;
     }
 
     //если камера уползла за край карты, двигаем её обратно

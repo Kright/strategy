@@ -6,6 +6,7 @@ import com.vk.lgorsl.gamelogic.userinput.Gamer;
 import com.vk.lgorsl.gamelogic.world.*;
 import com.vk.lgorsl.utils.LinearCongruentialGenerator;
 import com.vk.lgorsl.utils.sprites.SpriteBank;
+import com.vk.lgorsl.utils.sprites.iRender;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,7 @@ public class NewWorldLoader implements iWorldLoader {
         landscape.add(new LandType(sprites.getSprite("grass"), 2, "Поле"));
         landscape.add(new LandType(sprites.getSprite("grass"), 4, "Лес", sprites.getSprite("forest")));
         landscape.add(new LandType(sprites.getSprite("hill"), 4, "Холм"));
-        landscape.add(new LandType(sprites.getSprite("mountain"), 0, "Гора" ));
+        landscape.add(new LandType(iRender.NullRender.get() , 0, "Гора", sprites.getSprite("mountain")));
         landscape.get(2).landUpgrades.add(new LandUpgrade(sprites.getSprite("windmill"), "windmill"));
         landscape.get(0).landUpgrades.add(new LandUpgrade(sprites.getSprite("field"), "field"));
 

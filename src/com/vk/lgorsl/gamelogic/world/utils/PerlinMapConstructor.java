@@ -20,6 +20,11 @@ public class PerlinMapConstructor implements Map.MapConstructor {
     private int parameter;
     private int[][] table;
     private final static int[][] k = {{1,0},{1,1}, {0,1}, {-1,0}, {-1,-1} , {0, -1} };
+    private int pVillages;
+    private int pMountains;
+    private int pHills;
+    private int pRivers;
+
 
     public PerlinMapConstructor(int width, int height, List<LandType> types, CustomRandom random){
         this.width=width;
@@ -32,7 +37,15 @@ public class PerlinMapConstructor implements Map.MapConstructor {
                 average+=perlinNoise(i,j);
             }
         average/=((width+height/2)*height);
+        pVillages=50;
+        pMountains=500;
+        pHills=100;
+
         table=new int[width+height/2][height+1];
+
+
+
+
         fillTable(random);
     }
 
@@ -150,7 +163,7 @@ public class PerlinMapConstructor implements Map.MapConstructor {
     private void makeMountains(CustomRandom random){
         for(int x=0; x<width+height/2; x++ )
             for(int y=0; y<height; y++)
-                if((random.get(500)==0)&& table[x][y]==0){
+                if((random.get(pMountains)==0)&& table[x][y]==0){
                     makeChain(x, y, random.get(10) + 3, 3, random);
                 }
     }
@@ -158,10 +171,10 @@ public class PerlinMapConstructor implements Map.MapConstructor {
          int p=0;
          table[x][y]=kind;
          if(kind==3){
-             makeChain(x,y, random.get(3)+1, 2, random);
+             makeChain(x,y, random.get(5)+1, 2, random);
          }
          int count=0;
-         while(random.get(length)!=0 || count<10 ){
+         while(random.get(length)!=0 || count<length ){
              count++;
              int i=0;
              while( (table[x][y]!=0)&& random.get(10)!=0 ){
@@ -193,7 +206,7 @@ public class PerlinMapConstructor implements Map.MapConstructor {
              }
          }
            if(kind==3)
-               makeChain(x,y, random.get(3)+1, 1, random);
+               makeChain(x,y, random.get(5)+1, 1, random);
 
      }
 
@@ -207,8 +220,8 @@ public class PerlinMapConstructor implements Map.MapConstructor {
                         }
                     }
                 }else{
-                if(random.get(200)==0 && table[x][y]==0){
-                    makeChain(x,y,random.get(4)+1,2,random);
+                if(random.get(pHills)==0 && table[x][y]==0){
+                    makeChain(x,y,random.get(5)+1,2,random);
                 }
 
                 }
@@ -235,7 +248,7 @@ public class PerlinMapConstructor implements Map.MapConstructor {
                         }
 
                     }
-                    if( !near &&random.get(10+s)==0 && upgrades){
+                    if( !near &&random.get(pVillages+s)==0 && upgrades){
                         table[x][y]=10;
                     }
                 }

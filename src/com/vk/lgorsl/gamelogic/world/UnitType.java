@@ -9,7 +9,7 @@ import com.vk.lgorsl.utils.sprites.iRender;
  * картинка, возможно, анимация и прочее
  */
 public class UnitType {
-    public String name;
+    public final String name;
 
     public final int movementPoints, hitPoints, pay;    //pay - стоимость содержания юнита
 

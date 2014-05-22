@@ -22,8 +22,8 @@ abstract class State {
     abstract State getNext();
 
     void paint(Canvas canvas, MapRender render) {
-        render.render(canvas, gamer.country.map);
-        //render.render(canvas, gamer.country.map.getTrueMap());
+       // render.render(canvas, gamer.country.map);
+        render.render(canvas, gamer.country.map.getTrueMap());
     }
 
     Cell getTrueCell(Touch t) {

@@ -126,6 +126,7 @@ public class Unit implements iRender {
 
     @Override
     public void render(RenderParams params) {
+        //flags[id].sprite.render(params);
         type.sprite.render(params);
     }
 

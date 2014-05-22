@@ -43,6 +43,12 @@ public abstract class Settlement implements iRender {
         }
     }
 
+    public void setCountry(Country country){
+        if(this.country.id==0){
+            this.country=country;
+        }
+    }
+
     /**
      * удаление поселения
      */

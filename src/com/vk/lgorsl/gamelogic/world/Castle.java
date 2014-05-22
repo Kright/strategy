@@ -1,5 +1,6 @@
 package com.vk.lgorsl.gamelogic.world;
 
+import android.util.Log;
 import com.vk.lgorsl.utils.sprites.RenderParams;
 import com.vk.lgorsl.utils.sprites.iRender;
 
@@ -26,13 +27,15 @@ public class Castle extends Settlement {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (Map.getInterval(i, j) < 2) {
+                    if(country.map.getCell(cell.x + i, cell.y + j).accessible()){
                     near.add(country.map.getCell(cell.x + i, cell.y + j));
+                    }
                 }
             }
         }
         region = new Region(near);
         region.setColorNum(country.id);
-        this.country.map.addCellsNear(region.cells, cell.x, cell.y);
+        //this.country.map.addCellsNear(region.cells, cell.x, cell.y);
         Iterator<Cell> iterator = region.iterator();
         Cell c;
         while (iterator.hasNext()) {      //замок может захватить только ничью территорию
@@ -40,8 +43,9 @@ public class Castle extends Settlement {
                 iterator.remove();
             }else{
                 c.setCastleControl(this);
-                if(c.hasSettlement()&&! (c.getSettlement() instanceof Castle)){
+                if(c.hasSettlement()&& !(c.getSettlement() instanceof Castle)){
                     settlements.add(c.getSettlement());
+
                 }
 
             }
@@ -54,10 +58,11 @@ public class Castle extends Settlement {
     }
 
     @Override
-    public void nextTurn() {
+    public void nextTurn(){
         for(Settlement s:settlements){
             s.nextTurn();
         }
+        //risingRegion();
     }
 
     /**
@@ -73,8 +78,10 @@ public class Castle extends Settlement {
     @Override
     public int getTaxes() {
         int taxes=0;
-        for(Settlement s:settlements){
-            taxes+=s.getTaxes();
+        for(Cell c: region){
+            if(c.hasSettlement()&&c.getSettlement()!=this){
+            taxes+=c.getSettlement().getTaxes();
+            }
         }
         return taxes; //и ещё вычесть стоимость содержания замка, которой пока нет
     }
@@ -104,6 +111,38 @@ public class Castle extends Settlement {
     public double getEfficiency() {
         return efficiency;
     }
+
+    public void risingRegion(){
+        List<Cell> listci=new ArrayList<Cell>(); // сюда добавляем все соседние клекти
+        List<Cell> listc=new ArrayList<Cell>();
+        Cell c;
+        Iterator<Cell> i= region.iterator();
+
+        while(i.hasNext()){
+            listci.clear();
+            c=i.next();
+            country.map.getTrueMap().addCellsNear(listci, c.x, c.y, 1);
+            for(Cell cellI: listci){
+
+
+                if((!region.isInto(cellI))&& (cellI.controlledByCastle()== null)&& (!listc.contains(cellI))&&(cellI.accessible())){
+
+                    cellI.setCastleControl(this);
+                    if(cellI.hasSettlement()){
+                        settlements.add(cellI.getSettlement());
+                        cellI.getSettlement().setCountry(this.country);
+                    }
+                    listc.add(cellI);
+
+                }
+            }
+        }
+
+        region.addCells(listc);
+
+
+    }
+
 
     /**
      *

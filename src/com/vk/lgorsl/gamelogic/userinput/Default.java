@@ -32,6 +32,8 @@ class Default extends State {
                 if (c.getUnit().country == gamer.country){
                     return gamer.unitFirstActivation.setUnit(c.getUnit());
                 }
+                touches().getTouches();
+                return gamer.defaultState;
             } else {
                 return gamer.mapMoving;
             }

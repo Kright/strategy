@@ -36,6 +36,9 @@ abstract class UnitActivation extends State {
 
     public State setUnit(Unit unit) {
         this.unit = unit;
+        if (unit.country != gamer.country){
+            return gamer.defaultState;
+        }
         setGUIUnit(unit);
         if (unit.hasMovementPoints()) {
             way = new AlternativeWay(getMap(), unit);

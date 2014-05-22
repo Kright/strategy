@@ -1,6 +1,7 @@
 package com.vk.lgorsl.gamelogic.world;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import com.vk.lgorsl.GUI.BorderLine;
 import com.vk.lgorsl.GUI.MapCamera;
 import com.vk.lgorsl.GUI.iRenderFeature;
@@ -34,7 +35,22 @@ public class Region implements iRenderFeature, Iterable<Cell> {
      * принадлежит ли клетка области
      */
     public boolean isInto(Cell cell) {
-        return -1 != Collections.binarySearch(cells, cell);
+        //return cells.contains(cell);
+        int result = Collections.binarySearch(cells, cell);
+        if (cells.contains(cell) != (result > -1)) {
+            Log.d("mylog", "number of cell is " + result  + ", " + cell + "\n" + this);
+        }
+        return result > -1;
+    }
+
+    /**
+     * добавляет клетки в регион
+     *
+     * @param list
+     */
+    public void addCells(List<Cell> list) {
+        cells.addAll(list);
+        updateAfrerChange();
     }
 
     /**
@@ -64,8 +80,8 @@ public class Region implements iRenderFeature, Iterable<Cell> {
         StringBuilder sb = new StringBuilder();
         sb.append("size = " + cells.size());
         sb.append('{');
-        for(Cell c: cells){
-            sb.append(c.toString()+",");
+        for (Cell c : cells) {
+            sb.append(c.toString() + ",");
         }
         sb.append('}');
         return sb.toString();

@@ -14,7 +14,7 @@ import java.util.Iterator;
 public class Village extends Settlement {
 
     public static final int[] maxWealth = new int[]{100, 200, 300, 400};    //small numbers only for test
-    private static final int productivity = 10;     //доход на жителя
+    private static final int productivity = 20;     //доход на жителя
     private static final int pNewSettlement = 2; // вероятность отпочковаться
     private static final int pTown = 20; // вероятность стать городом
 
@@ -22,7 +22,6 @@ public class Village extends Settlement {
     protected int wealth; // благосостояние
     private int maxPopulation;
     protected ArrayList<Cell> fields = new ArrayList<Cell>(4);
-
 
     public Village(Country country, int x, int y) {
         super(getCountry(country.world, x, y), country.map.getTrueMap().getCell(x, y));
@@ -131,7 +130,6 @@ public class Village extends Settlement {
      */
     public void becomeTown() {
         if (country.world.getRandom().get(pTown) != 0) return;
-        cell.controlledByCastle().settlements.remove(this);
         //TODO превращение в город, now town hasn't picture and won't builded
         //new Town(this);
     }

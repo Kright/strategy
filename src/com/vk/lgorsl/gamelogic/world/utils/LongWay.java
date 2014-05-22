@@ -36,9 +36,15 @@ public class LongWay {
             addClose(parent);
         }
         CellWay pathMember = cWTarget;
+        try{
         while (pathMember.parent != null) {
             path.add(pathMember.c);
             pathMember = pathMember.parent;
+        }
+        } catch(NullPointerException ex){
+            //Это может внезапно случиться, когда путь не существует.
+            path.clear();
+            return;
         }
         path.add(pathMember.c);
         Collections.reverse(path);

@@ -45,14 +45,32 @@ public class NewWorldLoader implements iWorldLoader {
         Country country = new Country(world, 1);
 
         UnitType crusader = new UnitType("crusader", 4, 2, 0, sprites.getSprite("crusader"));
-        country.createUnit(crusader, 2, 2);
-        country.createUnit(crusader, 4, 4);
+
+        int x=width/2;
+        int y=height/2;
+        while(!world.map.getCell(x,y).accessible()){
+            x++;
+            y++;
+        }
+        country.createUnit(crusader, x, y);
+        //country.createUnit(crusader, 4, 4);
+        world.map.getCell(x, y).getUnit().buildCastle().apply();
+        x+=2;
+        y+=2;
+
+        while(!world.map.getCell(x,y).accessible()){
+            x++;
+            y++;
+        }
+        country.createUnit(crusader, x, y);
+        new Village(country, x, y);
 
         Country country2 =new Country(world, 2);
         country2.createUnit(crusader, 8, 8);
+
         world.map.getCell(8,8).getUnit().buildCastle().apply();
 
-        world.map.getCell(2, 2).getUnit().buildCastle().apply();
+
         new Village(country, 4, 4);
 
         world.addPlayer(new Gamer(session, country));

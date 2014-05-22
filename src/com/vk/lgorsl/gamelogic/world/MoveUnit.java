@@ -1,6 +1,7 @@
 package com.vk.lgorsl.gamelogic.world;
 
 import com.vk.lgorsl.gamelogic.world.unit.Unit;
+import com.vk.lgorsl.gamelogic.world.unit.UnitTask;
 
 import java.util.HashSet;
 import java.util.List;
@@ -44,6 +45,7 @@ public class MoveUnit extends Action {
             }
         }
         world.map.setUnit(unit, finish.x, finish.y);
+        unit.setTask(UnitTask.emptyTask);
         checkShadows();
         return true;
     }

@@ -1,6 +1,7 @@
 package com.vk.lgorsl.gamelogic.userinput;
 
 import android.util.Log;
+import com.vk.lgorsl.ActivityS;
 import com.vk.lgorsl.gamelogic.GameSession;
 import com.vk.lgorsl.gamelogic.world.unit.Unit;
 import com.vk.lgorsl.gamelogic.world.unit.UnitTask;
@@ -71,18 +72,7 @@ class GUI extends State {
                 return gamer.screenUpdate;
 
             case selectUnit: {
-                List<Unit> free = gamer.country.getFreeUnits();
-                if (free.isEmpty()) {
-                    break;
-                }
-                unit = free.get(0);
-                gamer.camera.setPosition(unit.getCell());
-                setGUIUnit(unit);
-                repaint();
-                while(!touchesIsEmpty()){
-                    touches().getTouch();
-                }
-                return gamer.unitSecondActivation.setUnit(unit);
+                return selectUnit();
             }
 
             case empty:
@@ -93,6 +83,22 @@ class GUI extends State {
         }
         return gamer.screenUpdate;
     }
+
+    public State selectUnit(){
+        List<Unit> free = gamer.country.getFreeUnits();
+        if (free.isEmpty()) {
+            return gamer.screenUpdate;
+        }
+        unit = free.get(0);
+        gamer.camera.setPosition(unit.getCell());
+        setGUIUnit(unit);
+        repaint();
+        while(!touchesIsEmpty()){
+            touches().getTouch();
+        }
+        return gamer.unitSecondActivation.setUnit(unit);
+    }
+
 
     private State doActionsLeft() {
         set(unit);

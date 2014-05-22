@@ -31,7 +31,7 @@ public class ActivityS extends Activity {
 
         SpriteBank sp = new SpriteBank(getResources());
         if (session == null) {
-            session = new GameSession(new NewWorldLoader(sp, 120, 140), sp);
+            session = new GameSession(new NewWorldLoader(sp, 60, 70), sp);
         }
         view.setOnTouchListener(session.touchBuffer);
     }

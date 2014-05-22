@@ -4,11 +4,13 @@ import com.vk.lgorsl.gamelogic.AI.PlayerAI;
 import com.vk.lgorsl.gamelogic.GameSession;
 import com.vk.lgorsl.gamelogic.userinput.Gamer;
 import com.vk.lgorsl.gamelogic.world.*;
+import com.vk.lgorsl.utils.CustomRandom;
 import com.vk.lgorsl.utils.LinearCongruentialGenerator;
 import com.vk.lgorsl.utils.sprites.SpriteBank;
 import com.vk.lgorsl.utils.sprites.iRender;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Загружает абсолютно новый мир
@@ -38,22 +40,19 @@ public class NewWorldLoader implements iWorldLoader {
 
         Settlement.init(sprites);
 
-        //World world = new World(width, height, landscape);
-        World world = new World(new PerlinMapConstructor(width, height, landscape, LinearCongruentialGenerator.getLikeNativeRandom()));
+        CustomRandom random = LinearCongruentialGenerator.getLikeNativeRandom();
+        random.setSeed(0x1488);
+        World world = new World(new PerlinMapConstructor(width, height, landscape, random));
         world.spriteBank = sprites;
-
         Country country = new Country(world, 1);
-
         UnitType crusader = new UnitType("crusader", 4, 2, 0, sprites.getSprite("crusader"));
-
-        int x=width/2;
-        int y=height/2;
+        int x=width/2+height/4+6;
+        int y=height/2-3;
         while(!world.map.getCell(x,y).accessible()){
             x++;
             y++;
         }
         country.createUnit(crusader, x, y);
-        //country.createUnit(crusader, 4, 4);
         world.map.getCell(x, y).getUnit().buildCastle().apply();
         x+=2;
         y+=2;

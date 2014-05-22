@@ -35,10 +35,11 @@ public class Gamer extends Player {
     protected void doTurn(MapRender render) {
         camera = render;
         currentState = screenUpdate;
-        //currentState = defaultState;
-        for(;;) {
+        while ((currentState = currentState.getNext()) == screenUpdate) ;
+        currentState = gui.selectUnit();
+        for (; ; ) {
             currentState = currentState.getNext();
-            if (currentState == endOfTurn || session.mustStop){
+            if (currentState == endOfTurn || session.mustStop) {
                 return;
             }
         }
